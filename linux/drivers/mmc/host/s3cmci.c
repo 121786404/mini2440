@@ -22,6 +22,7 @@
 #include <linux/gpio.h>
 #include <linux/irq.h>
 #include <linux/io.h>
+#include <linux/delay.h>
 
 #include <mach/dma.h>
 
@@ -493,6 +494,7 @@ static void pio_tasklet(unsigned long data)
 	struct s3cmci_host *host = (struct s3cmci_host *) data;
 
 	s3cmci_disable_irq(host, true);
+	udelay(50);
 
 	if (host->pio_active == XFER_WRITE)
 		do_pio_write(host);

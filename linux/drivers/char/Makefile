@@ -112,6 +112,12 @@ obj-$(CONFIG_PS3_FLASH)		+= ps3flash.o
 obj-$(CONFIG_JS_RTC)		+= js-rtc.o
 js-rtc-y = rtc.o
 
+obj-$(CONFIG_LEDS_MINI2440)	+= mini2440_leds.o
+obj-$(CONFIG_MINI2440_HELLO_MODULE) += mini2440_hello_module.o
+obj-$(CONFIG_MINI2440_BUTTONS)	+= mini2440_buttons.o
+obj-$(CONFIG_MINI2440_BUZZER)	+= mini2440_pwm.o
+obj-$(CONFIG_MINI2440_ADC)	+= mini2440_adc.o
+
 # Files generated that shall be removed upon make clean
 clean-files := consolemap_deftbl.c defkeymap.c
 

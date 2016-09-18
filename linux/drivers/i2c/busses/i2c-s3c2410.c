@@ -538,6 +538,9 @@ static int s3c24xx_i2c_xfer(struct i2c_adapter *adap,
 	struct s3c24xx_i2c *i2c = (struct s3c24xx_i2c *)adap->algo_data;
 	int retry;
 	int ret;
+	struct s3c2410_platform_i2c *pdata = i2c->dev->platform_data;
+	if (pdata->cfg_gpio)
+		pdata->cfg_gpio(to_platform_device(i2c->dev));
 
 	for (retry = 0; retry < adap->retries; retry++) {
 

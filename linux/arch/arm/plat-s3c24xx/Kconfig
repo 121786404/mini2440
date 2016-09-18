@@ -178,4 +178,9 @@ config MACH_SMDK
 	help
 	  Common machine code for SMDK2410 and SMDK2440
 
+config MACH_FRIENDLY_ARM
+	bool
+	help
+	  Common machine code for FriendlyARM boards i.e. Mini2440, etc
+
 endif

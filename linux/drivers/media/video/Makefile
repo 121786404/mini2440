@@ -12,6 +12,8 @@ omap2cam-objs	:=	omap24xxcam.o omap24xxcam-dma.o
 
 videodev-objs	:=	v4l2-dev.o v4l2-ioctl.o v4l2-device.o
 
+s3c2440camera-objs	:=	s3c2440_ov9650.o sccb.o s3c2440camif.o
+
 # V4L2 core modules
 
 obj-$(CONFIG_VIDEO_DEV) += videodev.o v4l2-int-device.o
@@ -165,6 +167,8 @@ obj-$(CONFIG_VIDEO_SAA7164)     += saa7164/
 obj-$(CONFIG_VIDEO_IR_I2C)  += ir-kbd-i2c.o
 
 obj-$(CONFIG_ARCH_DAVINCI)	+= davinci/
+
+obj-$(CONFIG_S3C2440_CAMERA) += s3c2440camera.o
 
 EXTRA_CFLAGS += -Idrivers/media/dvb/dvb-core
 EXTRA_CFLAGS += -Idrivers/media/dvb/frontends

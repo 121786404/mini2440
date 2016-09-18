@@ -43,6 +43,8 @@
 #include <linux/delay.h>
 #include <linux/clk.h>
 #include <linux/cpufreq.h>
+#include <linux/gpio.h>
+#include <mach/regs-gpio.h>
 
 #include <asm/irq.h>
 
@@ -429,6 +431,13 @@ static int s3c24xx_serial_startup(struct uart_port *port)
 
 	/* the port reset code should have done the correct
 	 * register setup for the port controls */
+	if (port->line == 2) {
+		s3c2410_gpio_cfgpin(S3C2410_GPH(6), S3C2410_GPH6_TXD2);
+		s3c2410_gpio_pullup(S3C2410_GPH(6), 1);
+		s3c2410_gpio_cfgpin(S3C2410_GPH(7), S3C2410_GPH7_RXD2);
+		s3c2410_gpio_pullup(S3C2410_GPH(7), 1);
+	}
+
 
 	return ret;
 

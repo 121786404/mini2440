@@ -97,6 +97,43 @@ config DEVKMEM
 	  kind of kernel debugging operations.
 	  When in doubt, say "N".
 
+config MINI2440_HELLO_MODULE
+	tristate "Mini2440 module sample"
+	depends on MACH_MINI2440
+	default m if MACH_MINI2440
+	help
+	  Mini2440 module sample.
+
+config LEDS_MINI2440
+	tristate "LED Support for Mini2440 GPIO LEDs"
+	depends on MACH_MINI2440
+	default y if MACH_MINI2440
+	help
+	  This option enables support for LEDs connected to GPIO lines
+	  on Mini2440 boards.
+
+config MINI2440_BUTTONS
+	tristate "Buttons driver for FriendlyARM Mini2440 development boards"
+	depends on MACH_MINI2440
+	default y if MACH_MINI2440
+	help
+	  this is buttons driver for FriendlyARM Mini2440 development boards
+
+config MINI2440_BUZZER
+	tristate "Buzzer driver for FriendlyARM Mini2440 development boards"
+	depends on MACH_MINI2440
+	default y if MACH_MINI2440
+	help
+	  this is buzzer driver for FriendlyARM Mini2440 development boards
+
+config MINI2440_ADC
+	bool "ADC driver for FriendlyARM Mini2440 development boards"
+	depends on MACH_MINI2440
+	default y if MACH_MINI2440
+	help
+	  this is ADC driver for FriendlyARM Mini2440 development boards
+	  Notes: the touch-screen-driver required this option
+
 config BFIN_JTAG_COMM
 	tristate "Blackfin JTAG Communication"
 	depends on BLACKFIN

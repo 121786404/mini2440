@@ -11,6 +11,29 @@ menuconfig INPUT_TOUCHSCREEN
 
 if INPUT_TOUCHSCREEN
 
+config TOUCHSCREEN_S3C2410
+	tristate "Samsung S3C2410 touchscreen input driver"
+	depends on MACH_MINI2440 && INPUT && INPUT_TOUCHSCREEN && MINI2440_ADC
+	help
+	  Say Y here if you have the s3c2410 touchscreen.
+
+	  If unsure, say N.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called s3c2410_ts.
+
+config TOUCHSCREEN_1WIRE
+	tristate "Mini2440 1-Wire host and Touch Screen Driver"
+	depends on MACH_MINI2440
+	help
+	  Say Y here to enable the 1-Wire host and Touch Screen driver for
+	  FriendlyARM Mini2440 development board.
+
+	  If unsure, say N.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called mini2440_1wire_host.
+
 config TOUCHSCREEN_ADS7846
 	tristate "ADS7846/TSC2046 and ADS7843 based touchscreens"
 	depends on SPI_MASTER
