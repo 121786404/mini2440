@@ -340,6 +340,7 @@ static int bootm_load_os(image_info_t os, ulong *load_end, int boot_progress)
 
 	switch (comp) {
 	case IH_COMP_NONE:
+		printf ("   load %x ,image_start %xd", load,blob_start);
 		if (load == blob_start) {
 			printf ("   XIP %s ... ", type_name);
 		} else {
