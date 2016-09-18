@@ -139,7 +139,7 @@
 
 #define CONFIG_BOOTDELAY	1
 //#define CONFIG_BOOTARGS		"noinitrd root=/dev/nfs rw nfsroot=192.168.199.222:/work/nfs_root/rootfs_rtm_2440 ip=192.168.199.22:192.168.199.222:192.168.199.1:255.255.255.0 console=ttySAC0,115200 init=/linuxrc mem=64M"
-#define CONFIG_BOOTARGS		"noinitrd root=/dev/nfs nfsroot=192.168.199.231:/home/sheldon.liu/C_mini2440/image/rootfs_rtm_2440 ip=192.168.199.22:192.168.199.231:192.168.199.1:255.255.255.0:sbc2440.arm9.net:eth0:off console=ttySAC0,115200 init=/linuxrc mem=64M"
+#define CONFIG_BOOTARGS		"noinitrd root=/dev/nfs nfsroot=192.168.199.231:/home/sheldon.liu/mini2440/rootfs_rtm_2440 ip=192.168.199.22:192.168.199.231:192.168.199.1:255.255.255.0:sbc2440.arm9.net:eth0:off console=ttySAC0,115200 init=/linuxrc mem=64M"
 #define CONFIG_ETHADDR	        08:08:11:18:12:27
 #define CONFIG_NETMASK          255.255.255.0
 #define CONFIG_IPADDR		192.168.199.22
@@ -149,9 +149,9 @@
 
 /*#define CONFIG_BOOTFILE	"elinos-lart" */
 #if 1
-#define CONFIG_BOOTCOMMAND	"nfs 0x30008000 192.168.199.231:/home/sheldon.liu/C_mini2440/linux/arch/arm/boot/uImage;bootm"
+#define CONFIG_BOOTCOMMAND	"nfs 0x30008000 192.168.199.231:/home/sheldon.liu/mini2440/linux/arch/arm/boot/uImage;bootm"
 #else
-#define CONFIG_BOOTCOMMAND	"nfs 0x30007FC0 192.168.199.231:/home/sheldon.liu/C_mini2440/linux/arch/arm/boot/uImage;bootm 0x30007FC0"
+#define CONFIG_BOOTCOMMAND	"nfs 0x30007FC0 192.168.199.231:/home/sheldon.liu/mini2440/linux/arch/arm/boot/uImage;bootm 0x30007FC0"
 #endif
 
 
