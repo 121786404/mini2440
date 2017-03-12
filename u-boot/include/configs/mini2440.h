@@ -265,7 +265,7 @@
 //#else 
 #define CONFIG_ENV_IS_IN_NAND 1
 //#define CONFIG_ENV_IS_IN_FLASH 1
-#define CONFIG_ENV_OFFSET 0X60000
+#define CONFIG_ENV_OFFSET 0X40000
 #define CONFIG_ENV_SIZE			0x20000	/* Total Size of Environment Sector */
 //#endif
 
@@ -330,7 +330,7 @@
 
 #define CONFIG_JFFS2_CMDLINE 1
 #define MTDIDS_DEFAULT "nand0=nandflash0"
-#define MTDPARTS_DEFAULT "mtdparts=nandflash0:384k(bootloader)," \
+#define MTDPARTS_DEFAULT "mtdparts=nandflash0:256k(bootloader)," \
 					      "128k(params)," \
 					      "5m(kernel)," \
 					      "-(root)"
