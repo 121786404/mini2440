@@ -330,8 +330,8 @@
 
 #define CONFIG_JFFS2_CMDLINE 1
 #define MTDIDS_DEFAULT "nand0=nandflash0"
-#define MTDPARTS_DEFAULT "mtdparts=nandflash0:256k(bootloader)," \
-					      "128k(params)," \
+#define MTDPARTS_DEFAULT "mtdparts=nandflash0:256k(u-boot)," \
+					      "128k(u-boot-env)," \
 					      "5m(kernel)," \
 					      "-(root)"
 

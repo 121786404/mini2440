@@ -396,17 +396,17 @@ static struct platform_device s3c24xx_uda134x = {
 
 static struct mtd_partition friendly_arm_default_nand_part[] = {
 	[0] = {
-		.name	= "uboot",
+		.name	= "u-boot",
 		.size	= 0x00040000,
 		.offset	= 0,
 	},
 	[1] = {
-		.name	= "para",
+		.name	= "u-boot-env",
 		.size	= 0x00020000,
 		.offset	= 0x00040000,
 	},
 	[2] = {
-		.name	= "Kernel",
+		.name	= "kernel",
 		.offset = 0x00060000,
 		.size	= 0x00500000,
 	},
