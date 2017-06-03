@@ -100,26 +100,26 @@ static irqreturn_t adc_irq(int irq, void *dev_id)
 	int adcdat0, adcdat1;
 	
 	
-	/* ÓÅ»¯´ëÊ©2: Èç¹ûADCÍê³ÉÊ±, ·¢ÏÖ´¥Ãþ±ÊÒÑ¾­ËÉ¿ª, Ôò¶ªÆú´Ë´Î½á¹û */
+	/* ä¼˜åŒ–æŽªæ–½2: å¦‚æžœADCå®Œæˆæ—¶, å‘çŽ°è§¦æ‘¸ç¬”å·²ç»æ¾å¼€, åˆ™ä¸¢å¼ƒæ­¤æ¬¡ç»“æžœ */
 	adcdat0 = s3c_ts_regs->adcdat0;
 	adcdat1 = s3c_ts_regs->adcdat1;
 
 	if (s3c_ts_regs->adcdat0 & (1<<15))
 	{
-		/* ÒÑ¾­ËÉ¿ª */
+		/* å·²ç»æ¾å¼€ */
 		cnt = 0;
 		enter_wait_pen_down_mode();
 	}
 	else
 	{
 		// printk("adc_irq cnt = %d, x = %d, y = %d\n", ++cnt, adcdat0 & 0x3ff, adcdat1 & 0x3ff);
-		/* ÓÅ»¯´ëÊ©3: ¶à´Î²âÁ¿ÇóÆ½¾ùÖµ */
+		/* ä¼˜åŒ–æŽªæ–½3: å¤šæ¬¡æµ‹é‡æ±‚å¹³å‡å€¼ */
 		x[cnt] = adcdat0 & 0x3ff;
 		y[cnt] = adcdat1 & 0x3ff;
 		++cnt;
 		if (cnt == 4)
 		{
-			/* ÓÅ»¯´ëÊ©4: Èí¼þ¹ýÂË */
+			/* ä¼˜åŒ–æŽªæ–½4: è½¯ä»¶è¿‡æ»¤ */
 			if (s3c_filter_ts(x, y))
 			{			
 				printk("x = %d, y = %d\n", (x[0]+x[1]+x[2]+x[3])/4, (y[0]+y[1]+y[2]+y[3])/4);
@@ -141,15 +141,15 @@ static int s3c_ts_init(void)
 {
 	struct clk* clk;
 	
-	/* 1. ·ÖÅäÒ»¸öinput_dev½á¹¹Ìå */
+	/* 1. åˆ†é…ä¸€ä¸ªinput_devç»“æž„ä½“ */
 	s3c_ts_dev = input_allocate_device();
 
-	/* 2. ÉèÖÃ */
-	/* 2.1 ÄÜ²úÉúÄÄÀàÊÂ¼þ */
+	/* 2. è®¾ç½® */
+	/* 2.1 èƒ½äº§ç”Ÿå“ªç±»äº‹ä»¶ */
 	set_bit(EV_KEY, s3c_ts_dev->evbit);
 	set_bit(EV_ABS, s3c_ts_dev->evbit);
 
-	/* 2.2 ÄÜ²úÉúÕâÀàÊÂ¼þÀïµÄÄÄÐ©ÊÂ¼þ */
+	/* 2.2 èƒ½äº§ç”Ÿè¿™ç±»äº‹ä»¶é‡Œçš„å“ªäº›äº‹ä»¶ */
 	set_bit(BTN_TOUCH, s3c_ts_dev->keybit);
 
 	input_set_abs_params(s3c_ts_dev, ABS_X, 0, 0x3FF, 0, 0);
@@ -157,29 +157,29 @@ static int s3c_ts_init(void)
 	input_set_abs_params(s3c_ts_dev, ABS_PRESSURE, 0, 1, 0, 0);
 
 
-	/* 3. ×¢²á */
+	/* 3. æ³¨å†Œ */
 	input_register_device(s3c_ts_dev);
 
-	/* 4. Ó²¼þÏà¹ØµÄ²Ù×÷ */
-	/* 4.1 Ê¹ÄÜÊ±ÖÓ(CLKCON[15]) */
+	/* 4. ç¡¬ä»¶ç›¸å…³çš„æ“ä½œ */
+	/* 4.1 ä½¿èƒ½æ—¶é’Ÿ(CLKCON[15]) */
 	clk = clk_get(NULL, "adc");
 	clk_enable(clk);
 	
-	/* 4.2 ÉèÖÃS3C2440µÄADC/TS¼Ä´æÆ÷ */
+	/* 4.2 è®¾ç½®S3C2440çš„ADC/TSå¯„å­˜å™¨ */
 	s3c_ts_regs = ioremap(0x58000000, sizeof(struct s3c_ts_regs));
 
 	/* bit[14]  : 1-A/D converter prescaler enable
 	 * bit[13:6]: A/D converter prescaler value,
 	 *            49, ADCCLK=PCLK/(49+1)=50MHz/(49+1)=1MHz
-	 * bit[0]: A/D conversion starts by enable. ÏÈÉèÎª0
+	 * bit[0]: A/D conversion starts by enable. å…ˆè®¾ä¸º0
 	 */
 	s3c_ts_regs->adccon = (1<<14)|(49<<6);
 
 	request_irq(IRQ_TC, pen_down_up_irq, IRQF_SAMPLE_RANDOM, "ts_pen", NULL);
 	request_irq(IRQ_ADC, adc_irq, IRQF_SAMPLE_RANDOM, "adc", NULL);
 
-	/* ÓÅ»¯´íÊ©1: 
-	 * ÉèÖÃADCDLYÎª×î´óÖµ, ÕâÊ¹µÃµçÑ¹ÎÈ¶¨ºóÔÙ·¢³öIRQ_TCÖÐ¶Ï
+	/* ä¼˜åŒ–é”™æ–½1: 
+	 * è®¾ç½®ADCDLYä¸ºæœ€å¤§å€¼, è¿™ä½¿å¾—ç”µåŽ‹ç¨³å®šåŽå†å‘å‡ºIRQ_TCä¸­æ–­
 	 */
 	s3c_ts_regs->adcdly = 0xffff;
 	

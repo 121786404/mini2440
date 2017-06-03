@@ -34,7 +34,7 @@ static void usbmouse_as_key_irq(struct urb *urb)
 	}
 	printk("\n");
 
-	/* ÖØĞÂÌá½»urb */
+	/* é‡æ–°æäº¤urb */
 	usb_submit_urb(uk_urb, GFP_KERNEL);
 }
 
@@ -48,42 +48,42 @@ static int usbmouse_as_key_probe(struct usb_interface *intf, const struct usb_de
 	interface = intf->cur_altsetting;
 	endpoint = &interface->endpoint[0].desc;
 
-	/* a. ·ÖÅäÒ»¸öinput_dev */
+	/* a. åˆ†é…ä¸€ä¸ªinput_dev */
 	uk_dev = input_allocate_device();
 	
-	/* b. ÉèÖÃ */
-	/* b.1 ÄÜ²úÉúÄÄÀàÊÂ¼ş */
+	/* b. è®¾ç½® */
+	/* b.1 èƒ½äº§ç”Ÿå“ªç±»äº‹ä»¶ */
 	set_bit(EV_KEY, uk_dev->evbit);
 	set_bit(EV_REP, uk_dev->evbit);
 	
-	/* b.2 ÄÜ²úÉúÄÄĞ©ÊÂ¼ş */
+	/* b.2 èƒ½äº§ç”Ÿå“ªäº›äº‹ä»¶ */
 	set_bit(KEY_L, uk_dev->keybit);
 	set_bit(KEY_S, uk_dev->keybit);
 	set_bit(KEY_ENTER, uk_dev->keybit);
 	
-	/* c. ×¢²á */
+	/* c. æ³¨å†Œ */
 	input_register_device(uk_dev);
 	
-	/* d. Ó²¼şÏà¹Ø²Ù×÷ */
-	/* Êı¾İ´«Êä3ÒªËØ: Ô´,Ä¿µÄ,³¤¶È */
-	/* Ô´: USBÉè±¸µÄÄ³¸ö¶Ëµã */
+	/* d. ç¡¬ä»¶ç›¸å…³æ“ä½œ */
+	/* æ•°æ®ä¼ è¾“3è¦ç´ : æº,ç›®çš„,é•¿åº¦ */
+	/* æº: USBè®¾å¤‡çš„æŸä¸ªç«¯ç‚¹ */
 	pipe = usb_rcvintpipe(dev, endpoint->bEndpointAddress);
 
-	/* ³¤¶È: */
+	/* é•¿åº¦: */
 	len = endpoint->wMaxPacketSize;
 
-	/* Ä¿µÄ: */
+	/* ç›®çš„: */
 	usb_buf = usb_buffer_alloc(dev, len, GFP_ATOMIC, &usb_buf_phys);
 
-	/* Ê¹ÓÃ"3ÒªËØ" */
-	/* ·ÖÅäusb request block */
+	/* ä½¿ç”¨"3è¦ç´ " */
+	/* åˆ†é…usb request block */
 	uk_urb = usb_alloc_urb(0, GFP_KERNEL);
-	/* Ê¹ÓÃ"3ÒªËØÉèÖÃurb" */
+	/* ä½¿ç”¨"3è¦ç´ è®¾ç½®urb" */
 	usb_fill_int_urb(uk_urb, dev, pipe, usb_buf, len, usbmouse_as_key_irq, NULL, endpoint->bInterval);
 	uk_urb->transfer_dma = usb_buf_phys;
 	uk_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
 
-	/* Ê¹ÓÃURB */
+	/* ä½¿ç”¨URB */
 	usb_submit_urb(uk_urb, GFP_KERNEL);
 	
 	return 0;
@@ -102,7 +102,7 @@ static void usbmouse_as_key_disconnect(struct usb_interface *intf)
 	input_free_device(uk_dev);
 }
 
-/* 1. ·ÖÅä/ÉèÖÃusb_driver */
+/* 1. åˆ†é…/è®¾ç½®usb_driver */
 static struct usb_driver usbmouse_as_key_driver = {
 	.name		= "usbmouse_as_key_",
 	.probe		= usbmouse_as_key_probe,
@@ -113,7 +113,7 @@ static struct usb_driver usbmouse_as_key_driver = {
 
 static int usbmouse_as_key_init(void)
 {
-	/* 2. ×¢²á */
+	/* 2. æ³¨å†Œ */
 	usb_register(&usbmouse_as_key_driver);
 	return 0;
 }

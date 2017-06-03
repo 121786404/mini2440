@@ -1,5 +1,5 @@
 
-/* ²Î¿¼ 
+/* å‚è€ƒ 
  * drivers\mtd\nand\s3c2410.c
  * drivers\mtd\nand\at91_nand.c
  */
@@ -54,12 +54,12 @@ static void s3c2440_select_chip(struct mtd_info *mtd, int chipnr)
 {
 	if (chipnr == -1)
 	{
-		/* È¡ÏûÑ¡ÖÐ: NFCONT[1]ÉèÎª1 */
+		/* å–æ¶ˆé€‰ä¸­: NFCONT[1]è®¾ä¸º1 */
 		s3c_nand_regs->nfcont |= (1<<1);		
 	}
 	else
 	{
-		/* Ñ¡ÖÐ: NFCONT[1]ÉèÎª0 */
+		/* é€‰ä¸­: NFCONT[1]è®¾ä¸º0 */
 		s3c_nand_regs->nfcont &= ~(1<<1);
 	}
 }
@@ -68,12 +68,12 @@ static void s3c2440_cmd_ctrl(struct mtd_info *mtd, int dat, unsigned int ctrl)
 {
 	if (ctrl & NAND_CLE)
 	{
-		/* ·¢ÃüÁî: NFCMMD=dat */
+		/* å‘å‘½ä»¤: NFCMMD=dat */
 		s3c_nand_regs->nfcmd = dat;
 	}
 	else
 	{
-		/* ·¢µØÖ·: NFADDR=dat */
+		/* å‘åœ°å€: NFADDR=dat */
 		s3c_nand_regs->nfaddr = dat;
 	}
 }
@@ -88,14 +88,14 @@ static int s3c_nand_init(void)
 {
 	struct clk *clk;
 	
-	/* 1. ·ÖÅäÒ»¸önand_chip½á¹¹Ìå */
+	/* 1. åˆ†é…ä¸€ä¸ªnand_chipç»“æž„ä½“ */
 	s3c_nand = kzalloc(sizeof(struct nand_chip), GFP_KERNEL);
 
 	s3c_nand_regs = ioremap(0x4E000000, sizeof(struct s3c_nand_regs));
 	
-	/* 2. ÉèÖÃnand_chip */
-	/* ÉèÖÃnand_chipÊÇ¸ønand_scanº¯ÊýÊ¹ÓÃµÄ, Èç¹û²»ÖªµÀÔõÃ´ÉèÖÃ, ÏÈ¿´nand_scanÔõÃ´Ê¹ÓÃ 
-	 * ËüÓ¦¸ÃÌá¹©:Ñ¡ÖÐ,·¢ÃüÁî,·¢µØÖ·,·¢Êý¾Ý,¶ÁÊý¾Ý,ÅÐ¶Ï×´Ì¬µÄ¹¦ÄÜ
+	/* 2. è®¾ç½®nand_chip */
+	/* è®¾ç½®nand_chipæ˜¯ç»™nand_scanå‡½æ•°ä½¿ç”¨çš„, å¦‚æžœä¸çŸ¥é“æ€Žä¹ˆè®¾ç½®, å…ˆçœ‹nand_scanæ€Žä¹ˆä½¿ç”¨ 
+	 * å®ƒåº”è¯¥æä¾›:é€‰ä¸­,å‘å‘½ä»¤,å‘åœ°å€,å‘æ•°æ®,è¯»æ•°æ®,åˆ¤æ–­çŠ¶æ€çš„åŠŸèƒ½
 	 */
 	s3c_nand->select_chip = s3c2440_select_chip;
 	s3c_nand->cmd_ctrl    = s3c2440_cmd_ctrl;
@@ -103,15 +103,15 @@ static int s3c_nand_init(void)
 	s3c_nand->IO_ADDR_W   = &s3c_nand_regs->nfdata;
 	s3c_nand->dev_ready   = s3c2440_dev_ready;
 	
-	/* 3. Ó²¼þÏà¹ØµÄÉèÖÃ: ¸ù¾ÝNAND FLASHµÄÊÖ²áÉèÖÃÊ±¼ä²ÎÊý */
-	/* Ê¹ÄÜNAND FLASH¿ØÖÆÆ÷µÄÊ±ÖÓ */
+	/* 3. ç¡¬ä»¶ç›¸å…³çš„è®¾ç½®: æ ¹æ®NAND FLASHçš„æ‰‹å†Œè®¾ç½®æ—¶é—´å‚æ•° */
+	/* ä½¿èƒ½NAND FLASHæŽ§åˆ¶å™¨çš„æ—¶é’Ÿ */
 	clk = clk_get(NULL, "nand");
 	clk_enable(clk);              /* CLKCON'bit[4] */
 	
 	/* HCLK=100MHz
-	 * TACLS:  ·¢³öCLE/ALEÖ®ºó¶à³¤Ê±¼ä²Å·¢³önWEÐÅºÅ, ´ÓNANDÊÖ²á¿ÉÖªCLE/ALEÓënWE¿ÉÒÔÍ¬Ê±·¢³ö,ËùÒÔTACLS=0
-	 * TWRPH0: nWEµÄÂö³å¿í¶È, HCLK x ( TWRPH0 + 1 ), ´ÓNANDÊÖ²á¿ÉÖªËüÒª>=12ns, ËùÒÔTWRPH0>=1
-	 * TWRPH1: nWE±äÎª¸ßµçÆ½ºó¶à³¤Ê±¼äCLE/ALE²ÅÄÜ±äÎªµÍµçÆ½, ´ÓNANDÊÖ²á¿ÉÖªËüÒª>=5ns, ËùÒÔTWRPH1>=0
+	 * TACLS:  å‘å‡ºCLE/ALEä¹‹åŽå¤šé•¿æ—¶é—´æ‰å‘å‡ºnWEä¿¡å·, ä»ŽNANDæ‰‹å†Œå¯çŸ¥CLE/ALEä¸ŽnWEå¯ä»¥åŒæ—¶å‘å‡º,æ‰€ä»¥TACLS=0
+	 * TWRPH0: nWEçš„è„‰å†²å®½åº¦, HCLK x ( TWRPH0 + 1 ), ä»ŽNANDæ‰‹å†Œå¯çŸ¥å®ƒè¦>=12ns, æ‰€ä»¥TWRPH0>=1
+	 * TWRPH1: nWEå˜ä¸ºé«˜ç”µå¹³åŽå¤šé•¿æ—¶é—´CLE/ALEæ‰èƒ½å˜ä¸ºä½Žç”µå¹³, ä»ŽNANDæ‰‹å†Œå¯çŸ¥å®ƒè¦>=5ns, æ‰€ä»¥TWRPH1>=0
 	 */
 #define TACLS    0
 #define TWRPH0   1
@@ -119,17 +119,17 @@ static int s3c_nand_init(void)
 	s3c_nand_regs->nfconf = (TACLS<<12) | (TWRPH0<<8) | (TWRPH1<<4);
 
 	/* NFCONT: 
-	 * BIT1-ÉèÎª1, È¡ÏûÆ¬Ñ¡ 
-	 * BIT0-ÉèÎª1, Ê¹ÄÜNAND FLASH¿ØÖÆÆ÷
+	 * BIT1-è®¾ä¸º1, å–æ¶ˆç‰‡é€‰ 
+	 * BIT0-è®¾ä¸º1, ä½¿èƒ½NAND FLASHæŽ§åˆ¶å™¨
 	 */
 	s3c_nand_regs->nfcont = (1<<1) | (1<<0);
 	
-	/* 4. Ê¹ÓÃ: nand_scan */
+	/* 4. ä½¿ç”¨: nand_scan */
 	s3c_mtd = kzalloc(sizeof(struct mtd_info), GFP_KERNEL);
 	s3c_mtd->owner = THIS_MODULE;
 	s3c_mtd->priv  = s3c_nand;
 	
-	nand_scan(s3c_mtd, 1);  /* Ê¶±ðNAND FLASH, ¹¹Ôìmtd_info */
+	nand_scan(s3c_mtd, 1);  /* è¯†åˆ«NAND FLASH, æž„é€ mtd_info */
 	
 	/* 5. add_mtd_partitions */
 	

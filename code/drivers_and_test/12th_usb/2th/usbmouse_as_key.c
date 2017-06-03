@@ -36,7 +36,7 @@ static void usbmouse_as_key_disconnect(struct usb_interface *intf)
 	printk("disconnect usbmouse!\n");
 }
 
-/* 1. ·ÖÅä/ÉèÖÃusb_driver */
+/* 1. åˆ†é…/è®¾ç½®usb_driver */
 static struct usb_driver usbmouse_as_key_driver = {
 	.name		= "usbmouse_as_key_",
 	.probe		= usbmouse_as_key_probe,
@@ -47,7 +47,7 @@ static struct usb_driver usbmouse_as_key_driver = {
 
 static int usbmouse_as_key_init(void)
 {
-	/* 2. ×¢²á */
+	/* 2. æ³¨å†Œ */
 	usb_register(&usbmouse_as_key_driver);
 	return 0;
 }

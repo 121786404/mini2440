@@ -1,5 +1,5 @@
 
-/* NAND FLASH¿ØÖÆÆ÷ */
+/* NAND FLASHæ§åˆ¶å™¨ */
 #define NFCONF (*((volatile unsigned long *)0x4E000000))
 #define NFCONT (*((volatile unsigned long *)0x4E000004))
 #define NFCMMD (*((volatile unsigned char *)0x4E000008))
@@ -36,13 +36,13 @@ int isBootFromNorFlash(void)
 	*p = 0x12345678;
 	if (*p == 0x12345678)
 	{
-		/* Ğ´³É¹¦, ÊÇnandÆô¶¯ */
+		/* å†™æˆåŠŸ, æ˜¯nandå¯åŠ¨ */
 		*p = val;
 		return 0;
 	}
 	else
 	{
-		/* NOR²»ÄÜÏñÄÚ´æÒ»ÑùĞ´ */
+		/* NORä¸èƒ½åƒå†…å­˜ä¸€æ ·å†™ */
 		return 1;
 	}
 }
@@ -51,7 +51,7 @@ void copy_code_to_sdram(unsigned char *src, unsigned char *dest, unsigned int le
 {	
 	int i = 0;
 	
-	/* Èç¹ûÊÇNORÆô¶¯ */
+	/* å¦‚æœæ˜¯NORå¯åŠ¨ */
 	if (isBootFromNorFlash())
 	{
 		while (i < len)
@@ -81,9 +81,9 @@ void nand_init(void)
 #define TACLS   0
 #define TWRPH0  1
 #define TWRPH1  0
-	/* ÉèÖÃÊ±Ğò */
+	/* è®¾ç½®æ—¶åº */
 	NFCONF = (TACLS<<12)|(TWRPH0<<8)|(TWRPH1<<4);
-	/* Ê¹ÄÜNAND Flash¿ØÖÆÆ÷, ³õÊ¼»¯ECC, ½ûÖ¹Æ¬Ñ¡ */
+	/* ä½¿èƒ½NAND Flashæ§åˆ¶å™¨, åˆå§‹åŒ–ECC, ç¦æ­¢ç‰‡é€‰ */
 	NFCONT = (1<<4)|(1<<1)|(1<<0);	
 }
 
@@ -138,24 +138,24 @@ void nand_read(unsigned int addr, unsigned char *buf, unsigned int len)
 	int col = addr % 2048;
 	int i = 0;
 		
-	/* 1. Ñ¡ÖĞ */
+	/* 1. é€‰ä¸­ */
 	nand_select();
 
 	while (i < len)
 	{
-		/* 2. ·¢³ö¶ÁÃüÁî00h */
+		/* 2. å‘å‡ºè¯»å‘½ä»¤00h */
 		nand_cmd(0x00);
 
-		/* 3. ·¢³öµØÖ·(·Ö5²½·¢³ö) */
+		/* 3. å‘å‡ºåœ°å€(åˆ†5æ­¥å‘å‡º) */
 		nand_addr(addr);
 
-		/* 4. ·¢³ö¶ÁÃüÁî30h */
+		/* 4. å‘å‡ºè¯»å‘½ä»¤30h */
 		nand_cmd(0x30);
 
-		/* 5. ÅĞ¶Ï×´Ì¬ */
+		/* 5. åˆ¤æ–­çŠ¶æ€ */
 		nand_wait_ready();
 
-		/* 6. ¶ÁÊı¾İ */
+		/* 6. è¯»æ•°æ® */
 		for (; (col < 2048) && (i < len); col++)
 		{
 			buf[i] = nand_data();
@@ -166,40 +166,40 @@ void nand_read(unsigned int addr, unsigned char *buf, unsigned int len)
 		col = 0;
 	}
 
-	/* 7. È¡ÏûÑ¡ÖĞ */		
+	/* 7. å–æ¶ˆé€‰ä¸­ */		
 	nand_deselect();
 }
 
-#define PCLK            50000000    // init.cÖĞµÄclock_initº¯ÊıÉèÖÃPCLKÎª50MHz
-#define UART_CLK        PCLK        //  UART0µÄÊ±ÖÓÔ´ÉèÎªPCLK
-#define UART_BAUD_RATE  115200      // ²¨ÌØÂÊ
+#define PCLK            50000000    // init.cä¸­çš„clock_initå‡½æ•°è®¾ç½®PCLKä¸º50MHz
+#define UART_CLK        PCLK        //  UART0çš„æ—¶é’Ÿæºè®¾ä¸ºPCLK
+#define UART_BAUD_RATE  115200      // æ³¢ç‰¹ç‡
 #define UART_BRD        ((UART_CLK  / (UART_BAUD_RATE * 16)) - 1)
 
 /*
- * ³õÊ¼»¯UART0
- * 115200,8N1,ÎŞÁ÷¿Ø
+ * åˆå§‹åŒ–UART0
+ * 115200,8N1,æ— æµæ§
  */
 void uart0_init(void)
 {
-    GPHCON  |= 0xa0;    // GPH2,GPH3ÓÃ×÷TXD0,RXD0
-    GPHUP   = 0x0c;     // GPH2,GPH3ÄÚ²¿ÉÏÀ­
+    GPHCON  |= 0xa0;    // GPH2,GPH3ç”¨ä½œTXD0,RXD0
+    GPHUP   = 0x0c;     // GPH2,GPH3å†…éƒ¨ä¸Šæ‹‰
 
-    ULCON0  = 0x03;     // 8N1(8¸öÊı¾İÎ»£¬ÎŞ½ÏÑé£¬1¸öÍ£Ö¹Î»)
-    UCON0   = 0x05;     // ²éÑ¯·½Ê½£¬UARTÊ±ÖÓÔ´ÎªPCLK
-    UFCON0  = 0x00;     // ²»Ê¹ÓÃFIFO
-    UMCON0  = 0x00;     // ²»Ê¹ÓÃÁ÷¿Ø
-    UBRDIV0 = UART_BRD; // ²¨ÌØÂÊÎª115200
+    ULCON0  = 0x03;     // 8N1(8ä¸ªæ•°æ®ä½ï¼Œæ— è¾ƒéªŒï¼Œ1ä¸ªåœæ­¢ä½)
+    UCON0   = 0x05;     // æŸ¥è¯¢æ–¹å¼ï¼ŒUARTæ—¶é’Ÿæºä¸ºPCLK
+    UFCON0  = 0x00;     // ä¸ä½¿ç”¨FIFO
+    UMCON0  = 0x00;     // ä¸ä½¿ç”¨æµæ§
+    UBRDIV0 = UART_BRD; // æ³¢ç‰¹ç‡ä¸º115200
 }
 
 /*
- * ·¢ËÍÒ»¸ö×Ö·û
+ * å‘é€ä¸€ä¸ªå­—ç¬¦
  */
 void putc(unsigned char c)
 {
-    /* µÈ´ı£¬Ö±µ½·¢ËÍ»º³åÇøÖĞµÄÊı¾İÒÑ¾­È«²¿·¢ËÍ³öÈ¥ */
+    /* ç­‰å¾…ï¼Œç›´åˆ°å‘é€ç¼“å†²åŒºä¸­çš„æ•°æ®å·²ç»å…¨éƒ¨å‘é€å‡ºå» */
     while (!(UTRSTAT0 & TXD0READY));
     
-    /* ÏòUTXH0¼Ä´æÆ÷ÖĞĞ´ÈëÊı¾İ£¬UART¼´×Ô¶¯½«Ëü·¢ËÍ³öÈ¥ */
+    /* å‘UTXH0å¯„å­˜å™¨ä¸­å†™å…¥æ•°æ®ï¼ŒUARTå³è‡ªåŠ¨å°†å®ƒå‘é€å‡ºå» */
     UTXH0 = c;
 }
 

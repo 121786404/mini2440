@@ -19,10 +19,10 @@ volatile unsigned long *gpgdat;
 static int second_drv_open(struct inode *inode, struct file *file)
 {
 	/*
-	 * K1,K2,K3,K4¶ÔÓ¦GPG0£¬GPG3£¬GPG5£¬GPG6
+	 * K1,K2,K3,K4å¯¹åº”GPG0ï¼ŒGPG3ï¼ŒGPG5ï¼ŒGPG6
 	 */
 
-	/* ÅäÖÃGPG0£¬GPG3£¬GPG5£¬GPG6ÎªÊäÈëÒı½Å */
+	/* é…ç½®GPG0ï¼ŒGPG3ï¼ŒGPG5ï¼ŒGPG6ä¸ºè¾“å…¥å¼•è„š */
 	*gpgcon &= ~((0x3<<(0*2)) | (0x3<<(3*2)) | (0x3<<(5*2)) | (0x3<<(6*2)));
 
 	return 0;
@@ -30,7 +30,7 @@ static int second_drv_open(struct inode *inode, struct file *file)
 
 ssize_t second_drv_read(struct file *file, char __user *buf, size_t size, loff_t *ppos)
 {
-	/* ·µ»Ø4¸öÒı½ÅµÄµçÆ½ */
+	/* è¿”å›4ä¸ªå¼•è„šçš„ç”µå¹³ */
 	unsigned char key_vals[4];
 	int regval;
 
@@ -50,7 +50,7 @@ ssize_t second_drv_read(struct file *file, char __user *buf, size_t size, loff_t
 
 
 static struct file_operations sencod_drv_fops = {
-    .owner  =   THIS_MODULE,    /* ÕâÊÇÒ»¸öºê£¬ÍÆÏò±àÒëÄ£¿éÊ±×Ô¶¯´´½¨µÄ__this_module±äÁ¿ */
+    .owner  =   THIS_MODULE,    /* è¿™æ˜¯ä¸€ä¸ªå®ï¼Œæ¨å‘ç¼–è¯‘æ¨¡å—æ—¶è‡ªåŠ¨åˆ›å»ºçš„__this_moduleå˜é‡ */
     .open   =   second_drv_open,     
 	.read	=	second_drv_read,	   
 };

@@ -9,17 +9,17 @@
 #include <asm/uaccess.h>
 
 static unsigned short ignore[]      = { I2C_CLIENT_END };
-static unsigned short normal_addr[] = { 0x50, I2C_CLIENT_END }; /* µØÖ·ÖµÊÇ7Î» */
-                                        /* ¸ÄÎª0x60µÄ»°, ÓÉÓÚ²»´æÔÚÉè±¸µØÖ·Îª0x60µÄÉè±¸, ËùÒÔat24cxx_detect²»±»µ÷ÓÃ */
+static unsigned short normal_addr[] = { 0x50, I2C_CLIENT_END }; /* åœ°å€å€¼æ˜¯7ä½ */
+                                        /* æ”¹ä¸º0x60çš„è¯, ç”±äºä¸å­˜åœ¨è®¾å¤‡åœ°å€ä¸º0x60çš„è®¾å¤‡, æ‰€ä»¥at24cxx_detectä¸è¢«è°ƒç”¨ */
 
 static unsigned short force_addr[] = {ANY_I2C_BUS, 0x60, I2C_CLIENT_END};
 static unsigned short * forces[] = {force_addr, NULL};
 										
 static struct i2c_client_address_data addr_data = {
-	.normal_i2c	= normal_addr,  /* Òª·¢³öSĞÅºÅºÍÉè±¸µØÖ·²¢µÃµ½ACKĞÅºÅ,²ÅÄÜÈ·¶¨´æÔÚÕâ¸öÉè±¸ */
+	.normal_i2c	= normal_addr,  /* è¦å‘å‡ºSä¿¡å·å’Œè®¾å¤‡åœ°å€å¹¶å¾—åˆ°ACKä¿¡å·,æ‰èƒ½ç¡®å®šå­˜åœ¨è¿™ä¸ªè®¾å¤‡ */
 	.probe		= ignore,
 	.ignore		= ignore,
-	//.forces     = forces, /* Ç¿ÖÆÈÏÎª´æÔÚÕâ¸öÉè±¸ */
+	//.forces     = forces, /* å¼ºåˆ¶è®¤ä¸ºå­˜åœ¨è¿™ä¸ªè®¾å¤‡ */
 };
 
 static struct i2c_driver at24cxx_driver;
@@ -44,19 +44,19 @@ static ssize_t at24cxx_read(struct file *file, char __user *buf, size_t size, lo
 	
 	copy_from_user(&address, buf, 1);
 
-	/* Êı¾İ´«ÊäÈıÒªËØ: Ô´,Ä¿µÄ,³¤¶È */
+	/* æ•°æ®ä¼ è¾“ä¸‰è¦ç´ : æº,ç›®çš„,é•¿åº¦ */
 
-	/* ¶ÁAT24CXXÊ±,ÒªÏÈ°ÑÒª¶ÁµÄ´æ´¢¿Õ¼äµÄµØÖ··¢¸øËü */
-	msg[0].addr  = at24cxx_client->addr;  /* Ä¿µÄ */
-	msg[0].buf   = &address;              /* Ô´ */
-	msg[0].len   = 1;                     /* µØÖ·=1 byte */
-	msg[0].flags = 0;                     /* ±íÊ¾Ğ´ */
+	/* è¯»AT24CXXæ—¶,è¦å…ˆæŠŠè¦è¯»çš„å­˜å‚¨ç©ºé—´çš„åœ°å€å‘ç»™å®ƒ */
+	msg[0].addr  = at24cxx_client->addr;  /* ç›®çš„ */
+	msg[0].buf   = &address;              /* æº */
+	msg[0].len   = 1;                     /* åœ°å€=1 byte */
+	msg[0].flags = 0;                     /* è¡¨ç¤ºå†™ */
 
-	/* È»ºóÆô¶¯¶Á²Ù×÷ */
-	msg[1].addr  = at24cxx_client->addr;  /* Ô´ */
-	msg[1].buf   = &data;                 /* Ä¿µÄ */
-	msg[1].len   = 1;                     /* Êı¾İ=1 byte */
-	msg[1].flags = I2C_M_RD;                     /* ±íÊ¾¶Á */
+	/* ç„¶åå¯åŠ¨è¯»æ“ä½œ */
+	msg[1].addr  = at24cxx_client->addr;  /* æº */
+	msg[1].buf   = &data;                 /* ç›®çš„ */
+	msg[1].len   = 1;                     /* æ•°æ®=1 byte */
+	msg[1].flags = I2C_M_RD;                     /* è¡¨ç¤ºè¯» */
 
 
 	ret = i2c_transfer(at24cxx_client->adapter, msg, 2);
@@ -83,11 +83,11 @@ static ssize_t at24cxx_write(struct file *file, const char __user *buf, size_t s
 	
 	copy_from_user(val, buf, 2);
 
-	/* Êı¾İ´«ÊäÈıÒªËØ: Ô´,Ä¿µÄ,³¤¶È */
-	msg[0].addr  = at24cxx_client->addr;  /* Ä¿µÄ */
-	msg[0].buf   = val;                   /* Ô´ */
-	msg[0].len   = 2;                     /* µØÖ·+Êı¾İ=2 byte */
-	msg[0].flags = 0;                     /* ±íÊ¾Ğ´ */
+	/* æ•°æ®ä¼ è¾“ä¸‰è¦ç´ : æº,ç›®çš„,é•¿åº¦ */
+	msg[0].addr  = at24cxx_client->addr;  /* ç›®çš„ */
+	msg[0].buf   = val;                   /* æº */
+	msg[0].len   = 2;                     /* åœ°å€+æ•°æ®=2 byte */
+	msg[0].flags = 0;                     /* è¡¨ç¤ºå†™ */
 
 	ret = i2c_transfer(at24cxx_client->adapter, msg, 1);
 	if (ret == 1)
@@ -107,7 +107,7 @@ static int at24cxx_detect(struct i2c_adapter *adapter, int address, int kind)
 {	
 	printk("at24cxx_detect\n");
 
-	/* ¹¹¹¹Ò»¸öi2c_client½á¹¹Ìå: ÒÔºóÊÕ¸ÄÊı¾İÊ±»áÓÃµ½Ëü */
+	/* æ„æ„ä¸€ä¸ªi2c_clientç»“æ„ä½“: ä»¥åæ”¶æ”¹æ•°æ®æ—¶ä¼šç”¨åˆ°å®ƒ */
 	at24cxx_client = kzalloc(sizeof(struct i2c_client), GFP_KERNEL);
 	at24cxx_client->addr    = address;
 	at24cxx_client->adapter = adapter;
@@ -142,8 +142,8 @@ static int at24cxx_detach(struct i2c_client *client)
 }
 
 
-/* 1. ·ÖÅäÒ»¸öi2c_driver½á¹¹Ìå */
-/* 2. ÉèÖÃi2c_driver½á¹¹Ìå */
+/* 1. åˆ†é…ä¸€ä¸ªi2c_driverç»“æ„ä½“ */
+/* 2. è®¾ç½®i2c_driverç»“æ„ä½“ */
 static struct i2c_driver at24cxx_driver = {
 	.driver = {
 		.name	= "at24cxx",

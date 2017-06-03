@@ -394,24 +394,24 @@ asmlinkage void sys_hello(const char __user * buf, int count)
 	int val;
 	struct pt_regs *regs; 
 	
-	/* 1. Êä³öÒ»Ğ©µ÷ÊÔĞÅÏ¢ */
-	/* Ó¦ÓÃ³ÌĞòtest_scµÄ·´»ã±àÀï:       0001078c <cnt>: */
-	/* Ó¦ÓÃ³ÌĞòtest_sc_sleepµÄ·´»ã±àÀï: 000107c8 <cnt>: */
+	/* 1. è¾“å‡ºä¸€äº›è°ƒè¯•ä¿¡æ¯ */
+	/* åº”ç”¨ç¨‹åºtest_scçš„åæ±‡ç¼–é‡Œ:       0001078c <cnt>: */
+	/* åº”ç”¨ç¨‹åºtest_sc_sleepçš„åæ±‡ç¼–é‡Œ: 000107c8 <cnt>: */
 //	copy_from_user(&val, (const void __user *)0x0001078c, 4);
 	copy_from_user(&val, (const void __user *)0x000107c8, 4);
 	printk("sys_hello: cnt = %d\n", val);
 
 	
-	/* 2. Ö´ĞĞ±»Ìæ»»µÄÖ¸Áî: add	r3, r3, #2	; 0x2 */
-	/* ËÑ pt_regs , ÔÚËüµÄ½á¹ûÀïÔÙËÑ current */
+	/* 2. æ‰§è¡Œè¢«æ›¿æ¢çš„æŒ‡ä»¤: add	r3, r3, #2	; 0x2 */
+	/* æœ pt_regs , åœ¨å®ƒçš„ç»“æœé‡Œå†æœ current */
 	regs = task_pt_regs(current);
 	regs->ARM_r3 += 2;
 
-	/* ´òÓ¡¾Ö²¿±äÁ¿i */
+	/* æ‰“å°å±€éƒ¨å˜é‡i */
 	copy_from_user(&val, (const void __user *)(regs->ARM_fp - 16), 4);
 	printk("sys_hello: i = %d\n", val);
 	
-	/* 3. ·µ»Ø */
+	/* 3. è¿”å› */
 	return;
 }
 

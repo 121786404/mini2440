@@ -1,6 +1,6 @@
 
 
-/* ·ÖÅä/ÉèÖÃ/×¢²áÒ»¸öplatform_driver */
+/* åˆ†é…/è®¾ç½®/æ³¨å†Œä¸€ä¸ªplatform_driver */
 
 #include <linux/module.h>
 #include <linux/version.h>
@@ -31,7 +31,7 @@ static int pin;
 static int led_open(struct inode *inode, struct file *file)
 {
 	//printk("first_drv_open\n");
-	/* ÅäÖÃÎªÊä³ö */
+	/* é…ç½®ä¸ºè¾“å‡º */
 	*gpio_con &= ~(0x3<<(pin*2));
 	*gpio_con |= (0x1<<(pin*2));
 	return 0;	
@@ -47,12 +47,12 @@ static ssize_t led_write(struct file *file, const char __user *buf, size_t count
 
 	if (val == 1)
 	{
-		// µãµÆ
+		// ç‚¹ç¯
 		*gpio_dat &= ~(1<<pin);
 	}
 	else
 	{
-		// ÃğµÆ
+		// ç­ç¯
 		*gpio_dat |= (1<<pin);
 	}
 	
@@ -61,7 +61,7 @@ static ssize_t led_write(struct file *file, const char __user *buf, size_t count
 
 
 static struct file_operations led_fops = {
-    .owner  =   THIS_MODULE,    /* ÕâÊÇÒ»¸öºê£¬ÍÆÏò±àÒëÄ£¿éÊ±×Ô¶¯´´½¨µÄ__this_module±äÁ¿ */
+    .owner  =   THIS_MODULE,    /* è¿™æ˜¯ä¸€ä¸ªå®ï¼Œæ¨å‘ç¼–è¯‘æ¨¡å—æ—¶è‡ªåŠ¨åˆ›å»ºçš„__this_moduleå˜é‡ */
     .open   =   led_open,     
 	.write	=	led_write,	   
 };
@@ -70,7 +70,7 @@ static int led_probe(struct platform_device *pdev)
 {
 	struct resource		*res;
 
-	/* ¸ù¾İplatform_deviceµÄ×ÊÔ´½øĞĞioremap */
+	/* æ ¹æ®platform_deviceçš„èµ„æºè¿›è¡Œioremap */
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	gpio_con = ioremap(res->start, res->end - res->start + 1);
 	gpio_dat = gpio_con + 1;
@@ -78,7 +78,7 @@ static int led_probe(struct platform_device *pdev)
 	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
 	pin = res->start;
 
-	/* ×¢²á×Ö·ûÉè±¸Çı¶¯³ÌĞò */
+	/* æ³¨å†Œå­—ç¬¦è®¾å¤‡é©±åŠ¨ç¨‹åº */
 
 	printk("led_probe, found led\n");
 
@@ -93,7 +93,7 @@ static int led_probe(struct platform_device *pdev)
 
 static int led_remove(struct platform_device *pdev)
 {
-	/* Ğ¶ÔØ×Ö·ûÉè±¸Çı¶¯³ÌĞò */
+	/* å¸è½½å­—ç¬¦è®¾å¤‡é©±åŠ¨ç¨‹åº */
 	/* iounmap */
 	printk("led_remove, remove led\n");
 

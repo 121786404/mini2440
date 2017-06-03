@@ -64,18 +64,18 @@ static volatile struct lcd_regs* lcd_regs;
 
 static int lcd_init(void)
 {
-	/* 1. ·ÖÅäÒ»¸öfb_info */
+	/* 1. åˆ†é…ä¸€ä¸ªfb_info */
 	s3c_lcd = framebuffer_alloc(0, NULL);
 
-	/* 2. ÉèÖÃ */
-	/* 2.1 ÉèÖÃ¹Ì¶¨µÄ²ÎÊý */
+	/* 2. è®¾ç½® */
+	/* 2.1 è®¾ç½®å›ºå®šçš„å‚æ•° */
 	strcpy(s3c_lcd->fix.id, "mylcd");
-	s3c_lcd->fix.smem_len = 320*240*32/8;        /* MINI2440µÄLCDÎ»¿íÊÇ24,µ«ÊÇ2440Àï»á·ÖÅä4×Ö½Ú¼´32Î»(ÀË·Ñ1×Ö½Ú) */
+	s3c_lcd->fix.smem_len = 320*240*32/8;        /* MINI2440çš„LCDä½å®½æ˜¯24,ä½†æ˜¯2440é‡Œä¼šåˆ†é…4å­—èŠ‚å³32ä½(æµªè´¹1å­—èŠ‚) */
 	s3c_lcd->fix.type     = FB_TYPE_PACKED_PIXELS;
 	s3c_lcd->fix.visual   = FB_VISUAL_TRUECOLOR; /* TFT */
 	s3c_lcd->fix.line_length = 320*4;
 	
-	/* 2.2 ÉèÖÃ¿É±äµÄ²ÎÊý */
+	/* 2.2 è®¾ç½®å¯å˜çš„å‚æ•° */
 	s3c_lcd->var.xres           = 320;
 	s3c_lcd->var.yres           = 240;
 	s3c_lcd->var.xres_virtual   = 320;
@@ -95,41 +95,41 @@ static int lcd_init(void)
 	s3c_lcd->var.activate       = FB_ACTIVATE_NOW;
 	
 	
-	/* 2.3 ÉèÖÃ²Ù×÷º¯Êý */
+	/* 2.3 è®¾ç½®æ“ä½œå‡½æ•° */
 	s3c_lcd->fbops              = &s3c_lcdfb_ops;
 	
-	/* 2.4 ÆäËûµÄÉèÖÃ */
+	/* 2.4 å…¶ä»–çš„è®¾ç½® */
 	//s3c_lcd->pseudo_palette =; //
-	//s3c_lcd->screen_base  = ;  /* ÏÔ´æµÄÐéÄâµØÖ· */ 
+	//s3c_lcd->screen_base  = ;  /* æ˜¾å­˜çš„è™šæ‹Ÿåœ°å€ */ 
 	s3c_lcd->screen_size   = 320*240*32/8;
 
-	/* 3. Ó²¼þÏà¹ØµÄ²Ù×÷ */
-	/* 3.1 ÅäÖÃGPIOÓÃÓÚLCD */
+	/* 3. ç¡¬ä»¶ç›¸å…³çš„æ“ä½œ */
+	/* 3.1 é…ç½®GPIOç”¨äºŽLCD */
 	gpbcon = ioremap(0x56000010, 8);
 	gpbdat = gpbcon+1;
 	gpccon = ioremap(0x56000020, 4);
 	gpdcon = ioremap(0x56000030, 4);
 	gpgcon = ioremap(0x56000060, 4);
 
-    *gpccon  = 0xaaaaaaaa;   /* GPIO¹Ü½ÅÓÃÓÚVD[7:0],LCDVF[2:0],VM,VFRAME,VLINE,VCLK,LEND */
-	*gpdcon  = 0xaaaaaaaa;   /* GPIO¹Ü½ÅÓÃÓÚVD[23:8] */
+    *gpccon  = 0xaaaaaaaa;   /* GPIOç®¡è„šç”¨äºŽVD[7:0],LCDVF[2:0],VM,VFRAME,VLINE,VCLK,LEND */
+	*gpdcon  = 0xaaaaaaaa;   /* GPIOç®¡è„šç”¨äºŽVD[23:8] */
 	
-//	*gpbcon &= ~(3);  /* GPB0ÉèÖÃÎªÊä³öÒý½Å */
+//	*gpbcon &= ~(3);  /* GPB0è®¾ç½®ä¸ºè¾“å‡ºå¼•è„š */
 //	*gpbcon |= 1;
-//	*gpbdat &= ~1;     /* Êä³öµÍµçÆ½ */
+//	*gpbdat &= ~1;     /* è¾“å‡ºä½Žç”µå¹³ */
 
-	*gpgcon |= (3<<8); /* GPG4ÓÃ×÷LCD_PWREN */
+	*gpgcon |= (3<<8); /* GPG4ç”¨ä½œLCD_PWREN */
 	
-	/* 3.2 ¸ù¾ÝLCDÊÖ²áÉèÖÃLCD¿ØÖÆÆ÷, ±ÈÈçVCLKµÄÆµÂÊµÈ */
+	/* 3.2 æ ¹æ®LCDæ‰‹å†Œè®¾ç½®LCDæŽ§åˆ¶å™¨, æ¯”å¦‚VCLKçš„é¢‘çŽ‡ç­‰ */
 	lcd_regs = ioremap(0x4D000000, sizeof(struct lcd_regs));
 
 	/*
-	 * MINI2440 LCD 3.5Ó¢´ç ZQ3506_V0 SPEC.pdf µÚ11¡¢12Ò³
+	 * MINI2440 LCD 3.5è‹±å¯¸ ZQ3506_V0 SPEC.pdf ç¬¬11ã€12é¡µ
 	 *
-	 * LCDÊÖ²á11,12Ò³ºÍ2440ÊÖ²á"Figure 15-6. TFT LCD Timing Example"Ò»¶Ô±È¾ÍÖªµÀ²ÎÊýº¬ÒåÁË
+	 * LCDæ‰‹å†Œ11,12é¡µå’Œ2440æ‰‹å†Œ"Figure 15-6. TFT LCD Timing Example"ä¸€å¯¹æ¯”å°±çŸ¥é“å‚æ•°å«ä¹‰äº†
 	 */
 
-	/* bit[17:8]: VCLK = HCLK / [(CLKVAL+1) x 2], LCDÊÖ²á11 (Dclk=6.4MHz~11MHz)
+	/* bit[17:8]: VCLK = HCLK / [(CLKVAL+1) x 2], LCDæ‰‹å†Œ11 (Dclk=6.4MHz~11MHz)
 	 *            7.1MHz = 100MHz / [(CLKVAL+1) x 2]
 	 *            CLKVAL = 6
 	 * bit[6:5]: 0b11, TFT LCD
@@ -138,78 +138,78 @@ static int lcd_init(void)
 	 */
 	lcd_regs->lcdcon1  = (6<<8) | (3<<5) | (0x0d<<1);
 
-	/* ´¹Ö±·½ÏòµÄÊ±¼ä²ÎÊý
-	 * ¸ù¾ÝÊý¾ÝÊÖ²á
-	 * bit[31:24]: VBPD, VSYNCÖ®ºóÔÙ¹ý¶à³¤Ê±¼ä²ÅÄÜ·¢³öµÚ1ÐÐÊý¾Ý
-	 *             LCDÊÖ²á tvb=18
+	/* åž‚ç›´æ–¹å‘çš„æ—¶é—´å‚æ•°
+	 * æ ¹æ®æ•°æ®æ‰‹å†Œ
+	 * bit[31:24]: VBPD, VSYNCä¹‹åŽå†è¿‡å¤šé•¿æ—¶é—´æ‰èƒ½å‘å‡ºç¬¬1è¡Œæ•°æ®
+	 *             LCDæ‰‹å†Œ tvb=18
 	 *             VBPD=17
-	 * bit[23:14]: ¶àÉÙÐÐ, 240, ËùÒÔLINEVAL=240-1=239
-	 * bit[13:6] : VFPD, ·¢³ö×îºóÒ»ÐÐÊý¾ÝÖ®ºó£¬ÔÙ¹ý¶à³¤Ê±¼ä²Å·¢³öVSYNC
-	 *             LCDÊÖ²átvf=4, ËùÒÔVFPD=4-1=3
-	 * bit[5:0]  : VSPW, VSYNCÐÅºÅµÄÂö³å¿í¶È, LCDÊÖ²átvp=1, ËùÒÔVSPW=1-1=0
+	 * bit[23:14]: å¤šå°‘è¡Œ, 240, æ‰€ä»¥LINEVAL=240-1=239
+	 * bit[13:6] : VFPD, å‘å‡ºæœ€åŽä¸€è¡Œæ•°æ®ä¹‹åŽï¼Œå†è¿‡å¤šé•¿æ—¶é—´æ‰å‘å‡ºVSYNC
+	 *             LCDæ‰‹å†Œtvf=4, æ‰€ä»¥VFPD=4-1=3
+	 * bit[5:0]  : VSPW, VSYNCä¿¡å·çš„è„‰å†²å®½åº¦, LCDæ‰‹å†Œtvp=1, æ‰€ä»¥VSPW=1-1=0
 	 */
 	 
-    /* Ê¹ÓÃÕâÐ©ÊýÖµ, Í¼ÏñÓÐÏÂÒÆµÄÏÖÏó, Ó¦¸ÃÊÇÊý¾ÝÊÖ²á¹ýÊ±ÁË
-	 * ×Ô¼ºÎ¢µ÷Ò»ÏÂ, ÉÏÏÂÒÆ¶¯µ÷VBPDºÍVFPD
-	 * ±£³Ö(VBPD+VFPD)²»±ä, ¼õÐ¡VBPDÍ¼ÏñÉÏÒÆ, È¡VBPD=11, VFPD=9
-	 * ¶àÊÔ¼¸´Î, ÎÒÊÔÁË10¶à´Î
+    /* ä½¿ç”¨è¿™äº›æ•°å€¼, å›¾åƒæœ‰ä¸‹ç§»çš„çŽ°è±¡, åº”è¯¥æ˜¯æ•°æ®æ‰‹å†Œè¿‡æ—¶äº†
+	 * è‡ªå·±å¾®è°ƒä¸€ä¸‹, ä¸Šä¸‹ç§»åŠ¨è°ƒVBPDå’ŒVFPD
+	 * ä¿æŒ(VBPD+VFPD)ä¸å˜, å‡å°VBPDå›¾åƒä¸Šç§», å–VBPD=11, VFPD=9
+	 * å¤šè¯•å‡ æ¬¡, æˆ‘è¯•äº†10å¤šæ¬¡
 	 */
   //lcd_regs->lcdcon2  = (17<<24) | (239<<14) | (3<<6) | (0<<0);
 	lcd_regs->lcdcon2  = (11<<24) | (239<<14) | (9<<6) | (0<<0);
 
 
-	/* Ë®Æ½·½ÏòµÄÊ±¼ä²ÎÊý
-	 * bit[25:19]: HBPD, VSYNCÖ®ºóÔÙ¹ý¶à³¤Ê±¼ä²ÅÄÜ·¢³öµÚ1ÐÐÊý¾Ý
-	 *             LCDÊÖ²á thb=38
+	/* æ°´å¹³æ–¹å‘çš„æ—¶é—´å‚æ•°
+	 * bit[25:19]: HBPD, VSYNCä¹‹åŽå†è¿‡å¤šé•¿æ—¶é—´æ‰èƒ½å‘å‡ºç¬¬1è¡Œæ•°æ®
+	 *             LCDæ‰‹å†Œ thb=38
 	 *             HBPD=37
-	 * bit[18:8]: ¶àÉÙÁÐ, 320, ËùÒÔHOZVAL=320-1=319
-	 * bit[7:0] : HFPD, ·¢³ö×îºóÒ»ÐÐÀï×îºóÒ»¸öÏóËØÊý¾ÝÖ®ºó£¬ÔÙ¹ý¶à³¤Ê±¼ä²Å·¢³öHSYNC
-	 *             LCDÊÖ²áthf>=2, th=408=thp+thb+320+thf, thf=49, HFPD=49-1=48
+	 * bit[18:8]: å¤šå°‘åˆ—, 320, æ‰€ä»¥HOZVAL=320-1=319
+	 * bit[7:0] : HFPD, å‘å‡ºæœ€åŽä¸€è¡Œé‡Œæœ€åŽä¸€ä¸ªè±¡ç´ æ•°æ®ä¹‹åŽï¼Œå†è¿‡å¤šé•¿æ—¶é—´æ‰å‘å‡ºHSYNC
+	 *             LCDæ‰‹å†Œthf>=2, th=408=thp+thb+320+thf, thf=49, HFPD=49-1=48
 	 */
 
-    /* Ê¹ÓÃÕâÐ©ÊýÖµ, Í¼ÏñÓÐ×óÒÆµÄÏÖÏó, Ó¦¸ÃÊÇÊý¾ÝÊÖ²á¹ýÊ±ÁË
-	 * ×Ô¼ºÎ¢µ÷Ò»ÏÂ, ÉÏÏÂÒÆ¶¯µ÷HBPDºÍHFPD
-	 * ±£³Ö(VBPD+VFPD)²»±ä, Ôö¼ÓHBPDÍ¼ÏñÓÒÒÆ, È¡HBPD=69, HFPD=16
-	 * ¶àÊÔ¼¸´Î, ÎÒÊÔÁË10¶à´Î
+    /* ä½¿ç”¨è¿™äº›æ•°å€¼, å›¾åƒæœ‰å·¦ç§»çš„çŽ°è±¡, åº”è¯¥æ˜¯æ•°æ®æ‰‹å†Œè¿‡æ—¶äº†
+	 * è‡ªå·±å¾®è°ƒä¸€ä¸‹, ä¸Šä¸‹ç§»åŠ¨è°ƒHBPDå’ŒHFPD
+	 * ä¿æŒ(VBPD+VFPD)ä¸å˜, å¢žåŠ HBPDå›¾åƒå³ç§», å–HBPD=69, HFPD=16
+	 * å¤šè¯•å‡ æ¬¡, æˆ‘è¯•äº†10å¤šæ¬¡
 	 */
 
 //	lcd_regs->lcdcon3 = (37<<19) | (319<<8) | (48<<0);
 	lcd_regs->lcdcon3 = (69<<19) | (319<<8) | (16<<0);
 
-	/* Ë®Æ½·½ÏòµÄÍ¬²½ÐÅºÅ
-	 * bit[7:0]	: HSPW, HSYNCÐÅºÅµÄÂö³å¿í¶È, LCDÊÖ²áThp=1, ËùÒÔHSPW=1-1=0
+	/* æ°´å¹³æ–¹å‘çš„åŒæ­¥ä¿¡å·
+	 * bit[7:0]	: HSPW, HSYNCä¿¡å·çš„è„‰å†²å®½åº¦, LCDæ‰‹å†ŒThp=1, æ‰€ä»¥HSPW=1-1=0
 	 */	
 	lcd_regs->lcdcon4 = 0;
 
-	/* ÐÅºÅµÄ¼«ÐÔ 
-	 * bit[11]: 1=565 format, ¶ÔÓÚ24bppÕâ¸ö²»ÓÃÉè
+	/* ä¿¡å·çš„æžæ€§ 
+	 * bit[11]: 1=565 format, å¯¹äºŽ24bppè¿™ä¸ªä¸ç”¨è®¾
 	 * bit[10]: 0 = The video data is fetched at VCLK falling edge
-	 * bit[9] : 1 = HSYNCÐÅºÅÒª·´×ª,¼´µÍµçÆ½ÓÐÐ§ 
-	 * bit[8] : 1 = VSYNCÐÅºÅÒª·´×ª,¼´µÍµçÆ½ÓÐÐ§ 
-	 * bit[6] : 0 = VDEN²»ÓÃ·´×ª
-	 * bit[3] : 0 = PWRENÊä³ö0
+	 * bit[9] : 1 = HSYNCä¿¡å·è¦åè½¬,å³ä½Žç”µå¹³æœ‰æ•ˆ 
+	 * bit[8] : 1 = VSYNCä¿¡å·è¦åè½¬,å³ä½Žç”µå¹³æœ‰æ•ˆ 
+	 * bit[6] : 0 = VDENä¸ç”¨åè½¬
+	 * bit[3] : 0 = PWRENè¾“å‡º0
 	 *
-	 * BSWP = 0, HWSWP = 0, BPP24BL = 0 : µ±bpp=24Ê±,2440»á¸øÃ¿Ò»¸öÏóËØ·ÖÅä32Î»¼´4×Ö½Ú,ÄÄÒ»¸ö×Ö½ÚÊÇ²»Ê¹ÓÃµÄ? ¿´2440ÊÖ²áP412
-         * bit[12]: 0, LSB valid, ¼´×î¸ß×Ö½Ú²»Ê¹ÓÃ
+	 * BSWP = 0, HWSWP = 0, BPP24BL = 0 : å½“bpp=24æ—¶,2440ä¼šç»™æ¯ä¸€ä¸ªè±¡ç´ åˆ†é…32ä½å³4å­—èŠ‚,å“ªä¸€ä¸ªå­—èŠ‚æ˜¯ä¸ä½¿ç”¨çš„? çœ‹2440æ‰‹å†ŒP412
+         * bit[12]: 0, LSB valid, å³æœ€é«˜å­—èŠ‚ä¸ä½¿ç”¨
 	 * bit[1] : 0 = BSWP
 	 * bit[0] : 0 = HWSWP
 	 */
 	lcd_regs->lcdcon5 = (0<<10) | (1<<9) | (1<<8) | (0<<12) | (0<<1) | (0<<0);
 	
-	/* 3.3 ·ÖÅäÏÔ´æ(framebuffer), ²¢°ÑµØÖ·¸æËßLCD¿ØÖÆÆ÷ */
+	/* 3.3 åˆ†é…æ˜¾å­˜(framebuffer), å¹¶æŠŠåœ°å€å‘Šè¯‰LCDæŽ§åˆ¶å™¨ */
 	s3c_lcd->screen_base = dma_alloc_writecombine(NULL, s3c_lcd->fix.smem_len, &s3c_lcd->fix.smem_start, GFP_KERNEL);
 	
 	lcd_regs->lcdsaddr1  = (s3c_lcd->fix.smem_start >> 1) & ~(3<<30);
 	lcd_regs->lcdsaddr2  = ((s3c_lcd->fix.smem_start + s3c_lcd->fix.smem_len) >> 1) & 0x1fffff;
-	lcd_regs->lcdsaddr3  = (320*32/16);  /* Ò»ÐÐµÄ³¤¶È(µ¥Î»: 2×Ö½Ú) */	
+	lcd_regs->lcdsaddr3  = (320*32/16);  /* ä¸€è¡Œçš„é•¿åº¦(å•ä½: 2å­—èŠ‚) */	
 	
-	//s3c_lcd->fix.smem_start = xxx;  /* ÏÔ´æµÄÎïÀíµØÖ· */
-	/* Æô¶¯LCD */
-	lcd_regs->lcdcon1 |= (1<<0); /* Ê¹ÄÜLCD¿ØÖÆÆ÷ */
-	lcd_regs->lcdcon5 |= (1<<3); /* Ê¹ÄÜLCD±¾Éí: LCD_PWREN */
-//	*gpbdat |= 1;     /* MINI2440µÄ±³¹âµçÂ·Ò²ÊÇÍ¨¹ýLCD_PWRENÀ´¿ØÖÆµÄ, ²»ÐèÒªµ¥¶ÀµÄ±³¹âÒý½Å */
+	//s3c_lcd->fix.smem_start = xxx;  /* æ˜¾å­˜çš„ç‰©ç†åœ°å€ */
+	/* å¯åŠ¨LCD */
+	lcd_regs->lcdcon1 |= (1<<0); /* ä½¿èƒ½LCDæŽ§åˆ¶å™¨ */
+	lcd_regs->lcdcon5 |= (1<<3); /* ä½¿èƒ½LCDæœ¬èº«: LCD_PWREN */
+//	*gpbdat |= 1;     /* MINI2440çš„èƒŒå…‰ç”µè·¯ä¹Ÿæ˜¯é€šè¿‡LCD_PWRENæ¥æŽ§åˆ¶çš„, ä¸éœ€è¦å•ç‹¬çš„èƒŒå…‰å¼•è„š */
 
-	/* 4. ×¢²á */
+	/* 4. æ³¨å†Œ */
 	register_framebuffer(s3c_lcd);
 	
 	return 0;

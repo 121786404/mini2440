@@ -101,7 +101,7 @@ static int ker_rw_init(void)
 
 	class = class_create(THIS_MODULE, "ker_rw");
 
-	/* ÎªÁËÈÃmdev¸ù¾İÕâĞ©ĞÅÏ¢À´´´½¨Éè±¸½Úµã */
+	/* ä¸ºäº†è®©mdevæ ¹æ®è¿™äº›ä¿¡æ¯æ¥åˆ›å»ºè®¾å¤‡èŠ‚ç‚¹ */
 	ker_dev = class_device_create(class, NULL, MKDEV(major, 0), NULL, "ker_rw"); /* /dev/ker_rw */
 	
 	return 0;

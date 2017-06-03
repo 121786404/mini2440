@@ -9,8 +9,8 @@
 #include <asm/arch/regs-gpio.h>
 #include <asm/hardware.h>
 
-#define DEVICE_NAME     "buttons"   /* ¼ÓÔØÄ£Ê½ºó£¬Ö´ĞĞ¡±cat /proc/devices¡±ÃüÁî¿´µ½µÄÉè±¸Ãû³Æ */
-#define BUTTON_MAJOR    232         /* Ö÷Éè±¸ºÅ */
+#define DEVICE_NAME     "buttons"   /* åŠ è½½æ¨¡å¼åï¼Œæ‰§è¡Œâ€cat /proc/devicesâ€å‘½ä»¤çœ‹åˆ°çš„è®¾å¤‡åç§° */
+#define BUTTON_MAJOR    232         /* ä¸»è®¾å¤‡å· */
 
 struct button_irq_desc {
     int irq;
@@ -18,7 +18,7 @@ struct button_irq_desc {
     char *name;
 };
 
-/* ÓÃÀ´Ö¸¶¨°´¼üËùÓÃµÄÍâ²¿ÖĞ¶ÏÒı½Å¼°ÖĞ¶Ï´¥·¢·½Ê½, Ãû×Ö */
+/* ç”¨æ¥æŒ‡å®šæŒ‰é”®æ‰€ç”¨çš„å¤–éƒ¨ä¸­æ–­å¼•è„šåŠä¸­æ–­è§¦å‘æ–¹å¼, åå­— */
 static struct button_irq_desc button_irqs [] = {
     {IRQ_EINT19, IRQF_TRIGGER_FALLING, "KEY1"}, /* K1 */
     {IRQ_EINT11, IRQF_TRIGGER_FALLING, "KEY2"}, /* K2 */
@@ -26,16 +26,16 @@ static struct button_irq_desc button_irqs [] = {
     {IRQ_EINT0,  IRQF_TRIGGER_FALLING, "KEY4"}, /* K4 */
 };
 
-/* °´¼ü±»°´ÏÂµÄ´ÎÊı(×¼È·µØËµ£¬ÊÇ·¢ÉúÖĞ¶ÏµÄ´ÎÊı) */
+/* æŒ‰é”®è¢«æŒ‰ä¸‹çš„æ¬¡æ•°(å‡†ç¡®åœ°è¯´ï¼Œæ˜¯å‘ç”Ÿä¸­æ–­çš„æ¬¡æ•°) */
 static volatile int press_cnt [] = {0, 0, 0, 0};
 
-/* µÈ´ı¶ÓÁĞ: 
- * µ±Ã»ÓĞ°´¼ü±»°´ÏÂÊ±£¬Èç¹ûÓĞ½ø³Ìµ÷ÓÃs3c24xx_buttons_readº¯Êı£¬
- * Ëü½«ĞİÃß
+/* ç­‰å¾…é˜Ÿåˆ—: 
+ * å½“æ²¡æœ‰æŒ‰é”®è¢«æŒ‰ä¸‹æ—¶ï¼Œå¦‚æœæœ‰è¿›ç¨‹è°ƒç”¨s3c24xx_buttons_readå‡½æ•°ï¼Œ
+ * å®ƒå°†ä¼‘çœ 
  */
 static DECLARE_WAIT_QUEUE_HEAD(button_waitq);
 
-/* ÖĞ¶ÏÊÂ¼ş±êÖ¾, ÖĞ¶Ï·şÎñ³ÌĞò½«ËüÖÃ1£¬s3c24xx_buttons_read½«ËüÇå0 */
+/* ä¸­æ–­äº‹ä»¶æ ‡å¿—, ä¸­æ–­æœåŠ¡ç¨‹åºå°†å®ƒç½®1ï¼Œs3c24xx_buttons_readå°†å®ƒæ¸…0 */
 static volatile int ev_press = 0;
 
 
@@ -43,16 +43,16 @@ static irqreturn_t buttons_interrupt(int irq, void *dev_id)
 {
     volatile int *press_cnt = (volatile int *)dev_id;
     
-    *press_cnt = *press_cnt + 1; /* °´¼ü¼ÆÊı¼Ó1 */
-    ev_press = 1;                /* ±íÊ¾ÖĞ¶Ï·¢ÉúÁË */
-    wake_up_interruptible(&button_waitq);   /* »½ĞÑĞİÃßµÄ½ø³Ì */
+    *press_cnt = *press_cnt + 1; /* æŒ‰é”®è®¡æ•°åŠ 1 */
+    ev_press = 1;                /* è¡¨ç¤ºä¸­æ–­å‘ç”Ÿäº† */
+    wake_up_interruptible(&button_waitq);   /* å”¤é†’ä¼‘çœ çš„è¿›ç¨‹ */
     
     return IRQ_RETVAL(IRQ_HANDLED);
 }
 
 
-/* Ó¦ÓÃ³ÌĞò¶ÔÉè±¸ÎÄ¼ş/dev/buttonsÖ´ĞĞopen(...)Ê±£¬
- * ¾Í»áµ÷ÓÃs3c24xx_buttons_openº¯Êı
+/* åº”ç”¨ç¨‹åºå¯¹è®¾å¤‡æ–‡ä»¶/dev/buttonsæ‰§è¡Œopen(...)æ—¶ï¼Œ
+ * å°±ä¼šè°ƒç”¨s3c24xx_buttons_openå‡½æ•°
  */
 static int s3c24xx_buttons_open(struct inode *inode, struct file *file)
 {
@@ -60,7 +60,7 @@ static int s3c24xx_buttons_open(struct inode *inode, struct file *file)
     int err;
     
     for (i = 0; i < sizeof(button_irqs)/sizeof(button_irqs[0]); i++) {
-        // ×¢²áÖĞ¶Ï´¦Àíº¯Êı
+        // æ³¨å†Œä¸­æ–­å¤„ç†å‡½æ•°
         err = request_irq(button_irqs[i].irq, buttons_interrupt, button_irqs[i].flags, 
                           button_irqs[i].name, (void *)&press_cnt[i]);
         if (err)
@@ -68,7 +68,7 @@ static int s3c24xx_buttons_open(struct inode *inode, struct file *file)
     }
 
     if (err) {
-        // ÊÍ·ÅÒÑ¾­×¢²áµÄÖĞ¶Ï
+        // é‡Šæ”¾å·²ç»æ³¨å†Œçš„ä¸­æ–­
         i--;
         for (; i >= 0; i--)
             free_irq(button_irqs[i].irq, (void *)&press_cnt[i]);
@@ -79,15 +79,15 @@ static int s3c24xx_buttons_open(struct inode *inode, struct file *file)
 }
 
 
-/* Ó¦ÓÃ³ÌĞò¶ÔÉè±¸ÎÄ¼ş/dev/buttonsÖ´ĞĞclose(...)Ê±£¬
- * ¾Í»áµ÷ÓÃs3c24xx_buttons_closeº¯Êı
+/* åº”ç”¨ç¨‹åºå¯¹è®¾å¤‡æ–‡ä»¶/dev/buttonsæ‰§è¡Œclose(...)æ—¶ï¼Œ
+ * å°±ä¼šè°ƒç”¨s3c24xx_buttons_closeå‡½æ•°
  */
 static int s3c24xx_buttons_close(struct inode *inode, struct file *file)
 {
     int i;
     
     for (i = 0; i < sizeof(button_irqs)/sizeof(button_irqs[0]); i++) {
-        // ÊÍ·ÅÒÑ¾­×¢²áµÄÖĞ¶Ï
+        // é‡Šæ”¾å·²ç»æ³¨å†Œçš„ä¸­æ–­
         free_irq(button_irqs[i].irq, (void *)&press_cnt[i]);
     }
 
@@ -95,50 +95,50 @@ static int s3c24xx_buttons_close(struct inode *inode, struct file *file)
 }
 
 
-/* Ó¦ÓÃ³ÌĞò¶ÔÉè±¸ÎÄ¼ş/dev/buttonsÖ´ĞĞread(...)Ê±£¬
- * ¾Í»áµ÷ÓÃs3c24xx_buttons_readº¯Êı
+/* åº”ç”¨ç¨‹åºå¯¹è®¾å¤‡æ–‡ä»¶/dev/buttonsæ‰§è¡Œread(...)æ—¶ï¼Œ
+ * å°±ä¼šè°ƒç”¨s3c24xx_buttons_readå‡½æ•°
  */
 static int s3c24xx_buttons_read(struct file *filp, char __user *buff, 
                                          size_t count, loff_t *offp)
 {
     unsigned long err;
     
-    /* Èç¹ûev_pressµÈÓÚ0£¬ĞİÃß */
+    /* å¦‚æœev_pressç­‰äº0ï¼Œä¼‘çœ  */
     wait_event_interruptible(button_waitq, ev_press);
 
-    /* Ö´ĞĞµ½ÕâÀïÊ±£¬ev_pressµÈÓÚ1£¬½«ËüÇå0 */
+    /* æ‰§è¡Œåˆ°è¿™é‡Œæ—¶ï¼Œev_pressç­‰äº1ï¼Œå°†å®ƒæ¸…0 */
     ev_press = 0;
 
-    /* ½«°´¼ü×´Ì¬¸´ÖÆ¸øÓÃ»§£¬²¢Çå0 */
+    /* å°†æŒ‰é”®çŠ¶æ€å¤åˆ¶ç»™ç”¨æˆ·ï¼Œå¹¶æ¸…0 */
     err = copy_to_user(buff, (const void *)press_cnt, min(sizeof(press_cnt), count));
     memset((void *)press_cnt, 0, sizeof(press_cnt));
 
     return err ? -EFAULT : 0;
 }
 
-/* Õâ¸ö½á¹¹ÊÇ×Ö·ûÉè±¸Çı¶¯³ÌĞòµÄºËĞÄ
- * µ±Ó¦ÓÃ³ÌĞò²Ù×÷Éè±¸ÎÄ¼şÊ±Ëùµ÷ÓÃµÄopen¡¢read¡¢writeµÈº¯Êı£¬
- * ×îÖÕ»áµ÷ÓÃÕâ¸ö½á¹¹ÖĞµÄ¶ÔÓ¦º¯Êı
+/* è¿™ä¸ªç»“æ„æ˜¯å­—ç¬¦è®¾å¤‡é©±åŠ¨ç¨‹åºçš„æ ¸å¿ƒ
+ * å½“åº”ç”¨ç¨‹åºæ“ä½œè®¾å¤‡æ–‡ä»¶æ—¶æ‰€è°ƒç”¨çš„openã€readã€writeç­‰å‡½æ•°ï¼Œ
+ * æœ€ç»ˆä¼šè°ƒç”¨è¿™ä¸ªç»“æ„ä¸­çš„å¯¹åº”å‡½æ•°
  */
 static struct file_operations s3c24xx_buttons_fops = {
-    .owner   =   THIS_MODULE,    /* ÕâÊÇÒ»¸öºê£¬Ö¸Ïò±àÒëÄ£¿éÊ±×Ô¶¯´´½¨µÄ__this_module±äÁ¿ */
+    .owner   =   THIS_MODULE,    /* è¿™æ˜¯ä¸€ä¸ªå®ï¼ŒæŒ‡å‘ç¼–è¯‘æ¨¡å—æ—¶è‡ªåŠ¨åˆ›å»ºçš„__this_moduleå˜é‡ */
     .open    =   s3c24xx_buttons_open,
     .release =   s3c24xx_buttons_close, 
     .read    =   s3c24xx_buttons_read,
 };
 
 /*
- * Ö´ĞĞ¡°insmod s3c24xx_buttons.ko¡±ÃüÁîÊ±¾Í»áµ÷ÓÃÕâ¸öº¯Êı
+ * æ‰§è¡Œâ€œinsmod s3c24xx_buttons.koâ€å‘½ä»¤æ—¶å°±ä¼šè°ƒç”¨è¿™ä¸ªå‡½æ•°
  */
 static int __init s3c24xx_buttons_init(void)
 {
     int ret;
 
-    /* ×¢²á×Ö·ûÉè±¸Çı¶¯³ÌĞò
-     * ²ÎÊıÎªÖ÷Éè±¸ºÅ¡¢Éè±¸Ãû×Ö¡¢file_operations½á¹¹£»
-     * ÕâÑù£¬Ö÷Éè±¸ºÅ¾ÍºÍ¾ßÌåµÄfile_operations½á¹¹ÁªÏµÆğÀ´ÁË£¬
-     * ²Ù×÷Ö÷Éè±¸ÎªBUTTON_MAJORµÄÉè±¸ÎÄ¼şÊ±£¬¾Í»áµ÷ÓÃs3c24xx_buttons_fopsÖĞµÄÏà¹Ø³ÉÔ±º¯Êı
-     * BUTTON_MAJOR¿ÉÒÔÉèÎª0£¬±íÊ¾ÓÉÄÚºË×Ô¶¯·ÖÅäÖ÷Éè±¸ºÅ
+    /* æ³¨å†Œå­—ç¬¦è®¾å¤‡é©±åŠ¨ç¨‹åº
+     * å‚æ•°ä¸ºä¸»è®¾å¤‡å·ã€è®¾å¤‡åå­—ã€file_operationsç»“æ„ï¼›
+     * è¿™æ ·ï¼Œä¸»è®¾å¤‡å·å°±å’Œå…·ä½“çš„file_operationsç»“æ„è”ç³»èµ·æ¥äº†ï¼Œ
+     * æ“ä½œä¸»è®¾å¤‡ä¸ºBUTTON_MAJORçš„è®¾å¤‡æ–‡ä»¶æ—¶ï¼Œå°±ä¼šè°ƒç”¨s3c24xx_buttons_fopsä¸­çš„ç›¸å…³æˆå‘˜å‡½æ•°
+     * BUTTON_MAJORå¯ä»¥è®¾ä¸º0ï¼Œè¡¨ç¤ºç”±å†…æ ¸è‡ªåŠ¨åˆ†é…ä¸»è®¾å¤‡å·
      */
     ret = register_chrdev(BUTTON_MAJOR, DEVICE_NAME, &s3c24xx_buttons_fops);
     if (ret < 0) {
@@ -151,20 +151,20 @@ static int __init s3c24xx_buttons_init(void)
 }
 
 /*
- * Ö´ĞĞ¡±rmmod s3c24xx_buttons.ko¡±ÃüÁîÊ±¾Í»áµ÷ÓÃÕâ¸öº¯Êı 
+ * æ‰§è¡Œâ€rmmod s3c24xx_buttons.koâ€å‘½ä»¤æ—¶å°±ä¼šè°ƒç”¨è¿™ä¸ªå‡½æ•° 
  */
 static void __exit s3c24xx_buttons_exit(void)
 {
-    /* Ğ¶ÔØÇı¶¯³ÌĞò */
+    /* å¸è½½é©±åŠ¨ç¨‹åº */
     unregister_chrdev(BUTTON_MAJOR, DEVICE_NAME);
 }
 
-/* ÕâÁ½ĞĞÖ¸¶¨Çı¶¯³ÌĞòµÄ³õÊ¼»¯º¯ÊıºÍĞ¶ÔØº¯Êı */
+/* è¿™ä¸¤è¡ŒæŒ‡å®šé©±åŠ¨ç¨‹åºçš„åˆå§‹åŒ–å‡½æ•°å’Œå¸è½½å‡½æ•° */
 module_init(s3c24xx_buttons_init);
 module_exit(s3c24xx_buttons_exit);
 
-/* ÃèÊöÇı¶¯³ÌĞòµÄÒ»Ğ©ĞÅÏ¢£¬²»ÊÇ±ØĞëµÄ */
-MODULE_AUTHOR("http://www.100ask.net");             // Çı¶¯³ÌĞòµÄ×÷Õß
-MODULE_DESCRIPTION("S3C2410/S3C2440 BUTTON Driver");   // Ò»Ğ©ÃèÊöĞÅÏ¢
-MODULE_LICENSE("GPL");                              // ×ñÑ­µÄĞ­Òé
+/* æè¿°é©±åŠ¨ç¨‹åºçš„ä¸€äº›ä¿¡æ¯ï¼Œä¸æ˜¯å¿…é¡»çš„ */
+MODULE_AUTHOR("http://www.100ask.net");             // é©±åŠ¨ç¨‹åºçš„ä½œè€…
+MODULE_DESCRIPTION("S3C2410/S3C2440 BUTTON Driver");   // ä¸€äº›æè¿°ä¿¡æ¯
+MODULE_LICENSE("GPL");                              // éµå¾ªçš„åè®®
 

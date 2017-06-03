@@ -9,20 +9,20 @@
 #include <asm/arch/regs-gpio.h>
 #include <asm/hardware.h>
 
-#define DEVICE_NAME     "leds"  /* ¼ÓÔØÄ£Ê½ºó£¬Ö´ĞĞ¡±cat /proc/devices¡±ÃüÁî¿´µ½µÄÉè±¸Ãû³Æ */
-#define LED_MAJOR       231     /* Ö÷Éè±¸ºÅ */
+#define DEVICE_NAME     "leds"  /* åŠ è½½æ¨¡å¼åï¼Œæ‰§è¡Œâ€cat /proc/devicesâ€å‘½ä»¤çœ‹åˆ°çš„è®¾å¤‡åç§° */
+#define LED_MAJOR       231     /* ä¸»è®¾å¤‡å· */
 
 
 static struct class *leds_class;
 static struct class_device	*leds_class_devs[4];
 
 
-/* bit0<=>D10, 0:ÁÁ, 1:Ãğ 
- *  bit1<=>D11, 0:ÁÁ, 1:Ãğ 
- *  bit2<=>D12, 0:ÁÁ, 1:Ãğ 
+/* bit0<=>D10, 0:äº®, 1:ç­ 
+ *  bit1<=>D11, 0:äº®, 1:ç­ 
+ *  bit2<=>D12, 0:äº®, 1:ç­ 
  */ 
 static char leds_status = 0x0;  
-static DECLARE_MUTEX(leds_lock); // ¶¨Òå¸³Öµ
+static DECLARE_MUTEX(leds_lock); // å®šä¹‰èµ‹å€¼
 
 //static int minor;
 static unsigned long gpio_va;
@@ -32,8 +32,8 @@ static unsigned long gpio_va;
 #define GPFDAT  (*(volatile unsigned long *)(gpio_va + GPIO_OFT(0x56000054)))
 
 
-/* Ó¦ÓÃ³ÌĞò¶ÔÉè±¸ÎÄ¼ş/dev/ledsÖ´ĞĞopen(...)Ê±£¬
- * ¾Í»áµ÷ÓÃs3c24xx_leds_openº¯Êı
+/* åº”ç”¨ç¨‹åºå¯¹è®¾å¤‡æ–‡ä»¶/dev/ledsæ‰§è¡Œopen(...)æ—¶ï¼Œ
+ * å°±ä¼šè°ƒç”¨s3c24xx_leds_openå‡½æ•°
  */
 static int s3c24xx_leds_open(struct inode *inode, struct file *file)
 {
@@ -43,7 +43,7 @@ static int s3c24xx_leds_open(struct inode *inode, struct file *file)
 	{
         case 0: /* /dev/leds */
         {
-            // ÅäÖÃ3Òı½ÅÎªÊä³ö
+            // é…ç½®3å¼•è„šä¸ºè¾“å‡º
             //s3c2410_gpio_cfgpin(S3C2410_GPF4, S3C2410_GPF4_OUTP);
             GPFCON &= ~(0x3<<(4*2));
             GPFCON |= (1<<(4*2));
@@ -56,7 +56,7 @@ static int s3c24xx_leds_open(struct inode *inode, struct file *file)
             GPFCON &= ~(0x3<<(6*2));
             GPFCON |= (1<<(6*2));
 
-            // ¶¼Êä³ö0
+            // éƒ½è¾“å‡º0
             //s3c2410_gpio_setpin(S3C2410_GPF4, 0);
             GPFDAT &= ~(1<<4);
             
@@ -244,19 +244,19 @@ static ssize_t s3c24xx_leds_write(struct file *file, const char __user *buf, siz
 
 
 
-/* Õâ¸ö½á¹¹ÊÇ×Ö·ûÉè±¸Çı¶¯³ÌĞòµÄºËĞÄ
- * µ±Ó¦ÓÃ³ÌĞò²Ù×÷Éè±¸ÎÄ¼şÊ±Ëùµ÷ÓÃµÄopen¡¢read¡¢writeµÈº¯Êı£¬
- * ×îÖÕ»áµ÷ÓÃÕâ¸ö½á¹¹ÖĞÖ¸¶¨µÄ¶ÔÓ¦º¯Êı
+/* è¿™ä¸ªç»“æ„æ˜¯å­—ç¬¦è®¾å¤‡é©±åŠ¨ç¨‹åºçš„æ ¸å¿ƒ
+ * å½“åº”ç”¨ç¨‹åºæ“ä½œè®¾å¤‡æ–‡ä»¶æ—¶æ‰€è°ƒç”¨çš„openã€readã€writeç­‰å‡½æ•°ï¼Œ
+ * æœ€ç»ˆä¼šè°ƒç”¨è¿™ä¸ªç»“æ„ä¸­æŒ‡å®šçš„å¯¹åº”å‡½æ•°
  */
 static struct file_operations s3c24xx_leds_fops = {
-    .owner  =   THIS_MODULE,    /* ÕâÊÇÒ»¸öºê£¬ÍÆÏò±àÒëÄ£¿éÊ±×Ô¶¯´´½¨µÄ__this_module±äÁ¿ */
+    .owner  =   THIS_MODULE,    /* è¿™æ˜¯ä¸€ä¸ªå®ï¼Œæ¨å‘ç¼–è¯‘æ¨¡å—æ—¶è‡ªåŠ¨åˆ›å»ºçš„__this_moduleå˜é‡ */
     .open   =   s3c24xx_leds_open,     
 	.read	=	s3c24xx_leds_read,	   
 	.write	=	s3c24xx_leds_write,	   
 };
 
 /*
- * Ö´ĞĞinsmodÃüÁîÊ±¾Í»áµ÷ÓÃÕâ¸öº¯Êı 
+ * æ‰§è¡Œinsmodå‘½ä»¤æ—¶å°±ä¼šè°ƒç”¨è¿™ä¸ªå‡½æ•° 
  */
 static int __init s3c24xx_leds_init(void)
 //static int __init init_module(void)
@@ -270,11 +270,11 @@ static int __init s3c24xx_leds_init(void)
 		return -EIO;
 	}
 
-    /* ×¢²á×Ö·ûÉè±¸
-     * ²ÎÊıÎªÖ÷Éè±¸ºÅ¡¢Éè±¸Ãû×Ö¡¢file_operations½á¹¹£»
-     * ÕâÑù£¬Ö÷Éè±¸ºÅ¾ÍºÍ¾ßÌåµÄfile_operations½á¹¹ÁªÏµÆğÀ´ÁË£¬
-     * ²Ù×÷Ö÷Éè±¸ÎªLED_MAJORµÄÉè±¸ÎÄ¼şÊ±£¬¾Í»áµ÷ÓÃs3c24xx_leds_fopsÖĞµÄÏà¹Ø³ÉÔ±º¯Êı
-     * LED_MAJOR¿ÉÒÔÉèÎª0£¬±íÊ¾ÓÉÄÚºË×Ô¶¯·ÖÅäÖ÷Éè±¸ºÅ
+    /* æ³¨å†Œå­—ç¬¦è®¾å¤‡
+     * å‚æ•°ä¸ºä¸»è®¾å¤‡å·ã€è®¾å¤‡åå­—ã€file_operationsç»“æ„ï¼›
+     * è¿™æ ·ï¼Œä¸»è®¾å¤‡å·å°±å’Œå…·ä½“çš„file_operationsç»“æ„è”ç³»èµ·æ¥äº†ï¼Œ
+     * æ“ä½œä¸»è®¾å¤‡ä¸ºLED_MAJORçš„è®¾å¤‡æ–‡ä»¶æ—¶ï¼Œå°±ä¼šè°ƒç”¨s3c24xx_leds_fopsä¸­çš„ç›¸å…³æˆå‘˜å‡½æ•°
+     * LED_MAJORå¯ä»¥è®¾ä¸º0ï¼Œè¡¨ç¤ºç”±å†…æ ¸è‡ªåŠ¨åˆ†é…ä¸»è®¾å¤‡å·
      */
     ret = register_chrdev(LED_MAJOR, DEVICE_NAME, &s3c24xx_leds_fops);
     if (ret < 0) {
@@ -302,12 +302,12 @@ static int __init s3c24xx_leds_init(void)
 }
 
 /*
- * Ö´ĞĞrmmodÃüÁîÊ±¾Í»áµ÷ÓÃÕâ¸öº¯Êı 
+ * æ‰§è¡Œrmmodå‘½ä»¤æ—¶å°±ä¼šè°ƒç”¨è¿™ä¸ªå‡½æ•° 
  */
 static void __exit s3c24xx_leds_exit(void)
 {
 	int minor;
-    /* Ğ¶ÔØÇı¶¯³ÌĞò */
+    /* å¸è½½é©±åŠ¨ç¨‹åº */
     unregister_chrdev(LED_MAJOR, DEVICE_NAME);
 
 	for (minor = 0; minor < 4; minor++)
@@ -318,11 +318,11 @@ static void __exit s3c24xx_leds_exit(void)
     iounmap(gpio_va);
 }
 
-/* ÕâÁ½ĞĞÖ¸¶¨Çı¶¯³ÌĞòµÄ³õÊ¼»¯º¯ÊıºÍĞ¶ÔØº¯Êı */
+/* è¿™ä¸¤è¡ŒæŒ‡å®šé©±åŠ¨ç¨‹åºçš„åˆå§‹åŒ–å‡½æ•°å’Œå¸è½½å‡½æ•° */
 module_init(s3c24xx_leds_init);
 module_exit(s3c24xx_leds_exit);
 
-/* ÃèÊöÇı¶¯³ÌĞòµÄÒ»Ğ©ĞÅÏ¢£¬²»ÊÇ±ØĞëµÄ */
+/* æè¿°é©±åŠ¨ç¨‹åºçš„ä¸€äº›ä¿¡æ¯ï¼Œä¸æ˜¯å¿…é¡»çš„ */
 MODULE_AUTHOR("http://www.100ask.net");
 MODULE_VERSION("0.1.0");
 MODULE_DESCRIPTION("S3C2410/S3C2440 LED Driver");

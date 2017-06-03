@@ -1,5 +1,5 @@
 
-/* ²Î¿¼:
+/* å‚è€ƒ:
  * drivers\block\xd.c
  * drivers\block\z2ram.c
  */
@@ -46,15 +46,15 @@ static void do_ramblock_request(request_queue_t * q)
 
 static int ramblock_init(void)
 {
-	/* 1. ·ÖÅäÒ»¸ögendisk½á¹¹Ìå */
-	ramblock_disk = alloc_disk(16); /* ´ÎÉè±¸ºÅ¸öÊý: ·ÖÇø¸öÊý+1 */
+	/* 1. åˆ†é…ä¸€ä¸ªgendiskç»“æž„ä½“ */
+	ramblock_disk = alloc_disk(16); /* æ¬¡è®¾å¤‡å·ä¸ªæ•°: åˆ†åŒºä¸ªæ•°+1 */
 
-	/* 2. ÉèÖÃ */
-	/* 2.1 ·ÖÅä/ÉèÖÃ¶ÓÁÐ: Ìá¹©¶ÁÐ´ÄÜÁ¦ */
+	/* 2. è®¾ç½® */
+	/* 2.1 åˆ†é…/è®¾ç½®é˜Ÿåˆ—: æä¾›è¯»å†™èƒ½åŠ› */
 	ramblock_queue = blk_init_queue(do_ramblock_request, &ramblock_lock);
 	ramblock_disk->queue = ramblock_queue;
 	
-	/* 2.2 ÉèÖÃÆäËûÊôÐÔ: ±ÈÈçÈÝÁ¿ */
+	/* 2.2 è®¾ç½®å…¶ä»–å±žæ€§: æ¯”å¦‚å®¹é‡ */
 	major = register_blkdev(0, "ramblock");  /* cat /proc/devices */	
 	ramblock_disk->major       = major;
 	ramblock_disk->first_minor = 0;
@@ -62,7 +62,7 @@ static int ramblock_init(void)
 	ramblock_disk->fops        = &ramblock_fops;
 	set_capacity(ramblock_disk, RAMBLOCK_SIZE / 512);
 
-	/* 3. ×¢²á */
+	/* 3. æ³¨å†Œ */
 	add_disk(ramblock_disk);
 
 	return 0;

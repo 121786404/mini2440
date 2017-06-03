@@ -1,6 +1,6 @@
 /*
  * FILE: m41t11.c
- * µ÷ÓÃI2C¶ÁĞ´º¯Êı£¬ÉèÖÃ¡¢¶ÁÈ¡RTCĞ¾Æ¬m41t11
+ * è°ƒç”¨I2Cè¯»å†™å‡½æ•°ï¼Œè®¾ç½®ã€è¯»å–RTCèŠ¯ç‰‡m41t11
  */
 #include <string.h>
 #include "m41t11.h"
@@ -21,13 +21,13 @@ struct rtc_registers {
 #define BIN_TO_BCD(val) ((((val)/10)<<4) + (val)%10)                     
 
 
-static unsigned long epoch = 2000;  /* Ğ¾Æ¬ÖĞ¡±Äê¡±Îª0x00Ê±£¬¶ÔÓ¦2000Äê */
+static unsigned long epoch = 2000;  /* èŠ¯ç‰‡ä¸­â€å¹´â€ä¸º0x00æ—¶ï¼Œå¯¹åº”2000å¹´ */
 
 static const unsigned char days_in_mo[] = 
 {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 /*
- * Ğ´m41t11£¬ÉèÖÃÈÕÆÚÓëÊ±¼ä
+ * å†™m41t11ï¼Œè®¾ç½®æ—¥æœŸä¸æ—¶é—´
  */
 int m41t11_set_datetime(struct rtc_time *dt)
 {
@@ -79,7 +79,7 @@ int m41t11_set_datetime(struct rtc_time *dt)
 }
 
 /*
- * ¶ÁÈ¡m41t11£¬»ñµÃÈÕÆÚÓëÊ±¼ä
+ * è¯»å–m41t11ï¼Œè·å¾—æ—¥æœŸä¸æ—¶é—´
  */
 int m41t11_get_datetime(struct rtc_time *dt)
 {

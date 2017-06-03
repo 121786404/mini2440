@@ -24,7 +24,7 @@ volatile unsigned long *gpgdat;
 
 static DECLARE_WAIT_QUEUE_HEAD(button_waitq);
 
-/* ÖĞ¶ÏÊÂ¼ş±êÖ¾, ÖĞ¶Ï·şÎñ³ÌĞò½«ËüÖÃ1£¬forth_drv_read½«ËüÇå0 */
+/* ä¸­æ–­äº‹ä»¶æ ‡å¿—, ä¸­æ–­æœåŠ¡ç¨‹åºå°†å®ƒç½®1ï¼Œforth_drv_readå°†å®ƒæ¸…0 */
 static volatile int ev_press = 0;
 
 static struct fasync_struct *fasync;
@@ -35,8 +35,8 @@ struct pin_desc{
 };
 
 
-/* ¼üÖµ: °´ÏÂÊ±, 0x01, 0x02, 0x03, 0x04 */
-/* ¼üÖµ: ËÉ¿ªÊ±, 0x81, 0x82, 0x83, 0x84 */
+/* é”®å€¼: æŒ‰ä¸‹æ—¶, 0x01, 0x02, 0x03, 0x04 */
+/* é”®å€¼: æ¾å¼€æ—¶, 0x81, 0x82, 0x83, 0x84 */
 static unsigned char key_val;
 
 struct pin_desc pins_desc[4] = {
@@ -47,13 +47,13 @@ struct pin_desc pins_desc[4] = {
 };
 
 
-static atomic_t canopen = ATOMIC_INIT(1);     //¶¨ÒåÔ­×Ó±äÁ¿v²¢³õÊ¼»¯Îª1
+static atomic_t canopen = ATOMIC_INIT(1);     //å®šä¹‰åŸå­å˜é‡vå¹¶åˆå§‹åŒ–ä¸º1
 
-static DECLARE_MUTEX(button_lock);//¶¨Òå»¥³âËø
+static DECLARE_MUTEX(button_lock);//å®šä¹‰äº’æ–¥é”
 
 
 /*
-  * È·¶¨°´¼üÖµ
+  * ç¡®å®šæŒ‰é”®å€¼
   */
 static irqreturn_t buttons_irq(int irq, void *dev_id)
 {
@@ -64,17 +64,17 @@ static irqreturn_t buttons_irq(int irq, void *dev_id)
 
 	if (pinval)
 	{
-		/* ËÉ¿ª */
+		/* æ¾å¼€ */
 		key_val = 0x80 | pindesc->key_val;
 	}
 	else
 	{
-		/* °´ÏÂ */
+		/* æŒ‰ä¸‹ */
 		key_val = pindesc->key_val;
 	}
 
-    ev_press = 1;                  /* ±íÊ¾ÖĞ¶Ï·¢ÉúÁË */
-    wake_up_interruptible(&button_waitq);   /* »½ĞÑĞİÃßµÄ½ø³Ì */
+    ev_press = 1;                  /* è¡¨ç¤ºä¸­æ–­å‘ç”Ÿäº† */
+    wake_up_interruptible(&button_waitq);   /* å”¤é†’ä¼‘çœ çš„è¿›ç¨‹ */
 
 	kill_fasync(&fasync, SIGIO, POLL_IN);
 	
@@ -86,15 +86,15 @@ static int forth_drv_open(struct inode *inode, struct file *file)
 	if (!atomic_dec_and_test(&canopen))
 	{
 		atomic_inc(&canopen);
-		return  -EBUSY; /*ÒÑ¾­´ò¿ª*/		
+		return  -EBUSY; /*å·²ç»æ‰“å¼€*/		
 	}
 
-	if (down_trylock(&button_lock))  //»ñµÃ´ò¿ªËø
-		 return  -EBUSY;  //Éè±¸Ã¦
+	if (down_trylock(&button_lock))  //è·å¾—æ‰“å¼€é”
+		 return  -EBUSY;  //è®¾å¤‡å¿™
 
 
-	/* ÅäÖÃGPF0,2ÎªÊäÈëÒı½Å */
-	/* ÅäÖÃGPG3,11ÎªÊäÈëÒı½Å */
+	/* é…ç½®GPF0,2ä¸ºè¾“å…¥å¼•è„š */
+	/* é…ç½®GPG3,11ä¸ºè¾“å…¥å¼•è„š */
 	request_irq(IRQ_EINT0,  buttons_irq, IRQT_BOTHEDGE, "S2", &pins_desc[0]);
 	request_irq(IRQ_EINT2,  buttons_irq, IRQT_BOTHEDGE, "S3", &pins_desc[1]);
 	request_irq(IRQ_EINT11, buttons_irq, IRQT_BOTHEDGE, "S4", &pins_desc[2]);
@@ -108,10 +108,10 @@ ssize_t forth_drv_read(struct file *file, char __user *buf, size_t size, loff_t 
 	if (size != 1)
 		return -EINVAL;
 
-	/* Èç¹ûÃ»ÓĞ°´¼ü¶¯×÷, ĞİÃß */
+	/* å¦‚æœæ²¡æœ‰æŒ‰é”®åŠ¨ä½œ, ä¼‘çœ  */
 	wait_event_interruptible(button_waitq, ev_press);
 
-	/* Èç¹ûÓĞ°´¼ü¶¯×÷, ·µ»Ø¼üÖµ */
+	/* å¦‚æœæœ‰æŒ‰é”®åŠ¨ä½œ, è¿”å›é”®å€¼ */
 	copy_to_user(buf, &key_val, 1);
 	ev_press = 0;
 	
@@ -126,15 +126,15 @@ int forth_drv_close(struct inode *inode, struct file *file)
 	free_irq(IRQ_EINT11, &pins_desc[2]);
 	free_irq(IRQ_EINT19, &pins_desc[3]);
 	
-	atomic_inc(&canopen); /* ÊÍ·ÅÉè±¸ */
-	up(&button_lock);  //ÊÍ·Å´ò¿ªËø
+	atomic_inc(&canopen); /* é‡Šæ”¾è®¾å¤‡ */
+	up(&button_lock);  //é‡Šæ”¾æ‰“å¼€é”
 	return 0;
 }
 
 static unsigned forth_drv_poll(struct file *file, poll_table *wait)
 {
 	unsigned int mask = 0;
-	poll_wait(file, &button_waitq, wait); // ²»»áÁ¢¼´ĞİÃß
+	poll_wait(file, &button_waitq, wait); // ä¸ä¼šç«‹å³ä¼‘çœ 
 
 	if (ev_press)
 		mask |= POLLIN | POLLRDNORM;
@@ -149,7 +149,7 @@ static int forth_drv_fasync(int fd, struct file *fp, int on)
 
 
 static struct file_operations sencod_drv_fops = {
-    .owner   =  THIS_MODULE,    /* ÕâÊÇÒ»¸öºê£¬ÍÆÏò±àÒëÄ£¿éÊ±×Ô¶¯´´½¨µÄ__this_module±äÁ¿ */
+    .owner   =  THIS_MODULE,    /* è¿™æ˜¯ä¸€ä¸ªå®ï¼Œæ¨å‘ç¼–è¯‘æ¨¡å—æ—¶è‡ªåŠ¨åˆ›å»ºçš„__this_moduleå˜é‡ */
     .open    =  forth_drv_open,     
 	.read	 =	forth_drv_read,	   
 	.release =  forth_drv_close,

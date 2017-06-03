@@ -1,6 +1,6 @@
 
 /*
- * ²Î¿¼ drivers\net\cs89x0.c
+ * å‚è€ƒ drivers\net\cs89x0.c
  */
 
 #include <linux/module.h>
@@ -30,7 +30,7 @@ static struct net_device *vnet_dev;
 
 static void emulator_rx_packet(struct sk_buff *skb, struct net_device *dev)
 {
-	/* ²Î¿¼LDD3 */
+	/* å‚è€ƒLDD3 */
 	unsigned char *type;
 	struct iphdr *ih;
 	__be32 *saddr, *daddr, tmp;
@@ -39,14 +39,14 @@ static void emulator_rx_packet(struct sk_buff *skb, struct net_device *dev)
 	
 	struct sk_buff *rx_skb;
 		
-	// ´ÓÓ²¼ş¶Á³ö/±£´æÊı¾İ
-	/* ¶Ôµ÷"Ô´/Ä¿µÄ"µÄmacµØÖ· */
+	// ä»ç¡¬ä»¶è¯»å‡º/ä¿å­˜æ•°æ®
+	/* å¯¹è°ƒ"æº/ç›®çš„"çš„macåœ°å€ */
 	ethhdr = (struct ethhdr *)skb->data;
 	memcpy(tmp_dev_addr, ethhdr->h_dest, ETH_ALEN);
 	memcpy(ethhdr->h_dest, ethhdr->h_source, ETH_ALEN);
 	memcpy(ethhdr->h_source, tmp_dev_addr, ETH_ALEN);
 
-	/* ¶Ôµ÷"Ô´/Ä¿µÄ"µÄipµØÖ· */    
+	/* å¯¹è°ƒ"æº/ç›®çš„"çš„ipåœ°å€ */    
 	ih = (struct iphdr *)(skb->data + sizeof(struct ethhdr));
 	saddr = &ih->saddr;
 	daddr = &ih->daddr;
@@ -59,13 +59,13 @@ static void emulator_rx_packet(struct sk_buff *skb, struct net_device *dev)
 	//((u8 *)daddr)[2] ^= 1;
 	type = skb->data + sizeof(struct ethhdr) + sizeof(struct iphdr);
 	//printk("tx package type = %02x\n", *type);
-	// ĞŞ¸ÄÀàĞÍ, Ô­À´0x8±íÊ¾ping
-	*type = 0; /* 0±íÊ¾reply */
+	// ä¿®æ”¹ç±»å‹, åŸæ¥0x8è¡¨ç¤ºping
+	*type = 0; /* 0è¡¨ç¤ºreply */
 	
 	ih->check = 0;		   /* and rebuild the checksum (ip needs it) */
 	ih->check = ip_fast_csum((unsigned char *)ih,ih->ihl);
 	
-	// ¹¹ÔìÒ»¸ösk_buff
+	// æ„é€ ä¸€ä¸ªsk_buff
 	rx_skb = dev_alloc_skb(skb->len + 2);
 	skb_reserve(rx_skb, 2); /* align IP on 16B boundary */	
 	memcpy(skb_put(rx_skb, skb->len), skb->data, skb->len);
@@ -77,7 +77,7 @@ static void emulator_rx_packet(struct sk_buff *skb, struct net_device *dev)
 	dev->stats.rx_packets++;
 	dev->stats.rx_bytes += skb->len;
 
-	// Ìá½»sk_buff
+	// æäº¤sk_buff
 	netif_rx(rx_skb);
 }
 
@@ -86,17 +86,17 @@ static int virt_net_send_packet(struct sk_buff *skb, struct net_device *dev)
 	static int cnt = 0;
 	printk("virt_net_send_packet cnt = %d\n", ++cnt);
 
-	/* ¶ÔÓÚÕæÊµµÄÍø¿¨, °ÑskbÀïµÄÊı¾İÍ¨¹ıÍø¿¨·¢ËÍ³öÈ¥ */
-	netif_stop_queue(dev); /* Í£Ö¹¸ÃÍø¿¨µÄ¶ÓÁĞ */
-    /* ...... */           /* °ÑskbµÄÊı¾İĞ´ÈëÍø¿¨ */
+	/* å¯¹äºçœŸå®çš„ç½‘å¡, æŠŠskbé‡Œçš„æ•°æ®é€šè¿‡ç½‘å¡å‘é€å‡ºå» */
+	netif_stop_queue(dev); /* åœæ­¢è¯¥ç½‘å¡çš„é˜Ÿåˆ— */
+    /* ...... */           /* æŠŠskbçš„æ•°æ®å†™å…¥ç½‘å¡ */
 
-	/* ¹¹ÔìÒ»¸ö¼ÙµÄsk_buff,ÉÏ±¨ */
+	/* æ„é€ ä¸€ä¸ªå‡çš„sk_buff,ä¸ŠæŠ¥ */
 	emulator_rx_packet(skb, dev);
 
-	dev_kfree_skb (skb);   /* ÊÍ·Åskb */
-	netif_wake_queue(dev); /* Êı¾İÈ«²¿·¢ËÍ³öÈ¥ºó,»½ĞÑÍø¿¨µÄ¶ÓÁĞ */
+	dev_kfree_skb (skb);   /* é‡Šæ”¾skb */
+	netif_wake_queue(dev); /* æ•°æ®å…¨éƒ¨å‘é€å‡ºå»å,å”¤é†’ç½‘å¡çš„é˜Ÿåˆ— */
 
-	/* ¸üĞÂÍ³¼ÆĞÅÏ¢ */
+	/* æ›´æ–°ç»Ÿè®¡ä¿¡æ¯ */
 	dev->stats.tx_packets++;
 	dev->stats.tx_bytes += skb->len;
 	
@@ -106,13 +106,13 @@ static int virt_net_send_packet(struct sk_buff *skb, struct net_device *dev)
 
 static int virt_net_init(void)
 {
-	/* 1. ·ÖÅäÒ»¸önet_device½á¹¹Ìå */
+	/* 1. åˆ†é…ä¸€ä¸ªnet_deviceç»“æ„ä½“ */
 	vnet_dev = alloc_netdev(0, "vnet%d", ether_setup);;  /* alloc_etherdev */
 
-	/* 2. ÉèÖÃ */
+	/* 2. è®¾ç½® */
 	vnet_dev->hard_start_xmit = virt_net_send_packet;
 
-	/* ÉèÖÃMACµØÖ· */
+	/* è®¾ç½®MACåœ°å€ */
     vnet_dev->dev_addr[0] = 0x08;
     vnet_dev->dev_addr[1] = 0x89;
     vnet_dev->dev_addr[2] = 0x89;
@@ -120,11 +120,11 @@ static int virt_net_init(void)
     vnet_dev->dev_addr[4] = 0x89;
     vnet_dev->dev_addr[5] = 0x11;
 
-    /* ÉèÖÃÏÂÃæÁ½Ïî²ÅÄÜpingÍ¨ */
+    /* è®¾ç½®ä¸‹é¢ä¸¤é¡¹æ‰èƒ½pingé€š */
 	vnet_dev->flags           |= IFF_NOARP;
 	vnet_dev->features        |= NETIF_F_NO_CSUM;	
 
-	/* 3. ×¢²á */
+	/* 3. æ³¨å†Œ */
 	//register_netdevice(vnet_dev);
 	register_netdev(vnet_dev);
 	

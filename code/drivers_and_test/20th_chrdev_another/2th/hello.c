@@ -12,7 +12,7 @@
 #include <linux/poll.h>
 #include <linux/cdev.h>
 
-/* 1. 确定主设备号 */
+/* 1. 纭畾涓昏澶囧彿 */
 static int major;
 
 static int hello_open(struct inode *inode, struct file *file)
@@ -28,7 +28,7 @@ static int hello2_open(struct inode *inode, struct file *file)
 }
 
 
-/* 2. 构造file_operations */
+/* 2. 鏋勯�爁ile_operations */
 static struct file_operations hello_fops = {
 	.owner = THIS_MODULE,
 	.open  = hello_open,
@@ -50,15 +50,15 @@ static int hello_init(void)
 {
 	dev_t devid;
 	
-	/* 3. 告诉内核 */
+	/* 3. 鍛婅瘔鍐呮牳 */
 #if 0
-	major = register_chrdev(0, "hello", &hello_fops); /* (major,  0), (major, 1), ..., (major, 255)都对应hello_fops */
+	major = register_chrdev(0, "hello", &hello_fops); /* (major,  0), (major, 1), ..., (major, 255)閮藉搴攈ello_fops */
 #else
 	if (major) {
 		devid = MKDEV(major, 0);
-		register_chrdev_region(devid, HELLO_CNT, "hello");  /* (major,0~1) 对应 hello_fops, (major, 2~255)都不对应hello_fops */
+		register_chrdev_region(devid, HELLO_CNT, "hello");  /* (major,0~1) 瀵瑰簲 hello_fops, (major, 2~255)閮戒笉瀵瑰簲hello_fops */
 	} else {
-		alloc_chrdev_region(&devid, 0, HELLO_CNT, "hello"); /* (major,0~1) 对应 hello_fops, (major, 2~255)都不对应hello_fops */
+		alloc_chrdev_region(&devid, 0, HELLO_CNT, "hello"); /* (major,0~1) 瀵瑰簲 hello_fops, (major, 2~255)閮戒笉瀵瑰簲hello_fops */
 		major = MAJOR(devid);                     
 	}
 	

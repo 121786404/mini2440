@@ -22,7 +22,7 @@ volatile unsigned long *gpfdat = NULL;
 static int first_drv_open(struct inode *inode, struct file *file)
 {
 	//printk("first_drv_open\n");
-	/* ÅäÖÃGPF4,5,6ÎªÊä³ö */
+	/* é…ç½®GPF4,5,6ä¸ºè¾“å‡º */
 	DBG_PRINTK("%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
 	*gpfcon &= ~((0x3<<(4*2)) | (0x3<<(5*2)) | (0x3<<(6*2)));
 	DBG_PRINTK("%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
@@ -41,12 +41,12 @@ static ssize_t first_drv_write(struct file *file, const char __user *buf, size_t
 
 	if (val == 1)
 	{
-		// µãµÆ
+		// ç‚¹ç¯
 		*gpfdat &= ~((1<<4) | (1<<5) | (1<<6));
 	}
 	else
 	{
-		// ÃğµÆ
+		// ç­ç¯
 		*gpfdat |= (1<<4) | (1<<5) | (1<<6);
 	}
 	
@@ -54,7 +54,7 @@ static ssize_t first_drv_write(struct file *file, const char __user *buf, size_t
 }
 
 static struct file_operations first_drv_fops = {
-    .owner  =   THIS_MODULE,    /* ÕâÊÇÒ»¸öºê£¬ÍÆÏò±àÒëÄ£¿éÊ±×Ô¶¯´´½¨µÄ__this_module±äÁ¿ */
+    .owner  =   THIS_MODULE,    /* è¿™æ˜¯ä¸€ä¸ªå®ï¼Œæ¨å‘ç¼–è¯‘æ¨¡å—æ—¶è‡ªåŠ¨åˆ›å»ºçš„__this_moduleå˜é‡ */
     .open   =   first_drv_open,     
 	.write	=	first_drv_write,	   
 };
@@ -64,7 +64,7 @@ int major;
 static int first_drv_init(void)
 {
 	DBG_PRINTK("%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
-	major = register_chrdev(0, "first_drv", &first_drv_fops); // ×¢²á, ¸æËßÄÚºË
+	major = register_chrdev(0, "first_drv", &first_drv_fops); // æ³¨å†Œ, å‘Šè¯‰å†…æ ¸
 
 	DBG_PRINTK("%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
 	firstdrv_class = class_create(THIS_MODULE, "firstdrv");
@@ -81,7 +81,7 @@ static int first_drv_init(void)
 
 static void first_drv_exit(void)
 {
-	unregister_chrdev(major, "first_drv"); // Ğ¶ÔØ
+	unregister_chrdev(major, "first_drv"); // å¸è½½
 
 	class_device_unregister(firstdrv_class_dev);
 	class_destroy(firstdrv_class);

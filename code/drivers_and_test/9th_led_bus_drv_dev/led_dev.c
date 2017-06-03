@@ -13,11 +13,11 @@
 #include <linux/platform_device.h>
 
 
-/* ·ÖÅä/ÉèÖÃ/×¢²áÒ»¸öplatform_device */
+/* åˆ†é…/è®¾ç½®/æ³¨å†Œä¸€ä¸ªplatform_device */
 
 static struct resource led_resource[] = {
     [0] = {
-        .start = 0x56000010,             /* TQ2440µÄLEDÊÇGPB5,6,7,8, GPBCONµØÖ·ÊÇ0x56000010 */
+        .start = 0x56000010,             /* TQ2440çš„LEDæ˜¯GPB5,6,7,8, GPBCONåœ°å€æ˜¯0x56000010 */
         .end   = 0x56000010 + 8 - 1,
         .flags = IORESOURCE_MEM,
     },

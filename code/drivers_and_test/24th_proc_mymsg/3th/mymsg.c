@@ -17,7 +17,7 @@ static ssize_t mymsg_read(struct file *file, char __user *buf,
 			 size_t count, loff_t *ppos)
 {
 	//printk("mymsg_read\n");
-	/* 把mylog_buf的数据copy_to_user, return */
+	/* 鎶妋ylog_buf鐨勬暟鎹甤opy_to_user, return */
 	copy_to_user(buf, mylog_buf, 10);
 	
 	return 10;

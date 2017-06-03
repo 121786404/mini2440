@@ -57,15 +57,15 @@ static int s3c_ts_init(void)
 {
 	struct clk* clk;
 	
-	/* 1. ·ÖÅäÒ»¸öinput_dev½á¹¹Ìå */
+	/* 1. åˆ†é…ä¸€ä¸ªinput_devç»“æž„ä½“ */
 	s3c_ts_dev = input_allocate_device();
 
-	/* 2. ÉèÖÃ */
-	/* 2.1 ÄÜ²úÉúÄÄÀàÊÂ¼þ */
+	/* 2. è®¾ç½® */
+	/* 2.1 èƒ½äº§ç”Ÿå“ªç±»äº‹ä»¶ */
 	set_bit(EV_KEY, s3c_ts_dev->evbit);
 	set_bit(EV_ABS, s3c_ts_dev->evbit);
 
-	/* 2.2 ÄÜ²úÉúÕâÀàÊÂ¼þÀïµÄÄÄÐ©ÊÂ¼þ */
+	/* 2.2 èƒ½äº§ç”Ÿè¿™ç±»äº‹ä»¶é‡Œçš„å“ªäº›äº‹ä»¶ */
 	set_bit(BTN_TOUCH, s3c_ts_dev->keybit);
 
 	input_set_abs_params(s3c_ts_dev, ABS_X, 0, 0x3FF, 0, 0);
@@ -73,21 +73,21 @@ static int s3c_ts_init(void)
 	input_set_abs_params(s3c_ts_dev, ABS_PRESSURE, 0, 1, 0, 0);
 
 
-	/* 3. ×¢²á */
+	/* 3. æ³¨å†Œ */
 	input_register_device(s3c_ts_dev);
 
-	/* 4. Ó²¼þÏà¹ØµÄ²Ù×÷ */
-	/* 4.1 Ê¹ÄÜÊ±ÖÓ(CLKCON[15]) */
+	/* 4. ç¡¬ä»¶ç›¸å…³çš„æ“ä½œ */
+	/* 4.1 ä½¿èƒ½æ—¶é’Ÿ(CLKCON[15]) */
 	clk = clk_get(NULL, "adc");
 	clk_enable(clk);
 	
-	/* 4.2 ÉèÖÃS3C2440µÄADC/TS¼Ä´æÆ÷ */
+	/* 4.2 è®¾ç½®S3C2440çš„ADC/TSå¯„å­˜å™¨ */
 	s3c_ts_regs = ioremap(0x58000000, sizeof(struct s3c_ts_regs));
 
 	/* bit[14]  : 1-A/D converter prescaler enable
 	 * bit[13:6]: A/D converter prescaler value,
 	 *            49, ADCCLK=PCLK/(49+1)=50MHz/(49+1)=1MHz
-	 * bit[0]: A/D conversion starts by enable. ÏÈÉèÎª0
+	 * bit[0]: A/D conversion starts by enable. å…ˆè®¾ä¸º0
 	 */
 	s3c_ts_regs->adccon = (1<<14)|(49<<6);
 

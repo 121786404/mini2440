@@ -37,18 +37,18 @@ static struct fb_info *s3c_lcd;
 
 static int lcd_init(void)
 {
-	/* 1. ·ÖÅäÒ»¸öfb_info */
+	/* 1. åˆ†é…ä¸€ä¸ªfb_info */
 	s3c_lcd = framebuffer_alloc(0, NULL);
 
-	/* 2. ÉèÖÃ */
-	/* 2.1 ÉèÖÃ¹Ì¶¨µÄ²ÎÊı */
+	/* 2. è®¾ç½® */
+	/* 2.1 è®¾ç½®å›ºå®šçš„å‚æ•° */
 	strcpy(s3c_lcd->fix.id, "mylcd");
-	s3c_lcd->fix.smem_len = 320*240*32/8;        /* MINI2440µÄLCDÎ»¿íÊÇ24,µ«ÊÇ2440Àï»á·ÖÅä4×Ö½Ú¼´32Î»(ÀË·Ñ1×Ö½Ú) */
+	s3c_lcd->fix.smem_len = 320*240*32/8;        /* MINI2440çš„LCDä½å®½æ˜¯24,ä½†æ˜¯2440é‡Œä¼šåˆ†é…4å­—èŠ‚å³32ä½(æµªè´¹1å­—èŠ‚) */
 	s3c_lcd->fix.type     = FB_TYPE_PACKED_PIXELS;
 	s3c_lcd->fix.visual   = FB_VISUAL_TRUECOLOR; /* TFT */
 	s3c_lcd->fix.line_length = 320*4;
 	
-	/* 2.2 ÉèÖÃ¿É±äµÄ²ÎÊı */
+	/* 2.2 è®¾ç½®å¯å˜çš„å‚æ•° */
 	s3c_lcd->var.xres           = 320;
 	s3c_lcd->var.yres           = 240;
 	s3c_lcd->var.xres_virtual   = 320;
@@ -68,21 +68,21 @@ static int lcd_init(void)
 	s3c_lcd->var.activate       = FB_ACTIVATE_NOW;
 	
 	
-	/* 2.3 ÉèÖÃ²Ù×÷º¯Êı */
+	/* 2.3 è®¾ç½®æ“ä½œå‡½æ•° */
 	s3c_lcd->fbops              = &s3c_lcdfb_ops;
 	
-	/* 2.4 ÆäËûµÄÉèÖÃ */
+	/* 2.4 å…¶ä»–çš„è®¾ç½® */
 	//s3c_lcd->pseudo_palette =; //
-	//s3c_lcd->screen_base  = ;  /* ÏÔ´æµÄĞéÄâµØÖ· */ 
+	//s3c_lcd->screen_base  = ;  /* æ˜¾å­˜çš„è™šæ‹Ÿåœ°å€ */ 
 	s3c_lcd->screen_size   = 320*240*32/8;
 
-	/* 3. Ó²¼şÏà¹ØµÄ²Ù×÷ */
-	/* 3.1 ÅäÖÃGPIOÓÃÓÚLCD */
-	/* 3.2 ¸ù¾İLCDÊÖ²áÉèÖÃLCD¿ØÖÆÆ÷, ±ÈÈçVCLKµÄÆµÂÊµÈ */
-	/* 3.3 ·ÖÅäÏÔ´æ(framebuffer), ²¢°ÑµØÖ·¸æËßLCD¿ØÖÆÆ÷ */
-	//s3c_lcd->fix.smem_start = xxx;  /* ÏÔ´æµÄÎïÀíµØÖ· */
+	/* 3. ç¡¬ä»¶ç›¸å…³çš„æ“ä½œ */
+	/* 3.1 é…ç½®GPIOç”¨äºLCD */
+	/* 3.2 æ ¹æ®LCDæ‰‹å†Œè®¾ç½®LCDæ§åˆ¶å™¨, æ¯”å¦‚VCLKçš„é¢‘ç‡ç­‰ */
+	/* 3.3 åˆ†é…æ˜¾å­˜(framebuffer), å¹¶æŠŠåœ°å€å‘Šè¯‰LCDæ§åˆ¶å™¨ */
+	//s3c_lcd->fix.smem_start = xxx;  /* æ˜¾å­˜çš„ç‰©ç†åœ°å€ */
 
-	/* 4. ×¢²á */
+	/* 4. æ³¨å†Œ */
 	register_framebuffer(s3c_lcd);
 	
 	return 0;

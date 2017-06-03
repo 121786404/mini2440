@@ -72,10 +72,10 @@ int main(void)
 	void (*theKernel)(int zero, int arch, unsigned int params);
 	volatile unsigned int *p = (volatile unsigned int *)0x30008000;
 
-	/* 0. °ïÄÚºËÉèÖÃ´®¿Ú: ÄÚºËÆô¶¯µÄ¿ªÊ¼²¿·Ö»á´Ó´®¿Ú´òÓ¡Ò»Ğ©ĞÅÏ¢,µ«ÊÇÄÚºËÒ»¿ªÊ¼Ã»ÓĞ³õÊ¼»¯´®¿Ú */
+	/* 0. å¸®å†…æ ¸è®¾ç½®ä¸²å£: å†…æ ¸å¯åŠ¨çš„å¼€å§‹éƒ¨åˆ†ä¼šä»ä¸²å£æ‰“å°ä¸€äº›ä¿¡æ¯,ä½†æ˜¯å†…æ ¸ä¸€å¼€å§‹æ²¡æœ‰åˆå§‹åŒ–ä¸²å£ */
 	uart0_init();
 	
-	/* 1. ´ÓNAND FLASHÀï°ÑÄÚºË¶ÁÈëÄÚ´æ */
+	/* 1. ä»NAND FLASHé‡ŒæŠŠå†…æ ¸è¯»å…¥å†…å­˜ */
 	puts("Copy kernel from nand\n\r");
 	nand_read(0x60000+64, (unsigned char *)0x30008000, 0x200000);
 	puthex(0x1234ABCD);
@@ -83,14 +83,14 @@ int main(void)
 	puthex(*p);
 	puts("\n\r");
 
-	/* 2. ÉèÖÃ²ÎÊı */
+	/* 2. è®¾ç½®å‚æ•° */
 	puts("Set boot params\n\r");
 	setup_start_tag();
 	setup_memory_tags();
 	setup_commandline_tag("noinitrd root=/dev/mtdblock3 init=/linuxrc console=ttySAC0");
 	setup_end_tag();
 
-	/* 3. Ìø×ªÖ´ĞĞ */
+	/* 3. è·³è½¬æ‰§è¡Œ */
 	puts("Boot kernel\n\r");
 	theKernel = (void (*)(int, int, unsigned int))0x30008000;
 	theKernel(0, 362, 0x30000100);  
@@ -102,7 +102,7 @@ int main(void)
 	 */
 
 	puts("Error!\n\r");
-	/* Èç¹ûÒ»ÇĞÕı³£, ²»»áÖ´ĞĞµ½ÕâÀï */
+	/* å¦‚æœä¸€åˆ‡æ­£å¸¸, ä¸ä¼šæ‰§è¡Œåˆ°è¿™é‡Œ */
 
 	return -1;
 }

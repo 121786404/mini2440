@@ -19,15 +19,15 @@
 static struct input_dev *s3c_ts_dev;
 static int s3c_ts_init(void)
 {
-	/* 1. ·ÖÅäÒ»¸öinput_dev½á¹¹Ìå */
+	/* 1. åˆ†é…ä¸€ä¸ªinput_devç»“æ„ä½“ */
 	s3c_ts_dev = input_allocate_device();
 
-	/* 2. ÉèÖÃ */
-	/* 2.1 ÄÜ²úÉúÄÄÀàÊÂ¼ş */
+	/* 2. è®¾ç½® */
+	/* 2.1 èƒ½äº§ç”Ÿå“ªç±»äº‹ä»¶ */
 	set_bit(EV_KEY, s3c_ts_dev->evbit);
 	set_bit(EV_ABS, s3c_ts_dev->evbit);
 
-	/* 2.2 ÄÜ²úÉúÕâÀàÊÂ¼şÀïµÄÄÄĞ©ÊÂ¼ş */
+	/* 2.2 èƒ½äº§ç”Ÿè¿™ç±»äº‹ä»¶é‡Œçš„å“ªäº›äº‹ä»¶ */
 	set_bit(BTN_TOUCH, s3c_ts_dev->keybit);
 
 	input_set_abs_params(s3c_ts_dev, ABS_X, 0, 0x3FF, 0, 0);
@@ -35,10 +35,10 @@ static int s3c_ts_init(void)
 	input_set_abs_params(s3c_ts_dev, ABS_PRESSURE, 0, 1, 0, 0);
 
 
-	/* 3. ×¢²á */
+	/* 3. æ³¨å†Œ */
 	input_register_device(s3c_ts_dev);
 
-	/* 4. Ó²¼şÏà¹ØµÄ²Ù×÷ */
+	/* 4. ç¡¬ä»¶ç›¸å…³çš„æ“ä½œ */
 	
 	return 0;
 }

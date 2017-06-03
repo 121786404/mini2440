@@ -10,15 +10,15 @@ int main(int argc, char **argv)
     int fd;
     int press_cnt[4];
     
-    fd = open("/dev/buttons", 0);  // ´ò¿ªÉè±¸
+    fd = open("/dev/buttons", 0);  // æ‰“å¼€è®¾å¤‡
     if (fd < 0) {
         printf("Can't open /dev/buttons\n");
         return -1;
     }
 
-    // ÕâÊÇ¸öÎÞÏÞÑ­»·£¬½ø³ÌÓÐ¿ÉÄÜÔÚreadº¯ÊýÖÐÐÝÃß£¬µ±ÓÐ°´¼ü±»°´ÏÂÊ±£¬Ëü²Å·µ»Ø
+    // è¿™æ˜¯ä¸ªæ— é™å¾ªçŽ¯ï¼Œè¿›ç¨‹æœ‰å¯èƒ½åœ¨readå‡½æ•°ä¸­ä¼‘çœ ï¼Œå½“æœ‰æŒ‰é”®è¢«æŒ‰ä¸‹æ—¶ï¼Œå®ƒæ‰è¿”å›ž
     while (1) {
-        // ¶Á³ö°´¼ü±»°´ÏÂµÄ´ÎÊý
+        // è¯»å‡ºæŒ‰é”®è¢«æŒ‰ä¸‹çš„æ¬¡æ•°
         ret = read(fd, press_cnt, sizeof(press_cnt));
         if (ret < 0) {
             printf("read err!\n");
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
         } 
 
         for (i = 0; i < sizeof(press_cnt)/sizeof(press_cnt[0]); i++) {
-            // Èç¹û±»°´ÏÂµÄ´ÎÊý²»Îª0£¬´òÓ¡³öÀ´
+            // å¦‚æžœè¢«æŒ‰ä¸‹çš„æ¬¡æ•°ä¸ä¸º0ï¼Œæ‰“å°å‡ºæ¥
             if (press_cnt[i])
                 printf("K%d has been pressed %d times!\n", i+1, press_cnt[i]);
         }

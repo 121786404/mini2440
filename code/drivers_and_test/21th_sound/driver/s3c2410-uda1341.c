@@ -1035,10 +1035,10 @@ static void init_uda1341(void)
 	uda1341_l3_data((DATA2 |DATA2_DEEMP_NONE) &~(DATA2_MUTE));
 	uda1341_l3_data(EXTADDR(EXT2));
 #if 1
-	/* 对于MINI2440,  */
+	/* 瀵逛簬MINI2440,  */
 	uda1341_l3_data(EXTDATA(EXT2_MIC_GAIN(0x6)) | EXT2_MIXMODE_CH2);//input channel 2 select
 #else
-	/* 对于TQ2440 */
+	/* 瀵逛簬TQ2440 */
 	uda1341_l3_data(EXTDATA(EXT2_MIC_GAIN(0x6)) | EXT2_MIXMODE_CH1);//input channel 1 select(input channel 2 off)
 #endif
 }

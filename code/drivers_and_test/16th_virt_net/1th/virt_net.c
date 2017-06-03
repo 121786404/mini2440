@@ -1,6 +1,6 @@
 
 /*
- * ²Î¿¼ drivers\net\cs89x0.c
+ * å‚è€ƒ drivers\net\cs89x0.c
  */
 
 #include <linux/module.h>
@@ -29,12 +29,12 @@ static struct net_device *vnet_dev;
 
 static int virt_net_init(void)
 {
-	/* 1. ·ÖÅäÒ»¸önet_device½á¹¹Ìå */
+	/* 1. åˆ†é…ä¸€ä¸ªnet_deviceç»“æ„ä½“ */
 	vnet_dev = alloc_netdev(0, "vnet%d", ether_setup);;  /* alloc_etherdev */
 
-	/* 2. ÉèÖÃ */
+	/* 2. è®¾ç½® */
 
-	/* 3. ×¢²á */
+	/* 3. æ³¨å†Œ */
 	//register_netdevice(vnet_dev);
 	register_netdev(vnet_dev);
 	

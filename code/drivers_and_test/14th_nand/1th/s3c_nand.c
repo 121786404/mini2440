@@ -1,5 +1,5 @@
 
-/* ²Î¿¼ 
+/* å‚è€ƒ 
  * drivers\mtd\nand\s3c2410.c
  * drivers\mtd\nand\at91_nand.c
  */
@@ -34,11 +34,11 @@ static void s3c2440_select_chip(struct mtd_info *mtd, int chipnr)
 {
 	if (chipnr == -1)
 	{
-		/* È¡ÏûÑ¡ÖÐ: NFCONT[1]ÉèÎª0 */
+		/* å–æ¶ˆé€‰ä¸­: NFCONT[1]è®¾ä¸º0 */
 	}
 	else
 	{
-		/* Ñ¡ÖÐ: NFCONT[1]ÉèÎª1 */
+		/* é€‰ä¸­: NFCONT[1]è®¾ä¸º1 */
 		
 	}
 }
@@ -47,43 +47,43 @@ static void s3c2440_cmd_ctrl(struct mtd_info *mtd, int dat, unsigned int ctrl)
 {
 	if (ctrl & NAND_CLE)
 	{
-		/* ·¢ÃüÁî: NFCMMD=dat */
+		/* å‘å‘½ä»¤: NFCMMD=dat */
 	}
 	else
 	{
-		/* ·¢µØÖ·: NFADDR=dat */
+		/* å‘åœ°å€: NFADDR=dat */
 	}
 }
 
 static int s3c2440_dev_ready(struct mtd_info *mtd)
 {
-	return "NFSTATµÄbit[0]";
+	return "NFSTATçš„bit[0]";
 }
 
 
 static int s3c_nand_init(void)
 {
-	/* 1. ·ÖÅäÒ»¸önand_chip½á¹¹Ìå */
+	/* 1. åˆ†é…ä¸€ä¸ªnand_chipç»“æž„ä½“ */
 	s3c_nand = kzalloc(sizeof(struct nand_chip), GFP_KERNEL);
 	
-	/* 2. ÉèÖÃnand_chip */
-	/* ÉèÖÃnand_chipÊÇ¸ønand_scanº¯ÊýÊ¹ÓÃµÄ, Èç¹û²»ÖªµÀÔõÃ´ÉèÖÃ, ÏÈ¿´nand_scanÔõÃ´Ê¹ÓÃ 
-	 * ËüÓ¦¸ÃÌá¹©:Ñ¡ÖÐ,·¢ÃüÁî,·¢µØÖ·,·¢Êý¾Ý,¶ÁÊý¾Ý,ÅÐ¶Ï×´Ì¬µÄ¹¦ÄÜ
+	/* 2. è®¾ç½®nand_chip */
+	/* è®¾ç½®nand_chipæ˜¯ç»™nand_scanå‡½æ•°ä½¿ç”¨çš„, å¦‚æžœä¸çŸ¥é“æ€Žä¹ˆè®¾ç½®, å…ˆçœ‹nand_scanæ€Žä¹ˆä½¿ç”¨ 
+	 * å®ƒåº”è¯¥æä¾›:é€‰ä¸­,å‘å‘½ä»¤,å‘åœ°å€,å‘æ•°æ®,è¯»æ•°æ®,åˆ¤æ–­çŠ¶æ€çš„åŠŸèƒ½
 	 */
 	s3c_nand->select_chip = s3c2440_select_chip;
 	s3c_nand->cmd_ctrl    = s3c2440_cmd_ctrl;
-	s3c_nand->IO_ADDR_R   = "NFDATAµÄÐéÄâµØÖ·";
-	s3c_nand->IO_ADDR_W   = "NFDATAµÄÐéÄâµØÖ·";
+	s3c_nand->IO_ADDR_R   = "NFDATAçš„è™šæ‹Ÿåœ°å€";
+	s3c_nand->IO_ADDR_W   = "NFDATAçš„è™šæ‹Ÿåœ°å€";
 	s3c_nand->dev_ready   = s3c2440_dev_ready;
 	
-	/* 3. Ó²¼þÏà¹ØµÄÉèÖÃ */
+	/* 3. ç¡¬ä»¶ç›¸å…³çš„è®¾ç½® */
 	
-	/* 4. Ê¹ÓÃ: nand_scan */
+	/* 4. ä½¿ç”¨: nand_scan */
 	s3c_mtd = kzalloc(sizeof(struct mtd_info), GFP_KERNEL);
 	s3c_mtd->owner = THIS_MODULE;
 	s3c_mtd->priv  = s3c_nand;
 	
-	nand_scan(s3c_mtd, 1);  /* Ê¶±ðNAND FLASH, ¹¹Ôìmtd_info */
+	nand_scan(s3c_mtd, 1);  /* è¯†åˆ«NAND FLASH, æž„é€ mtd_info */
 	
 	/* 5. add_mtd_partitions */
 	

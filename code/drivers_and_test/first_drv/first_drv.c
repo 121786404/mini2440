@@ -20,9 +20,9 @@ static int first_drv_open(struct inode *inode, struct file *file)
 {
 	//printk("first_drv_open\n");
 	/*
-	 * LED1,LED2,LED4¶ÔÓ¦GPB5¡¢GPB6¡¢GPB7¡¢GPB8
+	 * LED1,LED2,LED4å¯¹åº”GPB5ã€GPB6ã€GPB7ã€GPB8
 	 */
-	/* ÅäÖÃGPB5,6,7,8ÎªÊä³ö */
+	/* é…ç½®GPB5,6,7,8ä¸ºè¾“å‡º */
 	*gpbcon &= ~((0x3<<(5*2)) | (0x3<<(6*2)) | (0x3<<(7*2)) | (0x3<<(8*2)));
 	*gpbcon |= ((0x1<<(5*2)) | (0x1<<(6*2)) | (0x1<<(7*2)) | (0x1<<(8*2)));
 	return 0;
@@ -38,12 +38,12 @@ static ssize_t first_drv_write(struct file *file, const char __user *buf, size_t
 
 	if (val == 1)
 	{
-		// µãµÆ
+		// ç‚¹ç¯
 		*gpbdat &= ~((1<<5) | (1<<6) | (1<<7) | (1<<8));
 	}
 	else
 	{
-		// ÃğµÆ
+		// ç­ç¯
 		*gpbdat |= (1<<5) | (1<<6) | (1<<7) | (1<<8);
 	}
 	
@@ -51,7 +51,7 @@ static ssize_t first_drv_write(struct file *file, const char __user *buf, size_t
 }
 
 static struct file_operations first_drv_fops = {
-    .owner  =   THIS_MODULE,    /* ÕâÊÇÒ»¸öºê£¬ÍÆÏò±àÒëÄ£¿éÊ±×Ô¶¯´´½¨µÄ__this_module±äÁ¿ */
+    .owner  =   THIS_MODULE,    /* è¿™æ˜¯ä¸€ä¸ªå®ï¼Œæ¨å‘ç¼–è¯‘æ¨¡å—æ—¶è‡ªåŠ¨åˆ›å»ºçš„__this_moduleå˜é‡ */
     .open   =   first_drv_open,     
 	.write	=	first_drv_write,	   
 };
@@ -60,7 +60,7 @@ static struct file_operations first_drv_fops = {
 int major;
 static int first_drv_init(void)
 {
-	major = register_chrdev(0, "first_drv", &first_drv_fops); // ×¢²á, ¸æËßÄÚºË
+	major = register_chrdev(0, "first_drv", &first_drv_fops); // æ³¨å†Œ, å‘Šè¯‰å†…æ ¸
 
 	firstdrv_class = class_create(THIS_MODULE, "firstdrv");
 
@@ -74,7 +74,7 @@ static int first_drv_init(void)
 
 static void first_drv_exit(void)
 {
-	unregister_chrdev(major, "first_drv"); // Ğ¶ÔØ
+	unregister_chrdev(major, "first_drv"); // å¸è½½
 
 	class_device_unregister(firstdrv_class_dev);
 	class_destroy(firstdrv_class);

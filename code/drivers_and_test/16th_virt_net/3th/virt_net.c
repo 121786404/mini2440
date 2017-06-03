@@ -1,6 +1,6 @@
 
 /*
- * ²Î¿¼ drivers\net\cs89x0.c
+ * å‚è€ƒ drivers\net\cs89x0.c
  */
 
 #include <linux/module.h>
@@ -32,9 +32,9 @@ static int virt_net_send_packet(struct sk_buff *skb, struct net_device *dev)
 	static int cnt = 0;
 	printk("virt_net_send_packet cnt = %d\n", ++cnt);
 
-	/* ¶ÔÓÚÕæÊµµÄÍø¿¨, °ÑskbÀïµÄÊı¾İÍ¨¹ıÍø¿¨·¢ËÍ³öÈ¥ */
+	/* å¯¹äºçœŸå®çš„ç½‘å¡, æŠŠskbé‡Œçš„æ•°æ®é€šè¿‡ç½‘å¡å‘é€å‡ºå» */
 
-	/* ¸üĞÂÍ³¼ÆĞÅÏ¢ */
+	/* æ›´æ–°ç»Ÿè®¡ä¿¡æ¯ */
 	dev->stats.tx_packets++;
 	dev->stats.tx_bytes += skb->len;
 	
@@ -44,13 +44,13 @@ static int virt_net_send_packet(struct sk_buff *skb, struct net_device *dev)
 
 static int virt_net_init(void)
 {
-	/* 1. ·ÖÅäÒ»¸önet_device½á¹¹Ìå */
+	/* 1. åˆ†é…ä¸€ä¸ªnet_deviceç»“æ„ä½“ */
 	vnet_dev = alloc_netdev(0, "vnet%d", ether_setup);;  /* alloc_etherdev */
 
-	/* 2. ÉèÖÃ */
+	/* 2. è®¾ç½® */
 	vnet_dev->hard_start_xmit = virt_net_send_packet;
 
-	/* ÉèÖÃMACµØÖ· */
+	/* è®¾ç½®MACåœ°å€ */
     vnet_dev->dev_addr[0] = 0x08;
     vnet_dev->dev_addr[1] = 0x89;
     vnet_dev->dev_addr[2] = 0x89;
@@ -60,7 +60,7 @@ static int virt_net_init(void)
 
 	
 
-	/* 3. ×¢²á */
+	/* 3. æ³¨å†Œ */
 	//register_netdevice(vnet_dev);
 	register_netdev(vnet_dev);
 	

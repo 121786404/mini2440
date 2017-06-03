@@ -1,5 +1,5 @@
 
-/* ²Î¿¼:
+/* å‚è€ƒ:
  * drivers\block\xd.c
  * drivers\block\z2ram.c
  */
@@ -37,7 +37,7 @@ static unsigned char *ramblock_buf;
 
 static int ramblock_getgeo(struct block_device *bdev, struct hd_geometry *geo)
 {
-	/* ÈİÁ¿=heads*cylinders*sectors*512 */
+	/* å®¹é‡=heads*cylinders*sectors*512 */
 	geo->heads     = 2;
 	geo->cylinders = 32;
 	geo->sectors   = RAMBLOCK_SIZE/2/32/512;
@@ -59,14 +59,14 @@ static void do_ramblock_request(request_queue_t * q)
 	//printk("do_ramblock_request %d\n", ++cnt);
 
 	while ((req = elv_next_request(q)) != NULL) {
-		/* Êı¾İ´«ÊäÈıÒªËØ: Ô´,Ä¿µÄ,³¤¶È */
-		/* Ô´/Ä¿µÄ: */
+		/* æ•°æ®ä¼ è¾“ä¸‰è¦ç´ : æº,ç›®çš„,é•¿åº¦ */
+		/* æº/ç›®çš„: */
 		unsigned long offset = req->sector * 512;
 
-		/* Ä¿µÄ/Ô´: */
+		/* ç›®çš„/æº: */
 		// req->buffer
 
-		/* ³¤¶È: */		
+		/* é•¿åº¦: */		
 		unsigned long len = req->current_nr_sectors * 512;
 
 		if (rq_data_dir(req) == READ)
@@ -86,15 +86,15 @@ static void do_ramblock_request(request_queue_t * q)
 
 static int ramblock_init(void)
 {
-	/* 1. ·ÖÅäÒ»¸ögendisk½á¹¹Ìå */
-	ramblock_disk = alloc_disk(16); /* ´ÎÉè±¸ºÅ¸öÊı: ·ÖÇø¸öÊı+1 */
+	/* 1. åˆ†é…ä¸€ä¸ªgendiskç»“æ„ä½“ */
+	ramblock_disk = alloc_disk(16); /* æ¬¡è®¾å¤‡å·ä¸ªæ•°: åˆ†åŒºä¸ªæ•°+1 */
 
-	/* 2. ÉèÖÃ */
-	/* 2.1 ·ÖÅä/ÉèÖÃ¶ÓÁĞ: Ìá¹©¶ÁĞ´ÄÜÁ¦ */
+	/* 2. è®¾ç½® */
+	/* 2.1 åˆ†é…/è®¾ç½®é˜Ÿåˆ—: æä¾›è¯»å†™èƒ½åŠ› */
 	ramblock_queue = blk_init_queue(do_ramblock_request, &ramblock_lock);
 	ramblock_disk->queue = ramblock_queue;
 	
-	/* 2.2 ÉèÖÃÆäËûÊôĞÔ: ±ÈÈçÈİÁ¿ */
+	/* 2.2 è®¾ç½®å…¶ä»–å±æ€§: æ¯”å¦‚å®¹é‡ */
 	major = register_blkdev(0, "ramblock");  /* cat /proc/devices */	
 	ramblock_disk->major       = major;
 	ramblock_disk->first_minor = 0;
@@ -102,10 +102,10 @@ static int ramblock_init(void)
 	ramblock_disk->fops        = &ramblock_fops;
 	set_capacity(ramblock_disk, RAMBLOCK_SIZE / 512);
 
-	/* 3. Ó²¼şÏà¹Ø²Ù×÷ */
+	/* 3. ç¡¬ä»¶ç›¸å…³æ“ä½œ */
 	ramblock_buf = kzalloc(RAMBLOCK_SIZE, GFP_KERNEL);
 
-	/* 4. ×¢²á */
+	/* 4. æ³¨å†Œ */
 	add_disk(ramblock_disk);
 
 	return 0;

@@ -7,17 +7,17 @@
 #include <linux/mutex.h>
 
 static unsigned short ignore[]      = { I2C_CLIENT_END };
-static unsigned short normal_addr[] = { 0x50, I2C_CLIENT_END }; /* µØÖ·ÖµÊÇ7Î» */
-                                        /* ¸ÄÎª0x60µÄ»°, ÓÉÓÚ²»´æÔÚÉè±¸µØÖ·Îª0x60µÄÉè±¸, ËùÒÔat24cxx_detect²»±»µ÷ÓÃ */
+static unsigned short normal_addr[] = { 0x50, I2C_CLIENT_END }; /* åœ°å€å€¼æ˜¯7ä½ */
+                                        /* æ”¹ä¸º0x60çš„è¯, ç”±äºä¸å­˜åœ¨è®¾å¤‡åœ°å€ä¸º0x60çš„è®¾å¤‡, æ‰€ä»¥at24cxx_detectä¸è¢«è°ƒç”¨ */
 
 static unsigned short force_addr[] = {ANY_I2C_BUS, 0x60, I2C_CLIENT_END};
 static unsigned short * forces[] = {force_addr, NULL};
 										
 static struct i2c_client_address_data addr_data = {
-	.normal_i2c	= ignore,  /* Òª·¢³öSĞÅºÅºÍÉè±¸µØÖ·²¢µÃµ½ACKĞÅºÅ,²ÅÄÜÈ·¶¨´æÔÚÕâ¸öÉè±¸ */
+	.normal_i2c	= ignore,  /* è¦å‘å‡ºSä¿¡å·å’Œè®¾å¤‡åœ°å€å¹¶å¾—åˆ°ACKä¿¡å·,æ‰èƒ½ç¡®å®šå­˜åœ¨è¿™ä¸ªè®¾å¤‡ */
 	.probe		= ignore,
 	.ignore		= ignore,
-	.forces     = forces, /* Ç¿ÖÆÈÏÎª´æÔÚÕâ¸öÉè±¸ */
+	.forces     = forces, /* å¼ºåˆ¶è®¤ä¸ºå­˜åœ¨è¿™ä¸ªè®¾å¤‡ */
 };
 
 static int at24cxx_detect(struct i2c_adapter *adapter, int address, int kind)
@@ -38,8 +38,8 @@ static int at24cxx_detach(struct i2c_client *client)
 }
 
 
-/* 1. ·ÖÅäÒ»¸öi2c_driver½á¹¹Ìå */
-/* 2. ÉèÖÃi2c_driver½á¹¹Ìå */
+/* 1. åˆ†é…ä¸€ä¸ªi2c_driverç»“æ„ä½“ */
+/* 2. è®¾ç½®i2c_driverç»“æ„ä½“ */
 static struct i2c_driver at24cxx_driver = {
 	.driver = {
 		.name	= "at24cxx",

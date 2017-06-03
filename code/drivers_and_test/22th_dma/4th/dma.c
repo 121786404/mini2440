@@ -48,7 +48,7 @@ static struct class *cls;
 static volatile struct s3c_dma_regs *dma_regs;
 
 static DECLARE_WAIT_QUEUE_HEAD(dma_waitq);
-/* ÖÐ¶ÏÊÂ¼þ±êÖ¾, ÖÐ¶Ï·þÎñ³ÌÐò½«ËüÖÃ1£¬ioctl½«ËüÇå0 */
+/* ä¸­æ–­äº‹ä»¶æ ‡å¿—, ä¸­æ–­æœåŠ¡ç¨‹åºå°†å®ƒç½®1ï¼Œioctlå°†å®ƒæ¸…0 */
 static volatile int ev_dma = 0;
 
 static int s3c_dma_ioctl(struct inode *inode, struct file *file, unsigned int cmd, unsigned long arg)
@@ -79,18 +79,18 @@ static int s3c_dma_ioctl(struct inode *inode, struct file *file, unsigned int cm
 		{
 			ev_dma = 0;
 			
-			/* °ÑÔ´,Ä¿µÄ,³¤¶È¸æËßDMA */
-			dma_regs->disrc      = src_phys;        /* Ô´µÄÎïÀíµØÖ· */
-			dma_regs->disrcc     = (0<<1) | (0<<0); /* Ô´Î»ÓÚAHB×ÜÏß, Ô´µØÖ·µÝÔö */
-			dma_regs->didst      = dst_phys;        /* Ä¿µÄµÄÎïÀíµØÖ· */
-			dma_regs->didstc     = (0<<2) | (0<<1) | (0<<0); /* Ä¿µÄÎ»ÓÚAHB×ÜÏß, Ä¿µÄµØÖ·µÝÔö */
-			dma_regs->dcon       = (1<<30)|(1<<29)|(0<<28)|(1<<27)|(0<<23)|(0<<20)|(BUF_SIZE<<0);  /* Ê¹ÄÜÖÐ¶Ï,µ¥¸ö´«Êä,Èí¼þ´¥·¢, */
+			/* æŠŠæº,ç›®çš„,é•¿åº¦å‘Šè¯‰DMA */
+			dma_regs->disrc      = src_phys;        /* æºçš„ç‰©ç†åœ°å€ */
+			dma_regs->disrcc     = (0<<1) | (0<<0); /* æºä½äºŽAHBæ€»çº¿, æºåœ°å€é€’å¢ž */
+			dma_regs->didst      = dst_phys;        /* ç›®çš„çš„ç‰©ç†åœ°å€ */
+			dma_regs->didstc     = (0<<2) | (0<<1) | (0<<0); /* ç›®çš„ä½äºŽAHBæ€»çº¿, ç›®çš„åœ°å€é€’å¢ž */
+			dma_regs->dcon       = (1<<30)|(1<<29)|(0<<28)|(1<<27)|(0<<23)|(0<<20)|(BUF_SIZE<<0);  /* ä½¿èƒ½ä¸­æ–­,å•ä¸ªä¼ è¾“,è½¯ä»¶è§¦å‘, */
 
-			/* Æô¶¯DMA */
+			/* å¯åŠ¨DMA */
 			dma_regs->dmasktrig  = (1<<1) | (1<<0);
 
-			/* ÈçºÎÖªµÀDMAÊ²Ã´Ê±ºòÍê³É? */
-			/* ÐÝÃß */
+			/* å¦‚ä½•çŸ¥é“DMAä»€ä¹ˆæ—¶å€™å®Œæˆ? */
+			/* ä¼‘çœ  */
 			wait_event_interruptible(dma_waitq, ev_dma);
 
 			if (memcmp(src, dst, BUF_SIZE) == 0)
@@ -116,9 +116,9 @@ static struct file_operations dma_fops = {
 
 static irqreturn_t s3c_dma_irq(int irq, void *devid)
 {
-	/* »½ÐÑ */
+	/* å”¤é†’ */
 	ev_dma = 1;
-    wake_up_interruptible(&dma_waitq);   /* »½ÐÑÐÝÃßµÄ½ø³Ì */
+    wake_up_interruptible(&dma_waitq);   /* å”¤é†’ä¼‘çœ çš„è¿›ç¨‹ */
 	return IRQ_HANDLED;
 }
 
@@ -130,7 +130,7 @@ static int s3c_dma_init(void)
 		return -EBUSY;
 	}
 	
-	/* ·ÖÅäSRC, DST¶ÔÓ¦µÄ»º³åÇø */
+	/* åˆ†é…SRC, DSTå¯¹åº”çš„ç¼“å†²åŒº */
 	src = dma_alloc_writecombine(NULL, BUF_SIZE, &src_phys, GFP_KERNEL);
 	if (NULL == src)
 	{
@@ -150,7 +150,7 @@ static int s3c_dma_init(void)
 
 	major = register_chrdev(0, "s3c_dma", &dma_fops);
 
-	/* ÎªÁË×Ô¶¯´´½¨Éè±¸½Úµã */
+	/* ä¸ºäº†è‡ªåŠ¨åˆ›å»ºè®¾å¤‡èŠ‚ç‚¹ */
 	cls = class_create(THIS_MODULE, "s3c_dma");
 	class_device_create(cls, NULL, MKDEV(major, 0), NULL, "dma"); /* /dev/dma */
 

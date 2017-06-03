@@ -1,6 +1,6 @@
 /*
  * FILE: i2c.c
- * ÓÃÓÚÖ÷»ú·¢ËÍ/½ÓÊÕ
+ * ç”¨äºä¸»æœºå‘é€/æ¥æ”¶
  */
 #include <stdio.h>
 #include "s3c24xx.h"
@@ -12,82 +12,82 @@ void Delay(int time);
 #define RDDATA      (2)
 
 typedef struct tI2C {
-    unsigned char *pData;   /* Êı¾İ»º³åÇø */
-    volatile int DataCount; /* µÈ´ı´«ÊäµÄÊı¾İ³¤¶È */
-    volatile int Status;    /* ×´Ì¬ */
-    volatile int Mode;      /* Ä£Ê½£º¶Á/Ğ´ */
-    volatile int Pt;        /* pDataÖĞ´ı´«ÊäÊı¾İµÄÎ»ÖÃ */
+    unsigned char *pData;   /* æ•°æ®ç¼“å†²åŒº */
+    volatile int DataCount; /* ç­‰å¾…ä¼ è¾“çš„æ•°æ®é•¿åº¦ */
+    volatile int Status;    /* çŠ¶æ€ */
+    volatile int Mode;      /* æ¨¡å¼ï¼šè¯»/å†™ */
+    volatile int Pt;        /* pDataä¸­å¾…ä¼ è¾“æ•°æ®çš„ä½ç½® */
 }tS3C24xx_I2C, *ptS3C24xx_I2C;
 
 static tS3C24xx_I2C g_tS3C24xx_I2C;
 
 /*
- * I2C³õÊ¼»¯
+ * I2Cåˆå§‹åŒ–
  */
 void i2c_init(void)
 {
-    GPEUP  |= 0xc000;       // ½ûÖ¹ÄÚ²¿ÉÏÀ­
-    GPECON |= 0xa0000000;   // Ñ¡ÔñÒı½Å¹¦ÄÜ£ºGPE15:IICSDA, GPE14:IICSCL
+    GPEUP  |= 0xc000;       // ç¦æ­¢å†…éƒ¨ä¸Šæ‹‰
+    GPECON |= 0xa0000000;   // é€‰æ‹©å¼•è„šåŠŸèƒ½ï¼šGPE15:IICSDA, GPE14:IICSCL
 
     INTMSK &= ~(BIT_IIC);
 
-    /* bit[7] = 1, Ê¹ÄÜACK
+    /* bit[7] = 1, ä½¿èƒ½ACK
      * bit[6] = 0, IICCLK = PCLK/16
-     * bit[5] = 1, Ê¹ÄÜÖĞ¶Ï
+     * bit[5] = 1, ä½¿èƒ½ä¸­æ–­
      * bit[3:0] = 0xf, Tx clock = IICCLK/16
      * PCLK = 50MHz, IICCLK = 3.125MHz, Tx Clock = 0.195MHz
      */
     IICCON = (1<<7) | (0<<6) | (1<<5) | (0xf);  // 0xaf
 
     IICADD  = 0x10;     // S3C24xx slave address = [7:1]
-    IICSTAT = 0x10;     // I2C´®ĞĞÊä³öÊ¹ÄÜ(Rx/Tx)
+    IICSTAT = 0x10;     // I2Cä¸²è¡Œè¾“å‡ºä½¿èƒ½(Rx/Tx)
 }
 
 /*
- * Ö÷»ú·¢ËÍ
- * slvAddr : ´Ó»úµØÖ·£¬buf : Êı¾İ´æ·ÅµÄ»º³åÇø£¬len : Êı¾İ³¤¶È 
+ * ä¸»æœºå‘é€
+ * slvAddr : ä»æœºåœ°å€ï¼Œbuf : æ•°æ®å­˜æ”¾çš„ç¼“å†²åŒºï¼Œlen : æ•°æ®é•¿åº¦ 
  */
 void i2c_write(unsigned int slvAddr, unsigned char *buf, int len)
 {
-    g_tS3C24xx_I2C.Mode = WRDATA;   // Ğ´²Ù×÷
-    g_tS3C24xx_I2C.Pt   = 0;        // Ë÷ÒıÖµ³õÊ¼Îª0
-    g_tS3C24xx_I2C.pData = buf;     // ±£´æ»º³åÇøµØÖ·
-    g_tS3C24xx_I2C.DataCount = len; // ´«Êä³¤¶È
+    g_tS3C24xx_I2C.Mode = WRDATA;   // å†™æ“ä½œ
+    g_tS3C24xx_I2C.Pt   = 0;        // ç´¢å¼•å€¼åˆå§‹ä¸º0
+    g_tS3C24xx_I2C.pData = buf;     // ä¿å­˜ç¼“å†²åŒºåœ°å€
+    g_tS3C24xx_I2C.DataCount = len; // ä¼ è¾“é•¿åº¦
     
     IICDS   = slvAddr;
-    IICSTAT = 0xf0;         // Ö÷»ú·¢ËÍ£¬Æô¶¯
+    IICSTAT = 0xf0;         // ä¸»æœºå‘é€ï¼Œå¯åŠ¨
     
-    /* µÈ´ıÖ±ÖÁÊı¾İ´«ÊäÍê±Ï */    
+    /* ç­‰å¾…ç›´è‡³æ•°æ®ä¼ è¾“å®Œæ¯• */    
     while (g_tS3C24xx_I2C.DataCount != -1);
 }
         
 /*
- * Ö÷»ú½ÓÊÕ
- * slvAddr : ´Ó»úµØÖ·£¬buf : Êı¾İ´æ·ÅµÄ»º³åÇø£¬len : Êı¾İ³¤¶È 
+ * ä¸»æœºæ¥æ”¶
+ * slvAddr : ä»æœºåœ°å€ï¼Œbuf : æ•°æ®å­˜æ”¾çš„ç¼“å†²åŒºï¼Œlen : æ•°æ®é•¿åº¦ 
  */
 void i2c_read(unsigned int slvAddr, unsigned char *buf, int len)
 {
-    g_tS3C24xx_I2C.Mode = RDDATA;   // ¶Á²Ù×÷
-    g_tS3C24xx_I2C.Pt   = -1;       // Ë÷ÒıÖµ³õÊ¼»¯Îª-1£¬±íÊ¾µÚ1¸öÖĞ¶ÏÊ±²»½ÓÊÕÊı¾İ(µØÖ·ÖĞ¶Ï)
-    g_tS3C24xx_I2C.pData = buf;     // ±£´æ»º³åÇøµØÖ·
-    g_tS3C24xx_I2C.DataCount = len; // ´«Êä³¤¶È
+    g_tS3C24xx_I2C.Mode = RDDATA;   // è¯»æ“ä½œ
+    g_tS3C24xx_I2C.Pt   = -1;       // ç´¢å¼•å€¼åˆå§‹åŒ–ä¸º-1ï¼Œè¡¨ç¤ºç¬¬1ä¸ªä¸­æ–­æ—¶ä¸æ¥æ”¶æ•°æ®(åœ°å€ä¸­æ–­)
+    g_tS3C24xx_I2C.pData = buf;     // ä¿å­˜ç¼“å†²åŒºåœ°å€
+    g_tS3C24xx_I2C.DataCount = len; // ä¼ è¾“é•¿åº¦
     
     IICDS        = slvAddr;
-    IICSTAT      = 0xb0;    // Ö÷»ú½ÓÊÕ£¬Æô¶¯
+    IICSTAT      = 0xb0;    // ä¸»æœºæ¥æ”¶ï¼Œå¯åŠ¨
     
-    /* µÈ´ıÖ±ÖÁÊı¾İ´«ÊäÍê±Ï */    
+    /* ç­‰å¾…ç›´è‡³æ•°æ®ä¼ è¾“å®Œæ¯• */    
     while (g_tS3C24xx_I2C.DataCount != 0);
 }
 
 /*
- * I2CÖĞ¶Ï·şÎñ³ÌĞò
- * ¸ù¾İÊ£ÓàµÄÊı¾İ³¤¶ÈÑ¡Ôñ¼ÌĞø´«Êä»òÕß½áÊø
+ * I2Cä¸­æ–­æœåŠ¡ç¨‹åº
+ * æ ¹æ®å‰©ä½™çš„æ•°æ®é•¿åº¦é€‰æ‹©ç»§ç»­ä¼ è¾“æˆ–è€…ç»“æŸ
  */
 void I2CIntHandle(void)
 {
     unsigned int iicSt,i;
 
-    // ÇåÖĞ¶Ï
+    // æ¸…ä¸­æ–­
     SRCPND = BIT_IIC;
     INTPND = BIT_IIC;
     
@@ -101,19 +101,19 @@ void I2CIntHandle(void)
         {
             if((g_tS3C24xx_I2C.DataCount--) == 0)
             {
-                // ÏÂÃæÁ½ĞĞÓÃÀ´»Ö¸´I2C²Ù×÷£¬·¢³öPĞÅºÅ
+                // ä¸‹é¢ä¸¤è¡Œç”¨æ¥æ¢å¤I2Cæ“ä½œï¼Œå‘å‡ºPä¿¡å·
                 IICSTAT = 0xd0;
                 IICCON  = 0xaf;
-                Delay(10000);  // µÈ´ıÒ»¶ÎÊ±¼äÒÔ±ãPĞÅºÅÒÑ¾­·¢³ö
+                Delay(10000);  // ç­‰å¾…ä¸€æ®µæ—¶é—´ä»¥ä¾¿Pä¿¡å·å·²ç»å‘å‡º
                 break;    
             }
 
             IICDS = g_tS3C24xx_I2C.pData[g_tS3C24xx_I2C.Pt++];
             
-            // ½«Êı¾İĞ´ÈëIICDSºó£¬ĞèÒªÒ»¶ÎÊ±¼ä²ÅÄÜ³öÏÖÔÚSDAÏßÉÏ
+            // å°†æ•°æ®å†™å…¥IICDSåï¼Œéœ€è¦ä¸€æ®µæ—¶é—´æ‰èƒ½å‡ºç°åœ¨SDAçº¿ä¸Š
             for (i = 0; i < 10; i++);   
 
-            IICCON = 0xaf;      // »Ö¸´I2C´«Êä
+            IICCON = 0xaf;      // æ¢å¤I2Cä¼ è¾“
             break;
         }
 
@@ -121,13 +121,13 @@ void I2CIntHandle(void)
         {
             if (g_tS3C24xx_I2C.Pt == -1)
             {
-                // Õâ´ÎÖĞ¶ÏÊÇ·¢ËÍI2CÉè±¸µØÖ·ºó·¢ÉúµÄ£¬Ã»ÓĞÊı¾İ
-                // Ö»½ÓÊÕÒ»¸öÊı¾İÊ±£¬²»Òª·¢³öACKĞÅºÅ
+                // è¿™æ¬¡ä¸­æ–­æ˜¯å‘é€I2Cè®¾å¤‡åœ°å€åå‘ç”Ÿçš„ï¼Œæ²¡æœ‰æ•°æ®
+                // åªæ¥æ”¶ä¸€ä¸ªæ•°æ®æ—¶ï¼Œä¸è¦å‘å‡ºACKä¿¡å·
                 g_tS3C24xx_I2C.Pt = 0;
                 if(g_tS3C24xx_I2C.DataCount == 1)
-                   IICCON = 0x2f;   // »Ö¸´I2C´«Êä£¬¿ªÊ¼½ÓÊÕÊı¾İ£¬½ÓÊÕµ½Êı¾İÊ±²»·¢³öACK
+                   IICCON = 0x2f;   // æ¢å¤I2Cä¼ è¾“ï¼Œå¼€å§‹æ¥æ”¶æ•°æ®ï¼Œæ¥æ”¶åˆ°æ•°æ®æ—¶ä¸å‘å‡ºACK
                 else 
-                   IICCON = 0xaf;   // »Ö¸´I2C´«Êä£¬¿ªÊ¼½ÓÊÕÊı¾İ
+                   IICCON = 0xaf;   // æ¢å¤I2Cä¼ è¾“ï¼Œå¼€å§‹æ¥æ”¶æ•°æ®
                 break;
             }
 
@@ -137,19 +137,19 @@ void I2CIntHandle(void)
             if (g_tS3C24xx_I2C.DataCount == 0)
             {
 
-                // ÏÂÃæÁ½ĞĞ»Ö¸´I2C²Ù×÷£¬·¢³öPĞÅºÅ
+                // ä¸‹é¢ä¸¤è¡Œæ¢å¤I2Cæ“ä½œï¼Œå‘å‡ºPä¿¡å·
                 IICSTAT = 0x90;
                 IICCON  = 0xaf;
-                Delay(10000);  // µÈ´ıÒ»¶ÎÊ±¼äÒÔ±ãPĞÅºÅÒÑ¾­·¢³ö
+                Delay(10000);  // ç­‰å¾…ä¸€æ®µæ—¶é—´ä»¥ä¾¿Pä¿¡å·å·²ç»å‘å‡º
                 break;    
             }      
 			else
 			{           
-	           // ½ÓÊÕ×îºóÒ»¸öÊı¾İÊ±£¬²»Òª·¢³öACKĞÅºÅ
+	           // æ¥æ”¶æœ€åä¸€ä¸ªæ•°æ®æ—¶ï¼Œä¸è¦å‘å‡ºACKä¿¡å·
 	           if(g_tS3C24xx_I2C.DataCount == 1)
-	               IICCON = 0x2f;   // »Ö¸´I2C´«Êä£¬½ÓÊÕµ½ÏÂÒ»Êı¾İÊ±ÎŞACK
+	               IICCON = 0x2f;   // æ¢å¤I2Cä¼ è¾“ï¼Œæ¥æ”¶åˆ°ä¸‹ä¸€æ•°æ®æ—¶æ— ACK
 	           else 
-	               IICCON = 0xaf;   // »Ö¸´I2C´«Êä£¬½ÓÊÕµ½ÏÂÒ»Êı¾İÊ±·¢³öACK
+	               IICCON = 0xaf;   // æ¢å¤I2Cä¼ è¾“ï¼Œæ¥æ”¶åˆ°ä¸‹ä¸€æ•°æ®æ—¶å‘å‡ºACK
 			}
            break;
         }
@@ -160,7 +160,7 @@ void I2CIntHandle(void)
 }
 
 /*
- * ÑÓÊ±º¯Êı
+ * å»¶æ—¶å‡½æ•°
  */
 void Delay(int time)
 {

@@ -1,6 +1,6 @@
 
 /*
- * ²Î¿¼ drivers\mtd\maps\physmap.c
+ * å‚è€ƒ drivers\mtd\maps\physmap.c
  */
 
 #include <linux/module.h>
@@ -34,19 +34,19 @@ static struct mtd_partition s3c_nor_parts[] = {
 
 static int s3c_nor_init(void)
 {
-	/* 1. ·ÖÅämap_info½á¹¹Ìå */
+	/* 1. åˆ†é…map_infoç»“æ„ä½“ */
 	s3c_nor_map = kzalloc(sizeof(struct map_info), GFP_KERNEL);;
 	
-	/* 2. ÉèÖÃ: ÎïÀí»ùµØÖ·(phys), ´óĞ¡(size), Î»¿í(bankwidth), ĞéÄâ»ùµØÖ·(virt) */
+	/* 2. è®¾ç½®: ç‰©ç†åŸºåœ°å€(phys), å¤§å°(size), ä½å®½(bankwidth), è™šæ‹ŸåŸºåœ°å€(virt) */
 	s3c_nor_map->name = "s3c_nor";
 	s3c_nor_map->phys = 0;
-	s3c_nor_map->size = 0x1000000; /* >= NORµÄÕæÕı´óĞ¡ */
+	s3c_nor_map->size = 0x1000000; /* >= NORçš„çœŸæ­£å¤§å° */
 	s3c_nor_map->bankwidth = 2;
 	s3c_nor_map->virt = ioremap(s3c_nor_map->phys, s3c_nor_map->size);
 
 	simple_map_init(s3c_nor_map);
 	
-	/* 3. Ê¹ÓÃ: µ÷ÓÃNOR FLASHĞ­Òé²ãÌá¹©µÄº¯ÊıÀ´Ê¶±ğ */
+	/* 3. ä½¿ç”¨: è°ƒç”¨NOR FLASHåè®®å±‚æä¾›çš„å‡½æ•°æ¥è¯†åˆ« */
 	printk("use cfi_probe\n");
 	s3c_nor_mtd = do_map_probe("cfi_probe", s3c_nor_map);
 	if (!s3c_nor_mtd)

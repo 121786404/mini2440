@@ -28,21 +28,21 @@ static struct fb_info *s3c_lcd;
 
 static int lcd_init(void)
 {
-	/* 1. ·ÖÅäÒ»¸öfb_info */
+	/* 1. åˆ†é…ä¸€ä¸ªfb_info */
 	s3c_lcd = framebuffer_alloc(0, NULL);
 
-	/* 2. ÉèÖÃ */
-	/* 2.1 ÉèÖÃ¹Ì¶¨µÄ²ÎÊý */
-	/* 2.2 ÉèÖÃ¿É±äµÄ²ÎÊý */
-	/* 2.3 ÉèÖÃ²Ù×÷º¯Êý */
-	/* 2.4 ÆäËûµÄÉèÖÃ */
+	/* 2. è®¾ç½® */
+	/* 2.1 è®¾ç½®å›ºå®šçš„å‚æ•° */
+	/* 2.2 è®¾ç½®å¯å˜çš„å‚æ•° */
+	/* 2.3 è®¾ç½®æ“ä½œå‡½æ•° */
+	/* 2.4 å…¶ä»–çš„è®¾ç½® */
 
-	/* 3. Ó²¼þÏà¹ØµÄ²Ù×÷ */
-	/* 3.1 ÅäÖÃGPIOÓÃÓÚLCD */
-	/* 3.2 ¸ù¾ÝLCDÊÖ²áÉèÖÃLCD¿ØÖÆÆ÷, ±ÈÈçVCLKµÄÆµÂÊµÈ */
-	/* 3.3 ·ÖÅäÏÔ´æ(framebuffer), ²¢°ÑµØÖ·¸æËßLCD¿ØÖÆÆ÷ */
+	/* 3. ç¡¬ä»¶ç›¸å…³çš„æ“ä½œ */
+	/* 3.1 é…ç½®GPIOç”¨äºŽLCD */
+	/* 3.2 æ ¹æ®LCDæ‰‹å†Œè®¾ç½®LCDæŽ§åˆ¶å™¨, æ¯”å¦‚VCLKçš„é¢‘çŽ‡ç­‰ */
+	/* 3.3 åˆ†é…æ˜¾å­˜(framebuffer), å¹¶æŠŠåœ°å€å‘Šè¯‰LCDæŽ§åˆ¶å™¨ */
 
-	/* 4. ×¢²á */
+	/* 4. æ³¨å†Œ */
 	register_framebuffer(s3c_lcd);
 	
 	return 0;

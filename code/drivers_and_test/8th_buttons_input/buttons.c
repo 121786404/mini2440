@@ -1,5 +1,5 @@
 
-/* ²Î¿¼drivers\input\keyboard\gpio_keys.c */
+/* å‚è€ƒdrivers\input\keyboard\gpio_keys.c */
 
 #include <linux/module.h>
 #include <linux/version.h>
@@ -41,7 +41,7 @@ static struct timer_list buttons_timer;
 
 static irqreturn_t buttons_irq(int irq, void *dev_id)
 {
-	/* 10msºóÆô¶¯¶¨Ê±Æ÷ */
+	/* 10msåå¯åŠ¨å®šæ—¶å™¨ */
 	irq_pd = (struct pin_desc *)dev_id;
 	mod_timer(&buttons_timer, jiffies+HZ/100);
 	return IRQ_RETVAL(IRQ_HANDLED);
@@ -59,13 +59,13 @@ static void buttons_timer_function(unsigned long data)
 
 	if (pinval)
 	{
-		/* ËÉ¿ª : ×îºóÒ»¸ö²ÎÊı: 0-ËÉ¿ª, 1-°´ÏÂ */
+		/* æ¾å¼€ : æœ€åä¸€ä¸ªå‚æ•°: 0-æ¾å¼€, 1-æŒ‰ä¸‹ */
 		input_event(buttons_dev, EV_KEY, pindesc->key_val, 0);
 		input_sync(buttons_dev);
 	}
 	else
 	{
-		/* °´ÏÂ */
+		/* æŒ‰ä¸‹ */
 		input_event(buttons_dev, EV_KEY, pindesc->key_val, 1);
 		input_sync(buttons_dev);
 	}
@@ -75,24 +75,24 @@ static int buttons_init(void)
 {
 	int i;
 	
-	/* 1. ·ÖÅäÒ»¸öinput_dev½á¹¹Ìå */
+	/* 1. åˆ†é…ä¸€ä¸ªinput_devç»“æ„ä½“ */
 	buttons_dev = input_allocate_device();;
 
-	/* 2. ÉèÖÃ */
-	/* 2.1 ÄÜ²úÉúÄÄÀàÊÂ¼ş */
+	/* 2. è®¾ç½® */
+	/* 2.1 èƒ½äº§ç”Ÿå“ªç±»äº‹ä»¶ */
 	set_bit(EV_KEY, buttons_dev->evbit);
 	set_bit(EV_REP, buttons_dev->evbit);
 	
-	/* 2.2 ÄÜ²úÉúÕâÀà²Ù×÷ÀïµÄÄÄĞ©ÊÂ¼ş: L,S,ENTER,LEFTSHIT */
+	/* 2.2 èƒ½äº§ç”Ÿè¿™ç±»æ“ä½œé‡Œçš„å“ªäº›äº‹ä»¶: L,S,ENTER,LEFTSHIT */
 	set_bit(KEY_L, buttons_dev->keybit);
 	set_bit(KEY_S, buttons_dev->keybit);
 	set_bit(KEY_ENTER, buttons_dev->keybit);
 	set_bit(KEY_LEFTSHIFT, buttons_dev->keybit);
 
-	/* 3. ×¢²á */
+	/* 3. æ³¨å†Œ */
 	input_register_device(buttons_dev);
 	
-	/* 4. Ó²¼şÏà¹ØµÄ²Ù×÷ */
+	/* 4. ç¡¬ä»¶ç›¸å…³çš„æ“ä½œ */
 	init_timer(&buttons_timer);
 	buttons_timer.function = buttons_timer_function;
 	add_timer(&buttons_timer);

@@ -51,7 +51,7 @@ static struct file_operations dma_fops = {
 
 static int s3c_dma_init(void)
 {
-	/* 分配SRC, DST对应的缓冲区 */
+	/* 鍒嗛厤SRC, DST瀵瑰簲鐨勭紦鍐插尯 */
 	src = dma_alloc_writecombine(NULL, BUF_SIZE, &src_phys, GFP_KERNEL);
 	if (NULL == src)
 	{
@@ -69,7 +69,7 @@ static int s3c_dma_init(void)
 
 	major = register_chrdev(0, "s3c_dma", &dma_fops);
 
-	/* 为了自动创建设备节点 */
+	/* 涓轰簡鑷姩鍒涘缓璁惧鑺傜偣 */
 	cls = class_create(THIS_MODULE, "s3c_dma");
 	class_device_create(cls, NULL, MKDEV(major, 0), NULL, "dma"); /* /dev/dma */
 		

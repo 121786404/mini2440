@@ -41,7 +41,7 @@ static void mylog_putc(char c)
 {
 	if (is_mylog_full())
 	{
-		/* ¶ªÆúÒ»¸öÊý¾Ý */
+		/* ä¸¢å¼ƒä¸€ä¸ªæ•°æ® */
 		mylog_r = (mylog_r + 1) % MYLOG_BUF_LEN;
 
 		if ((mylog_r_for_read + 1) % MYLOG_BUF_LEN == mylog_r)
@@ -53,8 +53,8 @@ static void mylog_putc(char c)
 	mylog_buf[mylog_w] = c;
 	mylog_w = (mylog_w + 1) % MYLOG_BUF_LEN;
 
-	/* »½ÐÑµÈ´ýÊý¾ÝµÄ½ø³Ì */	
-    wake_up_interruptible(&mymsg_waitq);   /* »½ÐÑÐÝÃßµÄ½ø³Ì */	
+	/* å”¤é†’ç­‰å¾…æ•°æ®çš„è¿›ç¨‹ */	
+    wake_up_interruptible(&mymsg_waitq);   /* å”¤é†’ä¼‘çœ çš„è¿›ç¨‹ */	
 }
 
 static int mylog_getc(char *p)
@@ -103,7 +103,7 @@ static ssize_t mymsg_read(struct file *file, char __user *buf,
 	int i = 0;
 	char c;
 
-	/* °Ñmylog_bufµÄÊý¾Ýcopy_to_user, return */
+	/* æŠŠmylog_bufçš„æ•°æ®copy_to_user, return */
 	if ((file->f_flags & O_NONBLOCK) && is_mylog_empty_for_read())
 		return -EAGAIN;
 

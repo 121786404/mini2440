@@ -386,8 +386,8 @@ int __init dmfe_probe1(struct net_device *dev)
 
 	/* Search All DM9000 serial NIC */
 	do {
-		outb(DM9KS_VID_L, iobase); /* DM9000C�������Ĵ���(cmd����Ϊ0) */
-		id_val = inb(iobase + 4);  /* ��DM9000C�����ݼĴ���(cmd����Ϊ1) */
+		outb(DM9KS_VID_L, iobase); /* DM9000C的索引寄存器(cmd引脚为0) */
+		id_val = inb(iobase + 4);  /* 读DM9000C的数据寄存器(cmd引脚为1) */
 		outb(DM9KS_VID_H, iobase);
 		id_val |= inb(iobase + 4) << 8;
 		outb(DM9KS_PID_L, iobase);
@@ -1647,7 +1647,7 @@ int __init dm9000c_init(void)
 
 
 
-	/* ����S3C2440��memory controller */
+	/* 设置S3C2440的memory controller */
 	bwscon   = ioremap(0x48000000, 4);
 	bankcon4 = ioremap(0x48000014, 4);
 
@@ -1661,28 +1661,28 @@ int __init dm9000c_init(void)
 	*bwscon = val;
 
 	/*
-	 * Tacs[14:13]: ����Ƭѡ�ź�֮ǰ,�೤ʱ����Ҫ�ȷ�����ַ�ź�
-	 *              DM9000C��Ƭѡ�źź�CMD�źſ���ͬʱ����,
-	 *              ��������Ϊ0
-	 * Tcos[12:11]: ����Ƭѡ�ź�֮��,�೤ʱ����ܷ������ź�nOE
-	 *              DM9000C��T1>=0ns, 
-	 *              ��������Ϊ0
-	 * Tacc[10:8] : ��д�źŵ����峤��, 
-	 *              DM9000C��T2>=10ns, 
-	 *              ��������Ϊ1, ��ʾ2��hclk����,hclk=100MHz,����20ns
-	 * Tcoh[7:6]  : �����ź�nOE��Ϊ�ߵ�ƽ��,Ƭѡ�źŻ�Ҫά�ֶ೤ʱ��
-	 *              DM9000C����д����ʱ, nWE��Ϊ�ߵ�ƽ֮��, �������ϵ����ݻ�Ҫά������3ns
-	 *              DM9000C���ж�����ʱ, nOE��Ϊ�ߵ�ƽ֮��, �������ϵ�������6ns֮�ڻ���ʧ
-	 *              ����ȡһ������ֵ: ��Ƭѡ�ź���nOE��Ϊ�ߵ�ƽ��,��ά��10ns, 
-	 *              ������Ϊ01
-	 * Tcah[5:4]  : ��Ƭѡ�źű�Ϊ�ߵ�ƽ��, ��ַ�źŻ�Ҫά�ֶ೤ʱ��
-	 *              DM9000C��Ƭѡ�źź�CMD�źſ���ͬʱ����,ͬʱ��ʧ
-	 *              ������Ϊ0
-	 * PMC[1:0]   : 00-����ģʽ
+	 * Tacs[14:13]: 发出片选信号之前,多长时间内要先发出地址信号
+	 *              DM9000C的片选信号和CMD信号可以同时发出,
+	 *              所以它设为0
+	 * Tcos[12:11]: 发出片选信号之后,多长时间才能发出读信号nOE
+	 *              DM9000C的T1>=0ns, 
+	 *              所以它设为0
+	 * Tacc[10:8] : 读写信号的脉冲长度, 
+	 *              DM9000C的T2>=10ns, 
+	 *              所以它设为1, 表示2个hclk周期,hclk=100MHz,就是20ns
+	 * Tcoh[7:6]  : 当读信号nOE变为高电平后,片选信号还要维持多长时间
+	 *              DM9000C进行写操作时, nWE变为高电平之后, 数据线上的数据还要维持最少3ns
+	 *              DM9000C进行读操作时, nOE变为高电平之后, 数据线上的数据在6ns之内会消失
+	 *              我们取一个宽松值: 让片选信号在nOE放为高电平后,再维持10ns, 
+	 *              所以设为01
+	 * Tcah[5:4]  : 当片选信号变为高电平后, 地址信号还要维持多长时间
+	 *              DM9000C的片选信号和CMD信号可以同时出现,同时消失
+	 *              所以设为0
+	 * PMC[1:0]   : 00-正常模式
 	 *
 	 */
-	//*bankcon4 = (1<<8)|(1<<6);	/* ����DM9000C������TaccΪ1, ����DM9000E,TaccҪ���һ��,�������ֵ7  */
-	*bankcon4 = (7<<8)|(1<<6);  /* TQ2440��MINI2440ʹ��DM9000E,TaccҪ���һ�� */
+	//*bankcon4 = (1<<8)|(1<<6);	/* 对于DM9000C可以设Tacc为1, 对于DM9000E,Tacc要设大一点,比如最大值7  */
+	*bankcon4 = (7<<8)|(1<<6);  /* TQ2440和MINI2440使用DM9000E,Tacc要设大一点 */
 
 	iounmap(bwscon);
 	iounmap(bankcon4);
