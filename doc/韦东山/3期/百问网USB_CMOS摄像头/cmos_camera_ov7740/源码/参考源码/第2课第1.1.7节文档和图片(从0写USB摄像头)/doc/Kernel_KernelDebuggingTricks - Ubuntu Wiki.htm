@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="robots" content="index,nofollow">
+
+<title>Kernel/KernelDebuggingTricks - Ubuntu Wiki</title>
+<script type="text/javascript" src="Kernel_KernelDebuggingTricks%20-%20Ubuntu%20Wiki_files/common.js"></script>
+
+<script type="text/javascript">
+<!--
+var search_hint = "搜索";
+//-->
+</script>
+
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="Kernel_KernelDebuggingTricks%20-%20Ubuntu%20Wiki_files/common.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="screen" href="Kernel_KernelDebuggingTricks%20-%20Ubuntu%20Wiki_files/screen.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="print" href="Kernel_KernelDebuggingTricks%20-%20Ubuntu%20Wiki_files/print.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="projection" href="Kernel_KernelDebuggingTricks%20-%20Ubuntu%20Wiki_files/projection.css">
+
+<!-- css only for MS IE6/IE7 browsers -->
+<!--[if lt IE 8]>
+   <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="/moin_static192/light/css/msie.css">
+<![endif]-->
+
+
+
+
+
+<link rel="Start" href="https://wiki.ubuntu.com/Home">
+<link rel="Alternate" title="维基标记" href="https://wiki.ubuntu.com/Kernel/KernelDebuggingTricks?action=raw">
+<link rel="Alternate" media="print" title="打印视图" href="https://wiki.ubuntu.com/Kernel/KernelDebuggingTricks?action=print">
+<link rel="Up" href="https://wiki.ubuntu.com/Kernel">
+<link rel="Search" href="https://wiki.ubuntu.com/FindPage">
+<link rel="Index" href="https://wiki.ubuntu.com/TitleIndex">
+<link rel="Glossary" href="https://wiki.ubuntu.com/WordIndex">
+<link rel="Help" href="https://wiki.ubuntu.com/HelpOnFormatting">
+</head>
+
+<body dir="ltr" lang="zh">
+
+<!-- BEGIN HEADER -->
+<div id="wrapper" class="hfeed">
+<div id="header">
+    <ul id="mothership">
+        <li> <a href="http://www.ubuntu.com/partners">Partners</a> </li>
+        <li> <a href="http://www.ubuntu.com/support">Support</a> </li>
+        <li> <a href="http://www.ubuntu.com/community">Community</a> </li>
+        <li> <a href="http://www.ubuntu.com/">Ubuntu.com</a> </li>
+    </ul>
+
+    <div id="orangeHeader">
+        <h1> <a href="https://wiki.ubuntu.com/" title="Ubuntu Wiki"><span>Ubuntu Wiki</span></a> </h1>
+            <div id="search-box">
+
+<form id="searchform" method="get" action="/Kernel/KernelDebuggingTricks">
+<div>
+<input name="action" value="fullsearch" type="hidden">
+<input name="context" value="180" type="hidden">
+<label style="display: none;" for="searchinput">搜索：</label>
+<input class="disabled" id="searchinput" name="value" value="搜索" size="20" onfocus="searchFocus(this)" onblur="searchBlur(this)" onkeyup="searchChange(this)" onchange="searchChange(this)" alt="Search" type="text">
+<input disabled="disabled" id="titlesearch" name="titlesearch" value="标题" alt="Search Titles" type="submit">
+<input disabled="disabled" id="fullsearch" name="fullsearch" value="正文" alt="Search Full Text" type="submit">
+</div>
+</form>
+<script type="text/javascript">
+<!--// Initialize search form
+var f = document.getElementById('searchform');
+f.getElementsByTagName('label')[0].style.display = 'none';
+var e = document.getElementById('searchinput');
+searchChange(e);
+searchBlur(e);
+//-->
+</script>
+
+
+            </div>
+    </div>
+
+</div>
+    <div id="wikinav"> 
+<ul class="editbar"><li><span class="disabled">只读网页</span></li><li><a class="nbinfo" href="https://wiki.ubuntu.com/Kernel/KernelDebuggingTricks?action=info" rel="nofollow">信息</a></li><li><a class="nbattachments" href="https://wiki.ubuntu.com/Kernel/KernelDebuggingTricks?action=AttachFile" rel="nofollow">附件</a></li><li>
+<form class="actionsmenu" method="GET" action="/Kernel/KernelDebuggingTricks">
+<div>
+    
+    <select name="action" onchange="if ((this.selectedIndex != 0) &amp;&amp;
+                      (this.options[this.selectedIndex].disabled == false)) {
+                this.form.submit();
+            }
+            this.selectedIndex = 0;">
+        <option selected="selected" value="show">更多操作：</option><option value="raw">源码</option>
+<option value="print">打印视图</option>
+<option value="refresh">删除缓存</option>
+<option value="show" disabled="disabled" class="disabled">------------------------</option>
+<option value="SpellCheck">拼写检查</option>
+<option value="LikePages">相似网页</option>
+<option value="LocalSiteMap">本站地图</option>
+<option value="show" disabled="disabled" class="disabled">------------------------</option>
+<option value="RenamePage" disabled="disabled" class="disabled">改名</option>
+<option value="CopyPage">复制网页</option>
+<option value="DeletePage" disabled="disabled" class="disabled">删除</option>
+<option value="show" disabled="disabled" class="disabled">------------------------</option>
+<option value="show" disabled="disabled" class="disabled">订阅</option>
+<option value="show" disabled="disabled" class="disabled">------------------------</option>
+<option value="show" disabled="disabled" class="disabled">删除垃圾广告</option>
+<option value="show" disabled="disabled" class="disabled">恢复成此版本</option>
+<option value="PackagePages">网页打包</option>
+<option value="SyncPages">同步网页</option>
+<option value="show" disabled="disabled" class="disabled">------------------------</option>
+<option value="Load">加载</option>
+<option value="Save">保存</option>
+<option value="SlideShow">SlideShow</option>
+    </select>
+    
+    
+</div>
+<script type="text/javascript">
+<!--// Init menu
+actionsMenuInit('更多操作：');
+//-->
+</script>
+</form>
+</li></ul>
+
+<ul id="username">
+<li><a href="https://wiki.ubuntu.com/Home">Ubuntu Wiki</a></li>
+<li><a href="https://wiki.ubuntu.com/Kernel/KernelDebuggingTricks?action=login">登录</a></li>
+<li><a href="https://wiki.ubuntu.com/HelpContents">Help</a></li>
+</ul>
+
+        <hr class="clearBoth">
+    </div>
+    
+	<div id="main"> 
+		<div id="container">
+			<div id="content">
+		<h2 class="entry-title"> 
+<span><a href="https://wiki.ubuntu.com/Kernel/KernelDebuggingTricks">KernelDebuggingTricks</a></span>
+</h2>
+	<div class="hentry post">
+               
+
+<div id="page" dir="ltr" lang="en">
+
+<!-- END HEADER --><div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line867"></p><div dir="ltr" id="Kernel.2BAC8-MenuBar.content" lang="en"><span class="anchor" id="Kernel.2BAC8-MenuBar.top"></span>
+<span class="anchor" id="Kernel.2BAC8-MenuBar.line-1"></span><span class="anchor" id="Kernel.2BAC8-MenuBar.line-2"></span><div><table style="width:100%;"><tbody><tr>  <td style="width: 40px;  border: none;  -moz-border-radius-topleft: 15px ; -moz-border-radius-bottomleft: 15px;  background-color: #F1F1DD;"><p class="line891"><img alt="IconsPage/iconCircle48.png" class="attachment" src="Kernel_KernelDebuggingTricks%20-%20Ubuntu%20Wiki_files/IconsPage.png" title="IconsPage/iconCircle48.png"></p></td>
+  <td style="width: 20%;  border: none;  -moz-border-radius-topright: 15px; -moz-border-radius-bottomright: 15px;  font-size: 0.90em;  background-color: #F1F1DD;"><p class="line891"><a href="https://wiki.ubuntu.com/Kernel">Ubuntu Kernel Main</a></p></td>
+  <td colspan="2" style="border:none; text-align: center"></td>
+  <td style="width: 40px;  border: none;  -moz-border-radius-topleft: 15px ; -moz-border-radius-bottomleft: 15px;  background-color: #F1F1DD;"><p class="line891"><img alt="information.png" class="attachment" src="Kernel_KernelDebuggingTricks%20-%20Ubuntu%20Wiki_files/MenuBar.png" title="information.png"></p></td>
+  <td style="width: 20%;  border: none;  -moz-border-radius-topright: 15px; -moz-border-radius-bottomright: 15px;  font-size: 0.90em;  background-color: #F1F1DD;"><p class="line891"><a href="https://wiki.ubuntu.com/Kernel/Debugging">Kernel Debugging</a></p></td>
+  <td colspan="2" style="border:none; text-align: center"></td>
+  <td style="width: 40px;  border: none;  -moz-border-radius-topleft: 15px ; -moz-border-radius-bottomleft: 15px;  background-color: #F1F1DD;"><p class="line891"><img alt="IconsPage/IconBug.png" class="attachment" src="Kernel_KernelDebuggingTricks%20-%20Ubuntu%20Wiki_files/IconsPage_002.png" title="IconsPage/IconBug.png"></p></td>
+  <td style="width: 20%;  border: none;  -moz-border-radius-topright: 15px; -moz-border-radius-bottomright: 15px;  font-size: 0.90em;  background-color: #F1F1DD;"><p class="line891"><a href="https://wiki.ubuntu.com/Kernel/BugTriage">Bug Triage</a></p></td>
+  <td colspan="2" style="border:none; text-align: center"></td>
+  <td style="width: 40px;  border: none;  -moz-border-radius-topleft: 15px ; -moz-border-radius-bottomleft: 15px;  background-color: #F1F1DD;"><p class="line891"><img alt="testing.png" class="attachment" src="Kernel_KernelDebuggingTricks%20-%20Ubuntu%20Wiki_files/MenuBar_002.png" title="testing.png"></p></td>
+  <td style="width: 20%;  border: none;  -moz-border-radius-topright: 15px; -moz-border-radius-bottomright: 15px;  font-size: 0.90em;  background-color: #F1F1DD;"><p class="line891"><a href="https://wiki.ubuntu.com/Kernel/Dev">Kernel Development</a></p></td>
+  <td colspan="2" style="border:none; text-align: center"></td>
+  <td style="width: 40px;  border: none;  -moz-border-radius-topleft: 15px ; -moz-border-radius-bottomleft: 15px;  background-color: #F1F1DD;"><p class="line891"><img alt="todo.png" class="attachment" src="Kernel_KernelDebuggingTricks%20-%20Ubuntu%20Wiki_files/MenuBar_003.png" title="todo.png"></p></td>
+  <td style="width: 20%;  border: none;  -moz-border-radius-topright: 15px; -moz-border-radius-bottomright: 15px;  font-size: 0.90em;  background-color: #F1F1DD;"><p class="line891"><a href="https://wiki.ubuntu.com/Kernel/FAQ">Frequently Asked Questions</a></p></td>
+</tr>
+</tbody></table></div><span class="anchor" id="Kernel.2BAC8-MenuBar.line-3"></span><span class="anchor" id="Kernel.2BAC8-MenuBar.bottom"></span></div> <span class="anchor" id="line-2"></span><div><table style="float:right;  font-size: 0.9em;  width:40%;  background:#F1F1ED;  margin: 0 0 1em 1em;"><tbody><tr>  <td style="padding:0.5em;"><p class="line891"></p><div class="table-of-contents"><p class="table-of-contents-heading">目录</p><ol><li>
+<a href="#Kernel_Debugging_Tricks">Kernel Debugging Tricks</a><ol><li>
+<a href="#printk_is_your_friend">printk is your friend</a><ol><li>
+<a href="#Changing_the_ring_buffer_size">Changing the ring buffer size</a></li><li>
+<a href="#Changing_debug_levels">Changing debug levels</a></li></ol></li><li>
+<a href="#Serial_Console">Serial Console</a></li><li>
+<a href="#Console_Messages">Console Messages</a></li><li>
+<a href="#Slowing_down_kernel_messages_on_boot">Slowing down kernel messages on boot</a></li><li>
+<a href="#Kernel_panic_during_suspend">Kernel panic during suspend</a></li><li>
+<a href="#Serial_Console_in_VirtualBox">Serial Console in VirtualBox</a></li><li>
+<a href="#Network_Console">Network Console</a></li><li>
+<a href="#gdb_on_vmlinux">gdb on vmlinux</a></li><li>
+<a href="#Objdump">Objdump</a></li></ol></li><li>
+<a href="#Using_GDB_to_find_the_location_where_your_kernel_panicked_or_oopsed.">Using GDB to find the location where your kernel panicked or oopsed.</a></li></ol></div></td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867">
+</p><h2 id="Kernel_Debugging_Tricks">Kernel Debugging Tricks</h2>
+<span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line874">Debugging
+ the kernel is not necessarily rocket science; in fact it can be 
+achieved using very simple and straight forward techniques and some 
+time, patience and perseverance. This page describes some tricks and 
+techniques to help debug the kernel. <span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span></p><p class="line867">
+</p><h3 id="printk_is_your_friend">printk is your friend</h3>
+<span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line874">The
+ simplest, and probably most effective way to debug the kernel is via 
+printk(). This enables one to print messages to the console, and it very
+ similar to printf().  Note that printk() can slow down the execution of
+ code which can alter the way code runs, for example, changing the way 
+race conditions occur. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span></p><p class="line867">
+</p><h4 id="Changing_the_ring_buffer_size">Changing the ring buffer size</h4>
+<span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line874">The internal kernel console message buffer can sometimes be too small <span class="anchor" id="line-15"></span>to capture all of the printk messages, especially when debug code generates <span class="anchor" id="line-16"></span>a lot of printk messages. If the buffer fills up, it wraps around and one <span class="anchor" id="line-17"></span>can lose valueable debug messages. <span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span></p><p class="line874">To increase the internal buffer, use the kernel boot parameter: <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span></p><p class="line867"><span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span></p><pre><span class="anchor" id="line-1"></span>log_buf_len=N</pre><p class="line874">  <span class="anchor" id="line-24"></span>where N is the size of the buffer in bytes, and must be a power of 2. <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span></p><p class="line867">
+</p><h4 id="Changing_debug_levels">Changing debug levels</h4>
+<span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><p class="line874">One can specify the type of printk() log level by pre-pending the 1st printk() argument with one of the following: <span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span></p><p class="line867"><span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span></p><pre><span class="anchor" id="line-1-1"></span>KERN_EMERG    /* system is unusable                   */
+<span class="anchor" id="line-2"></span>KERN_ALERT    /* action must be taken immediately     */
+<span class="anchor" id="line-3"></span>KERN_CRIT     /* critical conditions                  */
+<span class="anchor" id="line-4"></span>KERN_ERR      /* error conditions                     */
+<span class="anchor" id="line-5"></span>KERN_WARNING  /* warning conditions                   */
+<span class="anchor" id="line-6"></span>KERN_NOTICE   /* normal but significant condition     */
+<span class="anchor" id="line-7"></span>KERN_INFO     /* informational                        */
+<span class="anchor" id="line-8"></span>KERN_DEBUG    /* debug-level messages                 */</pre><span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><p class="line874">e.g. printk(KERN_DEBUG "example debug message\n"); <span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span></p><p class="line874">If
+ one does not specify the log level then the default log level of 
+KERN_WARNING is used. For example, enable all levels of console message:
+ <span class="anchor" id="line-44"></span><span class="anchor" id="line-45"></span></p><p class="line867"><span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span></p><pre><span class="anchor" id="line-1-2"></span>echo 7 &gt; /proc/sys/kernel/printk</pre><span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><p class="line874">To
+ view console messages at boot, remove the quite and splash boot 
+parameters from the kernel boot line in grub. This will disable the 
+usplash splash screen and re-enable console messages. <span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span></p><p class="line867">
+</p><h3 id="Serial_Console">Serial Console</h3>
+<span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span><p class="line874">Serial
+ console enables one to dump out console messages over a serial cable. 
+Most modern PCs do not have legacy serial ports, so instead, one can use
+ a USB serial dongle instead.  <span class="anchor" id="line-54"></span>A
+ "null serial cable" or "universal file transfer cable" is needed to 
+connect the target computer with the host. Most commonly this will be a 
+DB9 female to DB9 female null serial cable. <span class="anchor" id="line-55"></span>In addition, one needs to enable USB serial support as a kernel build configuration: <span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span></p><p class="line867"><span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span></p><pre><span class="anchor" id="line-1-3"></span>CONFIG_USB_SERIAL_CONSOLE=y
+<span class="anchor" id="line-2-1"></span>CONFIG_USB_SERIAL=y</pre><span class="anchor" id="line-61"></span><span class="anchor" id="line-62"></span><p class="line874">and enable the appropriate driver, e.g.: <span class="anchor" id="line-63"></span><span class="anchor" id="line-64"></span></p><p class="line867"><span class="anchor" id="line-65"></span><span class="anchor" id="line-66"></span></p><pre><span class="anchor" id="line-1-4"></span>CONFIG_USB_SERIAL_PL2303=y</pre><span class="anchor" id="line-67"></span><span class="anchor" id="line-68"></span><p class="line874">and boot this kernel with <span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span></p><p class="line867"><span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span></p><pre><span class="anchor" id="line-1-5"></span>console=tty console=ttyUSB0,9600n8</pre><span class="anchor" id="line-73"></span><span class="anchor" id="line-74"></span><p class="line874">one may need to adjust the baud rate appropriately. <span class="anchor" id="line-75"></span><span class="anchor" id="line-76"></span></p><p class="line874">Note:
+ Generally, there is NO hardware or software flow control on serial 
+console drivers, which means one may get dropped characters when running
+ very high speed tty baud rates, such as 115200 baud. <span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span></p><p class="line867">
+</p><h3 id="Console_Messages">Console Messages</h3>
+<span class="anchor" id="line-79"></span><span class="anchor" id="line-80"></span><p class="line874">Kernel
+ Oops messages general contain a fair amount of information, ranging 
+from register and process state dump and a stack dump too.  
+Unfortunately the stack dump can be more than 25 lines and can scroll 
+off the top of the 25 line Virtual Console. Hence to capture more of a 
+Oops, try the following: <span class="anchor" id="line-81"></span><span class="anchor" id="line-82"></span></p><p class="line867"><span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span><span class="anchor" id="line-85"></span></p><pre><span class="anchor" id="line-1-6"></span>chvt 1
+<span class="anchor" id="line-2-2"></span>setfont /usr/share/consolefonts/Uni1-VGA8.psf.gz</pre><span class="anchor" id="line-86"></span><span class="anchor" id="line-87"></span><p class="line874">Of
+ course, one may still have a stack dump that scrolls the top of the 
+Oops message off the console, so one trick is to rebuild the kernel with
+ the stack dump removed, just to capture the initial Oops information. 
+To do this, modify dump_stack in arch/x86/kernel/dumpstack_*.c and 
+comment out the call to show_trace() <span class="anchor" id="line-88"></span><span class="anchor" id="line-89"></span><span class="anchor" id="line-90"></span></p><p class="line867">
+</p><h3 id="Slowing_down_kernel_messages_on_boot">Slowing down kernel messages on boot</h3>
+<span class="anchor" id="line-91"></span><span class="anchor" id="line-92"></span><p class="line874">One
+ may find a machine hangs during the kernel boot process and one would 
+like to be able to see all the kernel messages but unfortunately they 
+scroll off the console too quickly. One can slow down kernel console 
+messages at boot time using by building the kernel with the following 
+option enabled: <span class="anchor" id="line-93"></span><span class="anchor" id="line-94"></span></p><p class="line867"><span class="anchor" id="line-95"></span><span class="anchor" id="line-96"></span></p><pre><span class="anchor" id="line-1-7"></span>CONFIG_BOOT_PRINTK_DELAY=y</pre><span class="anchor" id="line-97"></span><span class="anchor" id="line-98"></span><p class="line874">And boot the machine with the following kernel boot parameter: <span class="anchor" id="line-99"></span><span class="anchor" id="line-100"></span></p><p class="line867"><span class="anchor" id="line-101"></span><span class="anchor" id="line-102"></span></p><pre><span class="anchor" id="line-1-8"></span>boot_delay=N</pre><span class="anchor" id="line-103"></span><span class="anchor" id="line-104"></span><p class="line874">where N = msecs delay between each console message. <span class="anchor" id="line-105"></span><span class="anchor" id="line-106"></span></p><p class="line867">
+</p><h3 id="Kernel_panic_during_suspend">Kernel panic during suspend</h3>
+<span class="anchor" id="line-107"></span><span class="anchor" id="line-108"></span><p class="line874">Debugging
+ suspend/resume issues can be difficult if the kernel panics during 
+suspend, especially late in the suspend because console messages are 
+disabled. One can stop console messages from being suspended by using 
+the kernel parameter no_console_suspend: <span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span></p><p class="line867"><span class="anchor" id="line-111"></span><span class="anchor" id="line-112"></span></p><pre><span class="anchor" id="line-1-9"></span>no_console_suspend=1</pre><span class="anchor" id="line-113"></span><span class="anchor" id="line-114"></span><p class="line874">This will force the console not to suspend. Boot with this option, <span class="anchor" id="line-115"></span>chvt 1 (to console #1), and suspend using pm-suspend <span class="anchor" id="line-116"></span><span class="anchor" id="line-117"></span></p><p class="line867">
+</p><h3 id="Serial_Console_in_VirtualBox">Serial Console in VirtualBox</h3>
+<span class="anchor" id="line-118"></span><span class="anchor" id="line-119"></span><p class="line874">In some debug scenerios it can be helpful to debug the kernel running inside <span class="anchor" id="line-120"></span>a
+ virtual machine. This is useful for some classes of non-hardware 
+specific bugs, for example generic kernel core problems or debugging 
+file system drivers. <span class="anchor" id="line-121"></span><span class="anchor" id="line-122"></span></p><p class="line862">One can capture Linux console messages running inside <a href="https://wiki.ubuntu.com/VirtualBox">VirtualBox</a> by setting it the <a href="https://wiki.ubuntu.com/VirtualBox">VirtualBox</a>
+ serial log to /tmp/vbox and running a serial tty communications program
+ such as minicom, and configure it to communicate with a named pipe tty 
+called unix#/tmp/vbox <span class="anchor" id="line-123"></span><span class="anchor" id="line-124"></span></p><p class="line874">Boot with virtualised kernel boot line: <span class="anchor" id="line-125"></span><span class="anchor" id="line-126"></span></p><p class="line867"><span class="anchor" id="line-127"></span><span class="anchor" id="line-128"></span></p><pre><span class="anchor" id="line-1-10"></span>console=tty console=ttyS0,9600 </pre><span class="anchor" id="line-129"></span><span class="anchor" id="line-130"></span><p class="line874">and minicom will capture the console messages <span class="anchor" id="line-131"></span><span class="anchor" id="line-132"></span></p><p class="line867">
+</p><h3 id="Network_Console">Network Console</h3>
+<span class="anchor" id="line-133"></span><span class="anchor" id="line-134"></span><p class="line874">One can route console messages over a network using netconsole. Note that <span class="anchor" id="line-135"></span>it's
+ not useful for capturing kernel panics as kernel halts before the 
+messages can be transmitted over the network. However it can be useful 
+to monitor <span class="anchor" id="line-136"></span>systems without the need of message serial console cabling. <span class="anchor" id="line-137"></span><span class="anchor" id="line-138"></span></p><p class="line874">see Documentation/networking/netconsole.txt <span class="anchor" id="line-139"></span><span class="anchor" id="line-140"></span></p><p class="line867"><span class="anchor" id="line-141"></span><span class="anchor" id="line-142"></span><span class="anchor" id="line-143"></span><span class="anchor" id="line-144"></span><span class="anchor" id="line-145"></span><span class="anchor" id="line-146"></span><span class="anchor" id="line-147"></span><span class="anchor" id="line-148"></span><span class="anchor" id="line-149"></span><span class="anchor" id="line-150"></span></p><pre><span class="anchor" id="line-1-11"></span>netconsole=[src-port]@[src-ip]/[&lt;dev&gt;],[tgt-port]@&lt;tgt-ip&gt;/[tgt-macaddr]
+<span class="anchor" id="line-2-3"></span>
+<span class="anchor" id="line-3-1"></span>        where
+<span class="anchor" id="line-4-1"></span>             src-port      source for UDP packets (defaults to 6665)
+<span class="anchor" id="line-5-1"></span>             src-ip        source IP to use (interface address)
+<span class="anchor" id="line-6-1"></span>             dev           network interface (eth0)
+<span class="anchor" id="line-7-1"></span>             tgt-port      port for logging agent (6666)
+<span class="anchor" id="line-8-1"></span>             tgt-ip        IP address for logging agent
+<span class="anchor" id="line-9"></span>             tgt-macaddr   ethernet MAC address for logging agent (broadcast)</pre><span class="anchor" id="line-151"></span><span class="anchor" id="line-152"></span><p class="line874">Examples: <span class="anchor" id="line-153"></span><span class="anchor" id="line-154"></span></p><p class="line867"><span class="anchor" id="line-155"></span><span class="anchor" id="line-156"></span></p><pre><span class="anchor" id="line-1-12"></span>linux netconsole=4444@10.0.0.1/eth1,9353@10.0.0.2/12:34:56:78:9a:bc</pre><span class="anchor" id="line-157"></span><span class="anchor" id="line-158"></span><p class="line862">The remote host can run either 'netcat -u -l -p &lt;port&gt;' or syslogd. <span class="anchor" id="line-159"></span><span class="anchor" id="line-160"></span></p><p class="line867">
+</p><h3 id="gdb_on_vmlinux">gdb on vmlinux</h3>
+<span class="anchor" id="line-161"></span><span class="anchor" id="line-162"></span><p class="line874">One
+ can disassemble a built kernel using gdb on the vmlinux image. This is 
+useful when one gets a kernel Oops message and a stack dump - one can 
+then disassemble the object code and see where the Oops is occuring. For
+ example: <span class="anchor" id="line-163"></span><span class="anchor" id="line-164"></span></p><p class="line867"><span class="anchor" id="line-165"></span><span class="anchor" id="line-166"></span><span class="anchor" id="line-167"></span><span class="anchor" id="line-168"></span><span class="anchor" id="line-169"></span><span class="anchor" id="line-170"></span><span class="anchor" id="line-171"></span><span class="anchor" id="line-172"></span><span class="anchor" id="line-173"></span><span class="anchor" id="line-174"></span><span class="anchor" id="line-175"></span><span class="anchor" id="line-176"></span><span class="anchor" id="line-177"></span><span class="anchor" id="line-178"></span><span class="anchor" id="line-179"></span><span class="anchor" id="line-180"></span><span class="anchor" id="line-181"></span><span class="anchor" id="line-182"></span><span class="anchor" id="line-183"></span><span class="anchor" id="line-184"></span><span class="anchor" id="line-185"></span></p><pre><span class="anchor" id="line-1-13"></span>gdb  debian/build/build-generic/vmlinux
+<span class="anchor" id="line-2-4"></span>(gdb) disassemble printk
+<span class="anchor" id="line-3-2"></span>Dump of assembler code for function printk:
+<span class="anchor" id="line-4-2"></span>0xffffffff8023dce0 &lt;printk+0&gt;:  sub    $0xd8,%rsp
+<span class="anchor" id="line-5-2"></span>0xffffffff8023dce7 &lt;printk+7&gt;:  lea    0xe0(%rsp),%rax
+<span class="anchor" id="line-6-2"></span>0xffffffff8023dcef &lt;printk+15&gt;: mov    %rsi,0x28(%rsp)
+<span class="anchor" id="line-7-2"></span>0xffffffff8023dcf4 &lt;printk+20&gt;: mov    %rsp,%rsi
+<span class="anchor" id="line-8-2"></span>0xffffffff8023dcf7 &lt;printk+23&gt;: mov    %rdx,0x30(%rsp)
+<span class="anchor" id="line-9-1"></span>0xffffffff8023dcfc &lt;printk+28&gt;: mov    %rcx,0x38(%rsp)
+<span class="anchor" id="line-10"></span>0xffffffff8023dd01 &lt;printk+33&gt;: mov    %rax,0x8(%rsp)
+<span class="anchor" id="line-11"></span>0xffffffff8023dd06 &lt;printk+38&gt;: lea    0x20(%rsp),%rax
+<span class="anchor" id="line-12"></span>0xffffffff8023dd0b &lt;printk+43&gt;: mov    %r8,0x40(%rsp)
+<span class="anchor" id="line-13"></span>0xffffffff8023dd10 &lt;printk+48&gt;: mov    %r9,0x48(%rsp)
+<span class="anchor" id="line-14"></span>0xffffffff8023dd15 &lt;printk+53&gt;: movl   $0x8,(%rsp)
+<span class="anchor" id="line-15"></span>0xffffffff8023dd1c &lt;printk+60&gt;: movl   $0x30,0x4(%rsp)
+<span class="anchor" id="line-16"></span>0xffffffff8023dd24 &lt;printk+68&gt;: mov    %rax,0x10(%rsp)
+<span class="anchor" id="line-17"></span>0xffffffff8023dd29 &lt;printk+73&gt;: callq  0xffffffff8023d980 &lt;vprintk&gt;
+<span class="anchor" id="line-18"></span>0xffffffff8023dd2e &lt;printk+78&gt;: add    $0xd8,%rsp
+<span class="anchor" id="line-19"></span>0xffffffff8023dd35 &lt;printk+85&gt;: retq   
+<span class="anchor" id="line-20"></span>End of assembler dump.</pre><span class="anchor" id="line-186"></span><span class="anchor" id="line-187"></span><p class="line867">
+</p><h3 id="Objdump">Objdump</h3>
+<span class="anchor" id="line-188"></span><span class="anchor" id="line-189"></span><p class="line874">If one has the built object code at hand, one can disassemble the object using objdump as follows: <span class="anchor" id="line-190"></span><span class="anchor" id="line-191"></span></p><p class="line867"><span class="anchor" id="line-192"></span><span class="anchor" id="line-193"></span></p><pre><span class="anchor" id="line-1-14"></span>objdump -SdCg debian/build/build-generic/fs/dcache.o</pre><span class="anchor" id="line-194"></span><span class="anchor" id="line-195"></span><p class="line867">
+</p><h2 id="Using_GDB_to_find_the_location_where_your_kernel_panicked_or_oopsed.">Using GDB to find the location where your kernel panicked or oopsed.</h2>
+<span class="anchor" id="line-196"></span><span class="anchor" id="line-197"></span><p class="line874">A
+ quick and easy way to find the line of code where your kernel panicked 
+or oopsed is to use GDB list command. You can do this as follows. <span class="anchor" id="line-198"></span><span class="anchor" id="line-199"></span></p><p class="line874">Lets assume your panic/oops message says something like: <span class="anchor" id="line-200"></span><span class="anchor" id="line-201"></span><span class="anchor" id="line-202"></span><span class="anchor" id="line-203"></span><span class="anchor" id="line-204"></span><span class="anchor" id="line-205"></span><span class="anchor" id="line-206"></span><span class="anchor" id="line-207"></span><span class="anchor" id="line-208"></span><span class="anchor" id="line-209"></span><span class="anchor" id="line-210"></span><span class="anchor" id="line-211"></span><span class="anchor" id="line-212"></span><span class="anchor" id="line-213"></span><span class="anchor" id="line-214"></span><span class="anchor" id="line-215"></span><span class="anchor" id="line-216"></span><span class="anchor" id="line-217"></span><span class="anchor" id="line-218"></span><span class="anchor" id="line-219"></span><span class="anchor" id="line-220"></span><span class="anchor" id="line-221"></span><span class="anchor" id="line-222"></span><span class="anchor" id="line-223"></span><span class="anchor" id="line-224"></span></p><pre><span class="anchor" id="line-1-15"></span>[  174.507084] Stack:
+<span class="anchor" id="line-2-5"></span>[  174.507163]  ce0bd8ac 00000008 00000000 ce4a7e90 c039ce30 ce0bd8ac c0718b04 c07185a0
+<span class="anchor" id="line-3-3"></span>[  174.507380]  ce4a7ea0 c0398f22 ce0bd8ac c0718b04 ce4a7eb0 c037deee ce0bd8e0 ce0bd8ac
+<span class="anchor" id="line-4-3"></span>[  174.507597]  ce4a7ec0 c037dfe0 c07185a0 ce0bd8ac ce4a7ed4 c037d353 ce0bd8ac ce0bd8ac
+<span class="anchor" id="line-5-3"></span>[  174.507888] Call Trace:
+<span class="anchor" id="line-6-3"></span>[  174.508125]  [&lt;c039ce30&gt;] ? sd_remove+0x20/0x70
+<span class="anchor" id="line-7-3"></span>[  174.508235]  [&lt;c0398f22&gt;] ? scsi_bus_remove+0x32/0x40
+<span class="anchor" id="line-8-3"></span>[  174.508326]  [&lt;c037deee&gt;] ? __device_release_driver+0x3e/0x70
+<span class="anchor" id="line-9-2"></span>[  174.508421]  [&lt;c037dfe0&gt;] ? device_release_driver+0x20/0x40
+<span class="anchor" id="line-10-1"></span>[  174.508514]  [&lt;c037d353&gt;] ? bus_remove_device+0x73/0x90
+<span class="anchor" id="line-11-1"></span>[  174.508606]  [&lt;c037bccf&gt;] ? device_del+0xef/0x150
+<span class="anchor" id="line-12-1"></span>[  174.508693]  [&lt;c0399207&gt;] ? __scsi_remove_device+0x47/0x80
+<span class="anchor" id="line-13-1"></span>[  174.508786]  [&lt;c0399262&gt;] ? scsi_remove_device+0x22/0x40
+<span class="anchor" id="line-14-1"></span>[  174.508877]  [&lt;c0399324&gt;] ? __scsi_remove_target+0x94/0xd0
+<span class="anchor" id="line-15-1"></span>[  174.508969]  [&lt;c03993c0&gt;] ? __remove_child+0x0/0x20
+<span class="anchor" id="line-16-1"></span>[  174.509060]  [&lt;c03993d7&gt;] ? __remove_child+0x17/0x20
+<span class="anchor" id="line-17-1"></span>[  174.509148]  [&lt;c037b868&gt;] ? device_for_each_child+0x38/0x60
+<span class="anchor" id="line-18-1"></span>[  174.509241]  [&lt;c039938f&gt;] ? scsi_remove_target+0x2f/0x60
+<span class="anchor" id="line-19-1"></span>[  174.509393]  [&lt;d0c38907&gt;] ? __iscsi_unbind_session+0x77/0xa0 [scsi_transport_iscsi]
+<span class="anchor" id="line-20-1"></span>[  174.509699]  [&lt;c015272e&gt;] ? run_workqueue+0x6e/0x140
+<span class="anchor" id="line-21"></span>[  174.509801]  [&lt;d0c38890&gt;] ? __iscsi_unbind_session+0x0/0xa0 [scsi_transport_iscsi]
+<span class="anchor" id="line-22"></span>[  174.509977]  [&lt;c0152888&gt;] ? worker_thread+0x88/0xe0
+<span class="anchor" id="line-23"></span>[  174.510047]  [&lt;c01566a0&gt;] ? autoremove_wake_function+0x0/0x40</pre><span class="anchor" id="line-225"></span><span class="anchor" id="line-226"></span><p class="line874">Lets
+ say you want to know what line of code represents sd_remove+0x20/0x70. 
+cd to the ubuntu debian/build/build-generic directory in your kernel 
+tree and run gdb on the ".o" file which has the function sd_remove() in 
+this case in sd.o, and use the gdb "list" command, (gdb) list 
+*(function+0xoffset), in this case function is sd_remove() and offset is
+ 0x20, and gdb should tell you the line number where you hit the panic 
+or oops. This has worked for me very reliably for most cases.  <span class="anchor" id="line-227"></span><span class="anchor" id="line-228"></span></p><p class="line867"><span class="anchor" id="line-229"></span><span class="anchor" id="line-230"></span><span class="anchor" id="line-231"></span><span class="anchor" id="line-232"></span><span class="anchor" id="line-233"></span><span class="anchor" id="line-234"></span><span class="anchor" id="line-235"></span><span class="anchor" id="line-236"></span><span class="anchor" id="line-237"></span><span class="anchor" id="line-238"></span><span class="anchor" id="line-239"></span><span class="anchor" id="line-240"></span><span class="anchor" id="line-241"></span><span class="anchor" id="line-242"></span><span class="anchor" id="line-243"></span><span class="anchor" id="line-244"></span><span class="anchor" id="line-245"></span><span class="anchor" id="line-246"></span><span class="anchor" id="line-247"></span><span class="anchor" id="line-248"></span><span class="anchor" id="line-249"></span><span class="anchor" id="line-250"></span><span class="anchor" id="line-251"></span><span class="anchor" id="line-252"></span></p><pre><span class="anchor" id="line-1-16"></span>manjo@hungry:~/devel/ubuntu/kernel/ubuntu-karmic-397906/debian/build/build-generic/drivers/scsi$ gdb sd.o
+<span class="anchor" id="line-2-6"></span>GNU gdb (GDB) 6.8.50.20090628-cvs-debian
+<span class="anchor" id="line-3-4"></span>Copyright (C) 2009 Free Software Foundation, Inc.
+<span class="anchor" id="line-4-4"></span>License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+<span class="anchor" id="line-5-4"></span>This is free software: you are free to change and redistribute it.
+<span class="anchor" id="line-6-4"></span>There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+<span class="anchor" id="line-7-4"></span>and "show warranty" for details.
+<span class="anchor" id="line-8-4"></span>This GDB was configured as "x86_64-linux-gnu".
+<span class="anchor" id="line-9-3"></span>For bug reporting instructions, please see:
+<span class="anchor" id="line-10-2"></span>&lt;http://www.gnu.org/software/gdb/bugs/&gt;...
+<span class="anchor" id="line-11-2"></span>(gdb) list *(sd_remove+0x20)
+<span class="anchor" id="line-12-2"></span>0x1650 is in sd_remove (/home/manjo/devel/ubuntu/kernel/ubuntu-karmic-397906/drivers/scsi/sd.c:2125).
+<span class="anchor" id="line-13-2"></span>2120    static int sd_remove(struct device *dev)
+<span class="anchor" id="line-14-2"></span>2121    {
+<span class="anchor" id="line-15-2"></span>2122            struct scsi_disk *sdkp;
+<span class="anchor" id="line-16-2"></span>2123    
+<span class="anchor" id="line-17-2"></span>2124            async_synchronize_full();
+<span class="anchor" id="line-18-2"></span>2125            sdkp = dev_get_drvdata(dev);
+<span class="anchor" id="line-19-2"></span>2126            blk_queue_prep_rq(sdkp-&gt;device-&gt;request_queue, scsi_prep_fn);
+<span class="anchor" id="line-20-2"></span>2127            device_del(&amp;sdkp-&gt;dev);
+<span class="anchor" id="line-21-1"></span>2128            del_gendisk(sdkp-&gt;disk);
+<span class="anchor" id="line-22-1"></span>2129            sd_shutdown(dev);
+<span class="anchor" id="line-23-1"></span>(gdb)</pre><span class="anchor" id="line-253"></span><span class="anchor" id="bottom"></span></div> <!-- BEGIN FOOTER -->
+<div id="pagebottom"></div>
+</div>
+
+
+        <div class="entry-utility"> 
+            <span class="cat-links">
+<p id="pageinfo" class="info" dir="ltr" lang="zh">Kernel/KernelDebuggingTricks  (2012-12-11 14:34:51由<span title="colin-king @ cpc3-craw6-2-0-cust180.croy.cable.virginmedia.com[77.100.248.181]"><a class="interwiki" href="https://launchpad.net/%7Ecolin-king" title="colin-king @ cpc3-craw6-2-0-cust180.croy.cable.virginmedia.com[77.100.248.181]">colin-king</a></span>编辑)</p>
+
+</span> 
+        </div> 
+    </div><!-- .post --> 
+ 
+            </div><!-- #content --> 
+        </div><!-- #container --> 
+        <div class="clearBoth"></div> 
+    </div><!-- #main --> 
+</div><!-- #wrapper .hfeed --> 
+    
+<div id="footer"> 
+    <div id="siteinfo">        
+        <p> The material on this wiki is available under a free license, see 
+	<a href="https://help.ubuntu.com/community/License">Copyright / License</a> for details.
+        </p> 
+    </div><!-- #siteinfo --> 
+</div><!-- #footer --> 
+
+
+</body></html>

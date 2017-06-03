@@ -1,0 +1,847 @@
+一. V4L2框架: video for linux version 2
+
+
+虚拟视频驱动vivi.c分析:
+1．分配video_device
+2．设置
+3．注册：video_register_device
+
+vivi_init
+    vivi_create_instance
+        v4l2_device_register   // 不是主要, 只是用于初始化一些东西，比如自旋锁、引用计数
+        video_device_alloc
+        // 设置
+          1. vfd:
+            .fops           = &vivi_fops,
+            .ioctl_ops 	= &vivi_ioctl_ops,
+            .release	= video_device_release,
+          2.
+            vfd->v4l2_dev = &dev->v4l2_dev;
+          3. 设置"ctrl属性"(用于APP的ioctl)：
+            	v4l2_ctrl_handler_init(hdl, 11);
+            	dev->volume = v4l2_ctrl_new_std(hdl, &vivi_ctrl_ops,
+            			V4L2_CID_AUDIO_VOLUME, 0, 255, 1, 200);
+            	dev->brightness = v4l2_ctrl_new_std(hdl, &vivi_ctrl_ops,
+            			V4L2_CID_BRIGHTNESS, 0, 255, 1, 127);
+            	dev->contrast = v4l2_ctrl_new_std(hdl, &vivi_ctrl_ops,
+            			V4L2_CID_CONTRAST, 0, 255, 1, 16);                        
+        video_register_device(video_device, type:VFL_TYPE_GRABBER, nr)
+            __video_register_device
+                vdev->cdev = cdev_alloc();
+                vdev->cdev->ops = &v4l2_fops;
+                cdev_add
+                
+                video_device[vdev->minor] = vdev;
+
+        		if (vdev->ctrl_handler == NULL)
+        			vdev->ctrl_handler = vdev->v4l2_dev->ctrl_handler;
+                
+                
+
+分析vivi.c的open,read,write,ioctl过程
+1. open
+app:     open("/dev/video0",....)
+---------------------------------------------------
+drv:     v4l2_fops.v4l2_open
+            vdev = video_devdata(filp);  // 根据次设备号从数组中得到video_device
+            ret = vdev->fops->open(filp);
+                        vivi_ioctl_ops.open
+                            v4l2_fh_open
+
+2. read
+app:    read ....
+---------------------------------------------------
+drv:    v4l2_fops.v4l2_read
+            struct video_device *vdev = video_devdata(filp);
+            ret = vdev->fops->read(filp, buf, sz, off);
+
+3. ioctl
+app:   ioctl
+----------------------------------------------------
+drv:   v4l2_fops.unlocked_ioctl
+            v4l2_ioctl
+                struct video_device *vdev = video_devdata(filp);
+                ret = vdev->fops->unlocked_ioctl(filp, cmd, arg);
+                            video_ioctl2
+                                video_usercopy(file, cmd, arg, __video_do_ioctl);
+                                    __video_do_ioctl
+                                        struct video_device *vfd = video_devdata(file);
+                                        根据APP传入的cmd来获得、设置"某些属性"
+
+v4l2_ctrl_handler的使用过程:
+    __video_do_ioctl
+        struct video_device *vfd = video_devdata(file);
+
+    	case VIDIOC_QUERYCTRL:
+    	{
+    		struct v4l2_queryctrl *p = arg;
+    
+    		if (vfh && vfh->ctrl_handler)
+    			ret = v4l2_queryctrl(vfh->ctrl_handler, p);
+    		else if (vfd->ctrl_handler)  // 在哪设置？在video_register_device
+    			ret = v4l2_queryctrl(vfd->ctrl_handler, p);
+    			            // 根据ID在ctrl_handler里找到v4l2_ctrl，返回它的值
+                                                
+
+二、测试虚拟驱动vivi
+准备工作：安装xawtv
+sudo apt-get install xawtv
+
+源码xawtv-3.95.tar.gz
+http://www.kraxel.org/releases/xawtv/
+
+在这个网站创建新的sources.list
+http://repogen.simplylinux.ch/
+1. 选择国家
+2．选择相邻的ubuntu版本
+3. 选择"Ubuntu Branches"
+4. 生成sources.list
+5. 把得到内容替换到/etc/apt/sources.list
+6. sudo apt-get update
+   sudo apt-get install xawtv
+
+测试USB摄像头：
+1．让VMWAER处于前台，接上USB摄像头，可以看到生成了/dev/video0
+2．执行 xawtv 即可看到图像
+
+测试虚拟摄像头vivi：
+1. 确实ubuntu的内核版本
+uname -a
+Linux book-desktop 2.6.31-14-generic #48-Ubuntu SMP Fri Oct 16 14:04:26 UTC 2009 i686 GNU/Linux
+2. 去www.kernel.org下载同版本的内核
+   解压后把drivers/media/video目录取出
+   修改它的Makefile为：
+
+KERN_DIR = /usr/src/linux-headers-2.6.31-14-generic
+
+all:
+        make -C $(KERN_DIR) M=`pwd` modules 
+
+clean:
+        make -C $(KERN_DIR) M=`pwd` modules clean
+        rm -rf modules.order
+
+obj-m   += vivi.o
+obj-m   += videobuf-core.o
+obj-m   += videobuf-vmalloc.o
+obj-m   += v4l2-common.o
+   
+3. make
+4. sudo modprobe vivi  
+   sudo rmmod vivi
+   sudo insmod ./vivi.ko
+
+5. ls /dev/video*
+6. xawtv -c /dev/videoX
+
+
+//
+3. ioctl(4, VIDIOC_G_FMT
+4. for()
+        ioctl(4, VIDIOC_ENUM_FMT
+5. ioctl(4, VIDIOC_QUERYCAP    // 列举性能
+6. ioctl(4, VIDIOC_G_INPUT     // 获得当前使用输入源
+7. ioctl(4, VIDIOC_ENUMINPUT   // 列举输入源
+8. ioctl(4, VIDIOC_QUERYCTRL   // 查询属性,比如亮度、对比度
+9. ioctl(4, VIDIOC_QUERYCAP
+10. ioctl(4, VIDIOC_ENUMINPUT
+
+三、根据虚拟驱动vivi的使用过程彻底分析摄像头驱动
+// 1~7都是在v4l2_open里调用
+1. open
+2. ioctl(4, VIDIOC_QUERYCAP
+
+// 3~7 都是在get_device_capabilities里调用
+3. for()
+        ioctl(4, VIDIOC_ENUMINPUT   // 列举输入源,VIDIOC_ENUMINPUT/VIDIOC_G_INPUT/VIDIOC_S_INPUT不是必需的
+4. for()
+        ioctl(4, VIDIOC_ENUMSTD  // 列举标准(制式), 不是必需的
+5. for()        
+        ioctl(4, VIDIOC_ENUM_FMT // 列举格式
+
+6. ioctl(4, VIDIOC_G_PARM
+7. for()
+        ioctl(4, VIDIOC_QUERYCTRL    // 查询属性(比如说亮度值最小值、最大值、默认值)
+
+// 8~10都是通过v4l2_read_attr来调用的        
+8. ioctl(4, VIDIOC_G_STD            // 获得当前使用的标准(制式), 不是必需的
+9. ioctl(4, VIDIOC_G_INPUT 
+10. ioctl(4, VIDIOC_G_CTRL           // 获得当前属性, 比如亮度是多少
+
+11. ioctl(4, VIDIOC_TRY_FMT          // 试试能否支持某种格式
+12. ioctl(4, VIDIOC_S_FMT            // 设置摄像头使用某种格式
+
+
+// 13~16在v4l2_start_streaming
+13. ioctl(4, VIDIOC_REQBUFS          // 请求系统分配缓冲区
+14. for()
+        ioctl(4, VIDIOC_QUERYBUF         // 查询所分配的缓冲区
+        mmap        
+15. for ()
+        ioctl(4, VIDIOC_QBUF             // 把缓冲区放入队列        
+16. ioctl(4, VIDIOC_STREAMON             // 启动摄像头
+
+
+// 17里都是通过v4l2_write_attr来调用的
+17. for ()
+        ioctl(4, VIDIOC_S_CTRL           // 设置属性
+    ioctl(4, VIDIOC_S_INPUT              // 设置输入源
+    ioctl(4, VIDIOC_S_STD                // 设置标准(制式), 不是必需的
+
+// v4l2_nextframe > v4l2_waiton    
+18. v4l2_queue_all
+    v4l2_waiton    
+        for ()
+        {
+            select(5, [4], NULL, NULL, {5, 0})      = 1 (in [4], left {4, 985979})
+            ioctl(4, VIDIOC_DQBUF                // de-queue, 把缓冲区从队列中取出
+            // 处理, 之以已经通过mmap获得了缓冲区的地址, 就可以直接访问数据        
+            ioctl(4, VIDIOC_QBUF                 // 把缓冲区放入队列
+        }
+
+xawtv的几大函数：
+1. v4l2_open
+2. v4l2_read_attr/v4l2_write_attr
+3. v4l2_start_streaming
+4. v4l2_nextframe/v4l2_waiton
+
+摄像头驱动程序必需的11个ioctl:
+    // 表示它是一个摄像头设备
+	.vidioc_querycap      = vidioc_querycap,
+
+    /* 用于列举、获得、测试、设置摄像头的数据的格式 */
+	.vidioc_enum_fmt_vid_cap  = vidioc_enum_fmt_vid_cap,
+	.vidioc_g_fmt_vid_cap     = vidioc_g_fmt_vid_cap,
+	.vidioc_try_fmt_vid_cap   = vidioc_try_fmt_vid_cap,
+	.vidioc_s_fmt_vid_cap     = vidioc_s_fmt_vid_cap,
+
+    /* 缓冲区操作: 申请/查询/放入队列/取出队列 */
+	.vidioc_reqbufs       = vidioc_reqbufs,
+	.vidioc_querybuf      = vidioc_querybuf,
+	.vidioc_qbuf          = vidioc_qbuf,
+	.vidioc_dqbuf         = vidioc_dqbuf,
+
+	// 启动/停止
+	.vidioc_streamon      = vidioc_streamon,
+	.vidioc_streamoff     = vidioc_streamoff,	
+     
+继续分析数据的获取过程：
+1. 请求分配缓冲区: ioctl(4, VIDIOC_REQBUFS          // 请求系统分配缓冲区
+                        videobuf_reqbufs(队列, v4l2_requestbuffers) // 队列在open函数用videobuf_queue_vmalloc_init初始化
+                        // 注意：这个IOCTL只是分配缓冲区的头部信息，真正的缓存还没有分配呢
+
+2. 查询映射缓冲区:
+ioctl(4, VIDIOC_QUERYBUF         // 查询所分配的缓冲区
+        videobuf_querybuf        // 获得缓冲区的数据格式、大小、每一行长度、高度            
+mmap(参数里有"大小")   // 在这里才分配缓存
+        v4l2_mmap
+            vivi_mmap
+                videobuf_mmap_mapper
+                    videobuf-vmalloc.c里的__videobuf_mmap_mapper
+                            mem->vmalloc = vmalloc_user(pages);   // 在这里才给缓冲区分配空间
+
+3. 把缓冲区放入队列:
+ioctl(4, VIDIOC_QBUF             // 把缓冲区放入队列        
+    videobuf_qbuf
+        q->ops->buf_prepare(q, buf, field);  // 调用驱动程序提供的函数做些预处理
+        list_add_tail(&buf->stream, &q->stream);  // 把缓冲区放入队列的尾部
+        q->ops->buf_queue(q, buf);           // 调用驱动程序提供的"入队列函数"
+        
+
+4. 启动摄像头
+ioctl(4, VIDIOC_STREAMON
+    videobuf_streamon
+        q->streaming = 1;
+        
+
+5. 用select查询是否有数据
+          // 驱动程序里必定有: 产生数据、唤醒进程
+          v4l2_poll
+                vdev->fops->poll
+                    vivi_poll   
+                        videobuf_poll_stream
+                            // 从队列的头部获得缓冲区
+                			buf = list_entry(q->stream.next, struct videobuf_buffer, stream);
+                            
+                            // 如果没有数据则休眠                			
+                			poll_wait(file, &buf->done, wait);
+
+    谁来产生数据、谁来唤醒它？
+    内核线程vivi_thread每30MS执行一次，它调用
+    vivi_thread_tick
+        vivi_fillbuff(fh, buf);  // 构造数据 
+        wake_up(&buf->vb.done);  // 唤醒进程
+          
+6. 有数据后从队列里取出缓冲区
+// 有那么多缓冲区，APP如何知道哪一个缓冲区有数据？调用VIDIOC_DQBUF
+ioctl(4, VIDIOC_DQBUF 
+    vidioc_dqbuf   
+        // 在队列里获得有数据的缓冲区
+        retval = stream_next_buffer(q, &buf, nonblocking);
+        
+        // 把它从队列中删掉
+        list_del(&buf->stream);
+        
+        // 把这个缓冲区的状态返回给APP
+        videobuf_status(q, b, buf, q->type);
+        
+7. 应用程序根据VIDIOC_DQBUF所得到缓冲区状态，知道是哪一个缓冲区有数据
+   就去读对应的地址(该地址来自前面的mmap)
+
+怎么写摄像头驱动程序:
+1. 分配video_device:video_device_alloc
+2. 设置
+   .fops
+   .ioctl_ops (里面需要设置11项)
+   如果要用内核提供的缓冲区操作函数，还需要构造一个videobuf_queue_ops
+3. 注册: video_register_device
+
+四、自己写一个虚拟摄像头驱动
+
+五、写一个USB摄像头驱动程序
+1.构造一个usb_driver
+2.设置
+   probe:
+        2.1. 分配video_device:video_device_alloc
+        2.2. 设置
+           .fops
+           .ioctl_ops (里面需要设置11项)
+           如果要用内核提供的缓冲区操作函数，还需要构造一个videobuf_queue_ops
+        2.3. 注册: video_register_device      
+  id_table: 表示支持哪些USB设备      
+3.注册： usb_register
+ 
+UVC: USB Video Class
+UVC驱动：drivers\media\video\uvc\
+
+uvc_driver.c分析:
+1. usb_register(&uvc_driver.driver);
+2. uvc_probe
+        uvc_register_video
+            vdev = video_device_alloc();
+            vdev->fops = &uvc_fops;
+            video_register_device
+
+在www.usb.org下载 uvc specification,
+UVC 1.5 Class specification.pdf : 有详细描述
+USB_Video_Example 1.5.pdf    : 有示例
+
+通过VideoControl Interface来控制，
+通过VideoStreaming Interface来读视频数据，
+VC里含有多个Unit/Terminal等功能模块，可以通过访问这些模块进行控制，比如调亮度
+            
+分析UVC驱动调用过程：
+const struct v4l2_file_operations uvc_fops = {
+	.owner		= THIS_MODULE,
+	.open		= uvc_v4l2_open,
+	.release	= uvc_v4l2_release,
+	.ioctl		= uvc_v4l2_ioctl,
+	.read		= uvc_v4l2_read,
+	.mmap		= uvc_v4l2_mmap,
+	.poll		= uvc_v4l2_poll,
+};
+
+1. open:
+        uvc_v4l2_open
+2. VIDIOC_QUERYCAP   // video->streaming->type 应该是在设备被枚举时分析描述符时设置的
+		if (video->streaming->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+			cap->capabilities = V4L2_CAP_VIDEO_CAPTURE
+					  | V4L2_CAP_STREAMING;
+		else
+			cap->capabilities = V4L2_CAP_VIDEO_OUTPUT
+					  | V4L2_CAP_STREAMING;
+3. VIDIOC_ENUM_FMT // format数组应是在设备被枚举时设置的
+        format = &video->streaming->format[fmt->index];
+4. VIDIOC_G_FMT
+        uvc_v4l2_get_format  // USB摄像头支持多种格式fromat, 每种格式下有多种frame(比如分辨率)
+            	struct uvc_format *format = video->streaming->cur_format;
+            	struct uvc_frame *frame = video->streaming->cur_frame;
+5. VIDIOC_TRY_FMT
+        uvc_v4l2_try_format
+            /* Check if the hardware supports the requested format. */
+
+        	/* Find the closest image size. The distance between image sizes is
+        	 * the size in pixels of the non-overlapping regions between the
+        	 * requested size and the frame-specified size.
+        	 */
+6. VIDIOC_S_FMT  // 只是把参数保存起来，还没有发给USB摄像头
+        uvc_v4l2_set_format
+            uvc_v4l2_try_format
+        	video->streaming->cur_format = format;
+        	video->streaming->cur_frame = frame;
+7. VIDIOC_REQBUFS
+        uvc_alloc_buffers
+           	for (; nbuffers > 0; --nbuffers) {
+        		mem = vmalloc_32(nbuffers * bufsize);
+        		if (mem != NULL)
+        			break;
+        	}
+8. VIDIOC_QUERYBUF
+        uvc_query_buffer
+            __uvc_query_buffer
+                memcpy(v4l2_buf, &buf->buf, sizeof *v4l2_buf);  // 复制参数
+9. mmap
+        uvc_v4l2_mmap
+            
+10. VIDIOC_QBUF
+        uvc_queue_buffer
+        	list_add_tail(&buf->stream, &queue->mainqueue);
+        	list_add_tail(&buf->queue, &queue->irqqueue);
+
+11. VIDIOC_STREAMON
+        uvc_video_enable(video, 1)  // 把所设置的参数发给硬件,然后启动摄像头
+            /* Commit the streaming parameters. */
+            uvc_commit_video
+                uvc_set_video_ctrl  /* 设置格式fromat, frame */
+                    	ret = __uvc_query_ctrl(video->dev /* 哪一个USB设备 */, SET_CUR, 0,
+                    		video->streaming->intfnum  /* 哪一个接口: VS */,
+                    		probe ? VS_PROBE_CONTROL : VS_COMMIT_CONTROL, data, size,
+                    		uvc_timeout_param);
+                    
+            /* 启动：Initialize isochronous/bulk URBs and allocate transfer buffers. */
+            uvc_init_video(video, GFP_KERNEL);
+                    uvc_init_video_isoc / uvc_init_video_bulk
+                        urb->complete = uvc_video_complete; (收到数据后此函数被调用,它又调用video->decode(urb, video, buf); ==> uvc_video_decode_isoc/uvc_video_encode_bulk => uvc_queue_next_buffer => wake_up(&buf->wait);)
+                        
+                    usb_submit_urb                    	
+12. poll
+        uvc_v4l2_poll            
+            uvc_queue_poll
+                poll_wait(file, &buf->wait, wait);  // 休眠等待有数据
+
+13. VIDIOC_DQBUF
+        uvc_dequeue_buffer
+        	list_del(&buf->stream);
+
+14. VIDIOC_STREAMOFF            
+        uvc_video_enable(video, 0);
+    		usb_kill_urb(urb);
+    		usb_free_urb(urb);
+        
+分析设置亮度过程：
+ioctl: VIDIOC_S_CTRL
+            uvc_ctrl_set
+            uvc_ctrl_commit
+                __uvc_ctrl_commit(video, 0);
+                    uvc_ctrl_commit_entity(video->dev, entity, rollback);
+                			ret = uvc_query_ctrl(dev  /* 哪一个USB设备 */, SET_CUR, ctrl->entity->id  /* 哪一个unit/terminal */,
+                				dev->intfnum /* 哪一个接口: VC interface */, ctrl->info->selector,
+                				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
+                				ctrl->info->size);
+                        
+     
+总结：
+1. UVC设备有2个interface: VideoControl Interface, VideoStreaming Interface
+2. VideoControl Interface用于控制，比如设置亮度。它内部有多个Unit/Terminal(在程序里Unit/Terminal都称为entity)
+   可以通过类似的函数来访问：
+                			ret = uvc_query_ctrl(dev  /* 哪一个USB设备 */, SET_CUR, ctrl->entity->id  /* 哪一个unit/terminal */,
+                				dev->intfnum /* 哪一个接口: VC interface */, ctrl->info->selector,
+                				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
+                				ctrl->info->size);
+3. VideoStreaming Interface用于获得视频数据，也可以用来选择fromat/frame(VS可能有多种format, 一个format支持多种frame， frame用来表示分辨率等信息)
+   可以通过类似的函数来访问：
+                    	ret = __uvc_query_ctrl(video->dev /* 哪一个USB设备 */, SET_CUR, 0,
+                    		video->streaming->intfnum  /* 哪一个接口: VS */,
+                    		probe ? VS_PROBE_CONTROL : VS_COMMIT_CONTROL, data, size,
+                    		uvc_timeout_param);
+4. 我们在设置FORMAT时只是简单的使用video->streaming->format[fmt->index]等数据，
+   这些数据哪来的？
+   应是设备被枚举时设置的，也就是分析它的描述符时设置的。
+
+5. UVC驱动的重点在于：
+   描述符的分析
+   属性的控制: 通过VideoControl Interface来设置
+   格式的选择：通过VideoStreaming Interface来设置
+   数据的获得：通过VideoStreaming Interface的URB来获得
+
+六、从零写UVC驱动之分析描述符
+
+七、从零写UVC驱动之实现数据传输
+A. 设置ubuntu让它从串口0输出printk信息
+a. 设置vmware添加serial port, 使用文件作为串口
+b. 启动ubuntu，修改/etc/default/grub
+GRUB_CMDLINE_LINUX_DEFAULT=""
+GRUB_CMDLINE_LINUX="console=tty0 console=ttyS0,115200n8"
+
+sudo update-grub
+sudo reboot
+
+c. ubuntu禁止root用户登录
+先修改root密码: sudo passwd root
+然后执行"su root"就可以用root登录了
+
+d. echo "8 4 1 7" > /proc/sys/kernel/printk
+
+再次重启后，只要执行这2个命令就可以：
+su root
+echo "8 4 1 7" > /proc/sys/kernel/printk
+
+B. 写代码：
+1.构造一个usb_driver
+2.设置
+   probe:
+        2.1. 分配video_device:video_device_alloc
+        2.2. 设置
+           .fops
+           .ioctl_ops (里面需要设置11项)
+           如果要用内核提供的缓冲区操作函数，还需要构造一个videobuf_queue_ops
+        2.3. 注册: video_register_device      
+  id_table: 表示支持哪些USB设备      
+3.注册： usb_register
+ 
+USB摄像头型号:
+a. 视频里用的是: 环宇飞扬 6190 ,它输出的是原始YUV数据，不支持输出MJPEG压缩数据
+   大概35元
+b. 你也可以使用其它符合UVC规范的摄像头: 就是接到WINDOWS电脑上后不用装驱动的摄像头
+   如果你要从零写驱动，就需要你会变通。
+c. 我们也会生产一款摄像头, 有2个接口：USB、CMOS(ITU-R BT. 601/656)
+   支持输出MJPEG格式数据, 正在生产调试中, 2013年8月20号左右会在100ask.taobao.com发布
+   大概100元
+   生产出来后, 我会针对它补录一个视频，现场修改代码
+
+注意：即使不支持MJPEG格式的摄像头，也可以做完项目视频的所有实验，
+      只是进行远程视频传输时，需要用软件进行图像压缩，导致视频播放有些卡
+
+
+八、从零写UVC驱动之实现设置属性(比如亮度)
+1. 先看APP以确定需要实现哪些接口
+xawtv.c:
+    grabber_scan
+        ng_vid_open
+            v4l2_driver.open // v4l2_open
+                get_device_capabilities(h);
+                    // 调用VIDIOC_QUERYCTRL ioctl确定是否支持某个属性
+                    /* controls */
+                    for (i = 0; i < MAX_CTRL; i++) {
+                	h->ctl[i].id = V4L2_CID_BASE+i;
+                	if (-1 == xioctl(h->fd, VIDIOC_QUERYCTRL, &h->ctl[i], EINVAL) ||
+                	    (h->ctl[i].flags & V4L2_CTRL_FLAG_DISABLED))
+                	    h->ctl[i].id = -1;
+                    }
+怎么去获得/设置属性？
+看drv0-v4l2.c
+可见这2个函数:
+v4l2_read_attr  : VIDIOC_G_CTRL
+v4l2_write_attr : VIDIOC_S_CTRL
+
+所以: 视频驱动里要实现3个ioctl:
+VIDIOC_QUERYCTRL
+VIDIOC_G_CTRL
+VIDIOC_S_CTRL
+
+
+2. 硬件上怎么设置属性?
+2.1 UVC规范里定义了哪些属性 : uvc_ctrl.c里数组: static struct uvc_control_info uvc_ctrls[]
+
+	{
+		.entity		= UVC_GUID_UVC_PROCESSING, // 属于哪了个entity(比如PU)
+		.selector	= PU_BRIGHTNESS_CONTROL,   // 用于亮度
+		.index		= 0,                       // 对应Processing Unit Descriptor的bmControls[0]
+		.size		= 2,                       // 数据长度为2字节
+		.flags		= UVC_CONTROL_SET_CUR | UVC_CONTROL_GET_RANGE
+				| UVC_CONTROL_RESTORE,
+	},
+
+
+ 
+2.2 我们的设备支持哪些属性
+    这需要去看描述符, 比如 Processing Unit Descriptor的bmControls的值为7f 14
+    可知BIT0为1，表示支持BRIGHTNESS
+    
+    在代码里：
+uvc_drvier.c
+uvc_ctrl_init_device    
+    // 对于每一个entity(IT,PU,SU,OT等)
+	list_for_each_entry(entity, &dev->entities, list) {
+	    // 取出bmControls
+	    bmControls = ....
+	    
+	    // 计算bmControls里位值为1的个数，就是支持的属性个数
+	    ncontrols += hweight8(bmControls[i]);    
+	    
+	    // 为每一个属性分配一个struct uvc_control
+	    entity->controls = kzalloc..
+	    
+	    // 设置这些struct uvc_control
+	    ctrl = entity->controls;
+	    for (...)
+	    {
+    		ctrl->entity = entity;
+    		ctrl->index = i;
+		}
+
+        // 把uvc_control和uvc_control_info挂构
+        uvc_ctrl_add_ctrl(dev, info);
+            ctrl->info = 某个uvc_control_info数组项(同属于一个entity, index相同)
+
+2.3 怎么去操作这些属性
+    参考 uvc_query_v4l2_ctrl
+    uvc_find_control
+        找到一个uvc_control_mapping结构体: uvc_ctrl.c里有static struct uvc_control_mapping uvc_ctrl_mappings[] 
+        	{
+        		.id		= V4L2_CID_BRIGHTNESS,  // APP根据ID来找到对应的属性
+        		.name		= "Brightness",
+        		.entity		= UVC_GUID_UVC_PROCESSING,  // 属于哪了个entity(比如PU)
+        		.selector	= PU_BRIGHTNESS_CONTROL,    // 用于亮度
+        		.size		= 16,                       // 数据占多少位
+        		.offset		= 0,                        // 从哪位开始
+        		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,   // 属性类别
+        		.data_type	= UVC_CTRL_DATA_TYPE_SIGNED,// 数据类型
+        	},
+
+         uvc_control_mapping结构体 用来更加细致地描述属性
+
+    uvc_query_ctrl
+        usb_control_msg
+
+
+举例说明: 要设置亮度，怎么操作？
+a. 根据PU的描述符的bmControls, 从它的bit0等于1知道它支持调节亮度
+b. 在uvc_ctrls数组中根据entity和index找到这一项：
+	{
+		.entity		= UVC_GUID_UVC_PROCESSING,
+		.selector	= PU_BRIGHTNESS_CONTROL,
+		.index		= 0,
+		.size		= 2,
+		.flags		= UVC_CONTROL_SET_CUR | UVC_CONTROL_GET_RANGE
+				| UVC_CONTROL_RESTORE,
+	},
+
+知道了：这个设备支持SET_CUR, GET_CUR, GET_MIN等
+要设置时，可以向PU的selector发数据, 发的数据是2字节
+
+c. 在uvc_ctrl_mappings数组中根据ID找到对应的数组项
+   从而知道了更加细致的信息，
+   然后使用usb_control_msg读写数据
+   
+
+3. 怎么写代码？
+实现3个ioctl: vidioc_queryctrl/vidioc_g_ctrl/vidioc_s_ctrl
+vidioc_queryctrl : 发起USB控制传输获得亮度的最小值、最大值、默认值、步进值
+vidioc_s_ctrl    : 把APP传入的亮度值通过USB传输发给硬件
+vidioc_g_ctrl    : 发起USB传输获得当前亮度值
+
+要点：数据发给谁？发给usb_device的
+                          VideoControl Interface
+                                    里面的Processing Unit 
+                                            里面的PU_BRIGHTNESS_CONTROL
+
+九. 先在PC上把USB摄像头用起来: 修改PC LINUX的UVC驱动
+十. 在"从零写的UVC驱动"基础上修改, 让它支持这款摄像头
+十一. 修改开发板上的UVC驱动, 并且在LCD上显示摄像头图像
+(1)准备工作：
+1. 准备虚拟机
+2．安装工具链
+sudo tar xjf arm-linux-gcc-4.3.2.tar.bz2 -C /
+设置环境变量：
+sudo vi /etc/environment  ： PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/arm/4.3.2/bin"
+
+3. 编译内核
+tar xjf linux-3.4.2.tar.bz2
+cd linux-3.4.2
+
+可以使用我们制作好的补丁: 
+linux-3.4.2_camera_jz2440.patch
+linux-3.4.2_camera_mini2440.patch
+linux-3.4.2_camera_tq2440.patch
+
+patch -p1 < ../linux-3.4.2_camera_jz2440.patch
+cp config_ok .config
+make uImage
+
+也可以从毕业班的内核补丁、驱动程序，自己修改、编译:
+patch -p1 < ../linux-3.4.2_100ask.patch
+
+把 lcd_4.3.c 复制到 /work/projects/linux-3.4.2/drivers/video
+修改/work/projects/linux-3.4.2/drivers/video/Makefile
+#obj-$(CONFIG_FB_S3C2410)         += s3c2410fb.o
+obj-$(CONFIG_FB_S3C2410)          += lcd_4.3.o
+
+把dm9dev9000c.c、dm9000.h复制到/work/projects/linux-3.4.2/drivers/net/ethernet/davicom
+修改/work/projects/linux-3.4.2/drivers/net/ethernet/davicom/Makefile
+
+cp config_ok .config
+make menuconfig
+   <*> Multimedia support  --->
+       <*>   Video For Linux 
+       [*]   Video capture adapters (NEW)  --->
+              [*]   V4L USB devices (NEW)  --->
+                   <*>   USB Video Class (UVC) 
+
+// 如果你使用的是百问网自制的USB摄像头，
+// 还需要参考第2课1.1.9节视频修改UVC驱动
+                   
+make uImae
+
+
+cp arch/arm/boot/uImage /work/nfs_root/uImage_new
+ 
+4. 文件系统：
+cd /work/nfs_root
+sudo tar xjf fs_mini_mdev_new.tar.bz2
+sudo chown book:book fs_mini_mdev_new
+
+5. 用新内核、新文件系统启动开发板
+启动开发板至UBOOT
+设置UBOOT的环境变量：
+set ipaddr 192.168.1.17
+set bootcmd 'nfs 32000000 192.168.1.124:/work/nfs_root/uImage_new; bootm 32000000'
+set bootargs console=ttySAC0,115200 root=/dev/nfs nfsroot=192.168.1.124:/work/nfs_root/fs_mini_mdev_new ip=192.168.1.17
+save 
+boot
+
+(2)从零写代码
+(3)调试测试
+a. 编译成功
+b. 再测试
+
+(4) 在PC上显示
+执行时找不到libvga库，如下操作
+sudo cp /usr/local/lib/libvga* /lib -d
+
+
+参考文档:
+http://www.svgalib.org/jay/beginners_guide/beginners_guide.html
+
+十二. CMOS驱动,并且在LCD上显示摄像头图像
+
+
+
+luvcview在arm板上的移植 
+http://blog.chinaunix.net/uid-20364597-id-3507440.html
+
+
+
+
+
+
+
+
+
+
+
+选购WIFI：
+淘宝搜: TL-WN721N 9271
+
+TL-WN721N有2种方案: realtek, Atheros 9271
+realtek : VID 0x0bda  PID 0x8176
+Atheros : VID 0x0cf3  PID 0x9271， 0x13D3, 0x3327
+
+
+[585955.047776] usb 1-1: new high speed USB device using ehci_hcd and address 3
+[585955.269142] usb 1-1: configuration #1 chosen from 1 choice
+[585955.379843] uvcvideo: Found UVC 1.00 device USB2.0 Camera (1e4e:0102)
+[585955.440427] uvcvideo: UVC non compliance - GET_DEF(PROBE) not supported. Enabling workaround.
+[585955.554594] input: USB2.0 Camera as /devices/pci0000:00/0000:00:11.0/0000:02:02.0/usb1/1-1/1-1:1.0/input/input5
+
+LD_PRELOAD=/usr/lib/libv4l/v4l1compat.so camorama
+
+sudo apt-get install cheese
+
+多种LINUX下的摄像头工具
+https://help.ubuntu.com/community/Webcam
+
+http://blog.csdn.net/hongtao_liu/article/details/5867351
+http://blog.csdn.net/hongtao_liu/article/details/5894089
+基于V4L2的视频驱动开发
+
+概念：
+视频制式 : NTSC PAL V4L2_STD_NTSC V4L2_STD_PAL
+视频格式 ：RGB YCbCr 420,422 V4L2_PIX_FMT_UYVY
+
+
+
+ 
+[视频技术手册]中文第5版
+http://ishare.iask.sina.com.cn/f/21425721.html
+http://ishare.iask.sina.com.cn/f/21425722.html
+
+
+http://www.360doc.com/content/08/0926/11/14148_1678949.shtml
+
+数字视频的基本概念
+http://hi.baidu.com/fengbit/item/78a161375067f1c42f8ec24e
+
+USB协议
+http://www.usb.org/developers/devclass_docs
+
+USB Video Class Specification 笔记 
+http://blog.csdn.net/chinaunixj/article/details/7394315
+
+
+基于嵌入式Linux的视频采集系统---UVC驱动模型介绍
+http://blog.csdn.net/chinaunixj/article/details/7439870
+
+
+Class-specific VC Interface Descriptor
+e:\kernel_projects\linux-3.4.2\linux-3.4.2\include\linux\usb\Video.h
+#define DECLARE_UVC_HEADER_DESCRIPTOR(n)		\
+struct UVC_HEADER_DESCRIPTOR(n) {			\
+	__u8  bLength;					\
+	__u8  bDescriptorType;				\
+	__u8  bDescriptorSubType;			\
+	__u16 bcdUVC;					\
+	__u16 wTotalLength;				\
+	__u32 dwClockFrequency;				\
+	__u8  bInCollection;				\
+	__u8  baInterfaceNr[n];				\
+} __attribute__ ((packed))
+
+
+Input Terminal Descriptor (Camera)
+
+
+驱动框架分析：
+Structure of a driver
+---------------------
+
+All drivers have the following structure:
+
+1) A struct for each device instance containing the device state.
+
+2) A way of initializing and commanding sub-devices (if any).
+
+3) Creating V4L2 device nodes (/dev/videoX, /dev/vbiX and /dev/radioX)
+   and keeping track of device-node specific data.
+
+4) Filehandle-specific structs containing per-filehandle data;
+
+5) video buffer handling.
+
+This is a rough schematic of how it all relates:
+
+    device instances            : v4l2_device
+      |
+      +-sub-device instances    : v4l2_subdev
+      |
+      \-V4L2 device nodes       : video_device, stores V4L2 device node data, this will create the character device
+	  |
+	  \-filehandle instances    : v4l2_fh
+
+The framework closely resembles the driver structure: it has a v4l2_device
+struct for the device instance data, a v4l2_subdev struct to refer to
+sub-device instances, the video_device struct stores V4L2 device node data
+and in the future a v4l2_fh struct will keep track of filehandle instances
+(this is not yet implemented).
+
+The V4L2 framework also optionally integrates with the media framework. If a
+driver sets the struct v4l2_device mdev field, sub-devices and video nodes
+will automatically appear in the media framework as entities.
+
+
+
+console/fs.h:2:20: error: FSlib.h: No such file or directory
+
+No package 'fontsproto' found
+
+error: asm/page.h: No such file or directory
+
+把asm/page.h改为sys/user.h
+
+sudo apt-get install libxaw7-dev
+
+
+# libraries
+LDLIBS  := -lFS
+
+./configure --x-includes=/usr/local/include/X11/fonts

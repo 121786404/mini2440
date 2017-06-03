@@ -1,0 +1,6 @@
+mini2440使用的LCD有多种型号,
+linux-3.4.2_camera_mini2440.patch 补丁不一定适合你用的mini2440, 
+如果用不了, 需要修改lcd驱动程序：
+1. 先打补丁linux-3.4.2_camera_mini2440.patch
+2. 根据厂家提供的内核来修改linux-3.4.2内核目录drivers/video/lcd_mini2440.c
+   主要是修改lcdcon1,2,3,4,5 这几个寄存器的值

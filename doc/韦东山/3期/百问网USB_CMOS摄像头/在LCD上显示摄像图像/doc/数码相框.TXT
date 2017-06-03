@@ -1,0 +1,423 @@
+1. 程序框架
+1.1 触摸屏:
+              主按线程,通过socket发给显示进程
+              ---------------------------
+              封装事件：ts线程          按键线程
+              ---------------------------
+                       操作系统                        
+
+封装的数据有:
+时间
+类型(点击、上下左右移动)
+位置
+速度
+幅度
+
+1.2 显示
+
+放大(上)  缩小(下)  左边    右边   当前    显示控制     接收sochket
+
+             libjpeg
+              mmap
+----------------------------------------
+内存      内存      内存    内存    内存
+
+                                            framebuffer
+                                            -----------
+                                                 LCD
+
+2. 显示文字
+2.1 文字编码方式
+源文件用不同的编码方式编写，会导致执行结果不一样。
+怎么解决？编译程序时，要指定字符集
+man gcc , /charset
+-finput-charset=charset  表示源文件的编码方式, 默认以UTF-8来解析
+-fexec-charset=charset   表示可执行程序里的字以什么编码方式来表示，默认是UTF-8
+
+gcc -o a a.c  //
+
+gcc -finput-charset=GBK -fexec-charset=UTF-8 -o utf-8_2 ansi.c
+
+
+2.2 英文字母、汉字的点阵显示
+测试:
+A. 配置、修改内核支持把lcd.c编译进去
+cp /work/drivers_and_test_new/10th_lcd/lcd.c drivers/video/
+修改drivers/video/Makefile
+#obj-$(CONFIG_FB_S3C2410)         += s3c2410fb.o
+obj-$(CONFIG_FB_S3C2410)          += lcd.o
+
+nfs 32000000 192.168.1.123:/work/nfs_root/uImage; bootm 32000000
+
+set bootargs console=ttySAC0,115200 root=/dev/nfs nfsroot=192.168.1.123:/work/nfs_root/fs_mini_mdev_new ip=192.168.1.17
+nfs 32000000 192.168.1.123:/work/nfs_root/uImage_jz2440; bootm 32000000
+nfs 32000000 192.168.1.123:/work/nfs_root/uImage_tq2440; bootm 32000000
+
+nfs 32000000 192.168.1.124:/work/nfs_root/uImage_new; bootm 32000000
+set bootargs console=ttySAC0,115200 root=/dev/nfs nfsroot=192.168.1.124:/work/nfs_root/fs_mini_mdev_new ip=192.168.1.17
+
+
+B. 使用新内核启动
+
+
+2.3 使用freetype来显示任意大小的文字
+2.3.1节_数码相框_freetype理论介绍
+2.3.2节_数码相框_在PC上测试freetype
+
+在PC：
+tar xjf freetype-2.4.10.tar.bz2 
+./configure
+make
+sudo make install
+
+gcc -o example1 example1.c  -I /usr/local/include/freetype2 -lfreetype -lm
+gcc -finput-charset=GBK -fexec-charset=UTF-8 -o example1 example1.c  -I /usr/local/include/freetype2 -lfreetype -lm
+./example1 ./simsun.ttc abc
+
+2.3.3节_数码相框_在LCD上显示一个矢量字体
+
+交叉编译:
+tar xjf freetype-2.4.10.tar.bz2 
+./configure --host=arm-linux
+make
+make DESTDIR=$PWD/tmp install
+
+编译出来的头文件应该放入：
+/usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include
+
+编译出来的库文件应该放入：
+/usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/armv4t/lib
+
+把tmp/usr/local/lib/*  复制到 /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/armv4t/lib
+sudo cp * /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/armv4t/lib -d -rf
+cp *so* /work/nfs_root/fs_mini_mdev_new/lib -d
+
+
+把tmp/usr/local/include/*  复制到 /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include
+cp * /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include -rf
+cd /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include
+mv freetype2/freetype .
+
+arm-linux-gcc -finput-charset=GBK -o example1 example1.c  -lfreetype -lm
+arm-linux-gcc -finput-charset=GBK -o show_font show_font.c  -lfreetype -lm
+
+
+freetype/config/ftheader.h
+freetype2/freetype/config/ftheader.h 
+
+
+
+arm-linux-gcc -finput-charset=GBK -fexec-charset=GBK -o show_font show_font.c -lfreetype -lm 
+
+2.3.4节_数码相框_在LCD上显示几行文字
+a. 从左边开始显示几行文字
+arm-linux-gcc -finput-charset=GBK -o show_lines show_lines.c  -lfreetype -lm
+
+
+b. 居中显示几行文字
+
+
+百问网gif
+www.100ask.net
+
+
+3. 在LCD上显示任意编码的文本文件，做一个电子书
+
+第1课第3.1节_数码相框_额外项目_电子书之效果及框架
+
+第1课3.2节_数码相框_额外项目_电子书之代码阅读及编写
+
+第1课3.3节_数码相框_额外项目_电子书之指针操作
+
+第1课3.4节_数码相框_额外项目_电子书之链表操作
+
+第1课3.5节_数码相框_额外项目_电子书之在PC上显示
+
+ctrl+alt+shift+f1
+
+
+
+下载地址：
+https://launchpad.net/ubuntu/+source/svgalib/1:1.4.3-30
+svgalib_1.4.3.orig.tar.gz
+svgalib_1.4.3-30.debian.tar.gz
+svgalib_1.4.3-30.dsc
+
+打补丁
+tar xzf svgalib_1.4.3.orig.tar.gz
+tar xzf svgalib_1.4.3-30.debian.tar.gz
+cd svgalib-1.4.3.orig/
+for file in ../debian/patches/*.patch; do patch -p1 < $file; done
+
+编译安装：
+sudo make install   // 编译出错，需要安装libx86
+再 sudo make install
+
+
+下载地址
+http://packages.ubuntu.com/lucid/libx86-1
+
+tar xzf libx86_1.1+ds1.orig.tar.gz 
+gunzip libx86_1.1+ds1-6.diff.gz
+cd libx86-1.1/
+patch -p1 < ../libx86_1.1+ds1-6.diff 
+make // 出错，修改lrmi.c，添加宏, 参考561491.patch
+make
+sudo make install
+
+
+
+
+
+http://security.ubuntu.com/ubuntu/pool/main//libx/libx86/
+libx86_1.1+ds1.orig.tar.bz2   // 修改
+
+sudo apt-get source libx86
+
+
+4. 编写一个通用的Makefile
+
+编译test_Makefile的方法：
+a. gcc -o test a.c b.c
+对于a.c: 预处理、编译、汇编
+对于b.c：预处理、编译、汇编
+最后链接
+优点：命令简单
+缺点：如果文件很多，即使你只修改了一个文件，但是所有的文件文件都要重新"预处理、编译、汇编"
+      效率低
+
+b. 写Makefile
+核心：规则
+
+目标:依赖1 依赖2
+	命令
+
+命令执行的条件：
+i. "依赖"文件 比 "目标"文件 新
+ii.没有"目标"这个文件
+      
+
+5. 使用多种方法支持多输入
+http://cc.byexamples.com/2007/04/08/non-blocking-user-input-in-loop-without-ncurses/
+
+http://www.groad.net/bbs/simple/?t3959.html
+
+5.1 使用轮询方法  // CPU占用率高
+实验方法:
+a. insmod  s3c_ts.ko
+   确定是哪个设备节点对应触摸屏
+b. 
+export TSLIB_TSDEVICE=/dev/event0
+export TSLIB_CALIBFILE=/etc/pointercal
+export TSLIB_CONFFILE=/etc/ts.conf
+export TSLIB_PLUGINDIR=/lib/ts
+export TSLIB_CONSOLEDEVICE=none
+export TSLIB_FBDEVICE=/dev/fb0
+
+c. 较准
+ts_calibrate   
+
+d. telnetd -l /bin/sh  //启动telnet服务，为了登录进去观察CPU占用率
+
+e. ./show_file -s 24 -d fb -f ./MSYH.TTF ./utf8_novel.txt
+
+f. telnet上开发板执行top命令观察
+
+
+5.2 使用select,poll   // CPU占用率低，适用于很多简单场合
+
+参考：UNIX环境高级编程 I/O多路转接
+
+监测多个文件，只要有某一个文件可读/可写/异常或超时，即返回
+ int select(int nfds,    fd_set *readfds, fd_set *writefds,fd_set *exceptfds, struct timeval *timeout);
+                最大文件句柄+1   被监测是否可读的文件                                         超时时间
+                                               被监测是否可写的文件
+                                                                被监测是否有异常的文件
+               
+
+5.3 使用多线程   // CPU占用率低，非常灵活
+参考 Unix_Linux_Windows_OpenMP多线程编程.pdf P18 3.3.2 条件变量
+
+实现滑动翻页：
+1. 触摸点在X方向的位移差值超过x分辨率的5分之1，就翻页
+
+
+gcc -o example1 example1.c -L/usr/local/lib/ -lfreetype -lm -I /usr/local/include/freetype2 
+gcc -finput-charset=GBK -fexec-charset=UTF-8 -o example1 example1.c -L/usr/local/lib/ -lfreetype -lm -I /usr/local/include/freetype2 
+gcc -finput-charset=UTF-8 -fexec-charset=UTF-8 -o example1 example1.c -L/usr/local/lib/ -lfreetype -lm -I /usr/local/include/freetype2 
+
+6.1 网络编程的简单例子
+6.2 修改电子书源码支持远程打印
+6.3 完善远程打印
+
+
+7. libjpeg的使用
+一、交叉编译libjpeg
+tar xzf libjpeg-turbo-1.2.1.tar.gz
+cd libjpeg-turbo-1.2.1
+./configure --prefix=/work/projects/13.libjpeg/libjpeg-turbo-1.2.1/tmp/ --host=arm-linux
+make
+make install 
+
+二、交叉编译jpg2rgb.c
+2.1 
+arm-linux-gcc -o jpg2rgb jpg2rgb.c -I /work/projects/13.libjpeg/libjpeg-turbo-1.2.1/tmp/include -L /work/projects/13.libjpeg/libjpeg-turbo-1.2.1/tmp/lib -ljpeg
+cp jpg2rgb /work/nfs_root/fs_mini_mdev_new
+cp libjpeg-turbo-1.2.1/tmp/lib/*so* /work/nfs_root/fs_mini_mdev_new/lib/ -d
+
+2.2
+把编译出来的头文件应该放入：
+/usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include
+：
+cd  /work/projects/13.libjpeg/libjpeg-turbo-1.2.1/tmp/include
+cp * /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include
+
+把编译出来的库文件应该放入：
+/usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/armv4t/lib
+：
+cd  /work/projects/13.libjpeg/libjpeg-turbo-1.2.1/tmp/lib
+cp *so* -d /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/armv4t/lib
+
+arm-linux-gcc -o jpg2rgb jpg2rgb.c -ljpeg
+
+三、在开发板上运行
+
+
+8. 大综合：实现数码相框
+
+8.4.4 试验：
+1. insmod s3c_ts.ko
+2. 
+export TSLIB_TSDEVICE=/dev/event0
+export TSLIB_CALIBFILE=/etc/pointercal
+export TSLIB_CONFFILE=/etc/ts.conf
+export TSLIB_PLUGINDIR=/lib/ts
+export TSLIB_CONSOLEDEVICE=none
+export TSLIB_FBDEVICE=/dev/fb0
+
+3.
+在开发板上：mkdir -p /etc/digitpic/icons
+把图标文件放到开发板的/etc/digitpic/icons
+
+4.
+在开发板上运行 digitpic
+
+8.5.1 编译安装使用最终版的数码相框
+1. 交叉编译安装freetype
+tar xjf freetype-2.4.10.tar.bz2 
+./configure --host=arm-linux
+make
+make DESTDIR=$PWD/tmp install
+
+编译出来的头文件应该放入：
+/usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include
+
+把tmp/usr/local/include/*  复制到 /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include
+cp * /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include -rf
+cd /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include
+mv freetype2/freetype .
+
+编译出来的库文件应该放入：
+/usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/armv4t/lib
+
+把tmp/usr/local/lib/*  复制到 /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/armv4t/lib
+sudo cp * /usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/armv4t/lib -d -rf
+
+//放到根文件系统
+cp *so* /work/nfs_root/fs_mini_mdev_new/lib -d
+
+
+
+2. 交叉编译安装libjpeg (如果工具链中已经有libjpeg库，这步可省；否则参考前面笔记)
+
+3. 把freetype库, libjpeg库放到根文件系统上去
+//放到根文件系统
+进入freetype的tmp/usr/local/lib
+cp *so* /work/nfs_root/fs_mini_mdev_new/lib -d
+
+4. 交叉编译安装tslib库
+修改：
+/usr/local/arm/4.3.2/arm-none-linux-gnueabi/libc/usr/include/linux/input.h
+#define EV_VERSION       0x010000
+改为
+#define EV_VERSION		0x010001
+
+然后：参考<tslib编译使用方法.txt>
+
+
+5. 准备运行：
+a. 从windows 得到矢量字体文件MSYH.TTF, 把它放入fs_mini_mdev_new
+b. 在根文件系统上建 /etc/digitpic 目录
+   把icons复制进去
+c. insmod s3c_ts.ko
+d. 
+export TSLIB_TSDEVICE=/dev/event0
+export TSLIB_CALIBFILE=/etc/pointercal
+export TSLIB_CONFFILE=/etc/ts.conf
+export TSLIB_PLUGINDIR=/lib/ts
+export TSLIB_CONSOLEDEVICE=none
+export TSLIB_FBDEVICE=/dev/fb0
+e. ts_calibrate
+f. ./digitpic /MSYH.TTF
+
+
+8.5.2 完整版本的数码相框源码分析
+
+8.5.3 改进数码相框: 支持中文
+字符集和编码II: fat/msdos/vfat
+http://gosubi.me/adow/2008/08/charset-coding-2-vfat/
+
+8.5.4 课后作业及思路
+1. 在"browse页面"里, 对不同后缀名的文件使用不同的图标
+2. 支持其他格式的图片文件, 比如png
+3. 支持鼠标
+4. "manual页面"里，点击"上一张"或"下一张"时所要显示的图片比较大, 速度有点慢: 改进它
+5. 在"browse页面"里点击txt文件时, 能显示文件内容
+
+
+
+
+
+
+
+BMP文件格式：
+http://redwolf.blog.51cto.com/427621/229096
+
+C语言结构体对齐
+http://blog.csdn.net/shenbin1430/article/details/4292463
+
+参考资料：
+FreeType 字体引擎分析与指南
+http://wenku.baidu.com/view/2d24be10cc7931b765ce155b.html
+
+HZK16应用示例
+http://wenku.baidu.com/view/0774d20c52ea551810a68768.html
+
+点阵字库HZK12 HZK16 HZK24 ASC12 ASC16 简介 及 使用方法 
+http://blog.csdn.net/hongjiujing/article/details/6649618
+
+汉字拼音、五笔、GB2312、GBK、Unicode、BIG5编码速查
+http://ipseeker.cn/tools/pywb.php
+
+在线汉字编码查询,一次查询多个汉字输入法编码及内码——快典网.htm
+http://bm.kdd.cc/
+
+BIG5编码表
+http://wenku.baidu.com/view/9bb3ae01b52acfc789ebc970.html
+
+UNICODE编码表
+http://wenku.baidu.com/view/7c667f563c1ec5da50e27069.html
+
+GB2312简体中文编码表
+http://wenku.baidu.com/view/0ef57bfb04a1b0717fd5dd1a.html
+
+hzk16的介绍以及简单的使用方法
+http://hi.baidu.com/hrman/blog/item/4616bc2675ce13128a82a193.html
+
+UTF-8
+http://zh.wikipedia.org/wiki/UTF-8
+
+getopt的用法
+http://www.cnitblog.com/zouzheng/archive/2007/04/02/25034.aspx
+
+http://www.svgalib.org/

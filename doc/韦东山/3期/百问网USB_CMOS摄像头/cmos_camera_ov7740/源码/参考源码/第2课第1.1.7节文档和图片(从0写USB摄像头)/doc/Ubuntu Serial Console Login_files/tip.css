@@ -1,0 +1,82 @@
+/**
+ * Qlue ToolTip - Content Plugin
+ *
+ * @author Aaron Harding 
+ * @package Qlue ToolTip
+ * @license GNU/GPL
+ *
+ * This plugin will convert a basic syntax of {QlueTip title=[tooltip]}Tool Tip Text{/QlueTip} into a valid tooltip.
+ * The user can add extra parameters to the syntax to match their needs. For further information visit http://www.Qlue.co.uk.
+ */
+ 
+.Qtoggle {
+	cursor: pointer;
+        /* The Following was added */
+        text-decoration: underline;
+}
+
+.qTip { 
+}
+
+.default .QTip-tl {
+	background: url(../images/tip-tl.png) 0 0 no-repeat;
+	position: relative;
+}
+
+.default .QTip-t {
+	background: url(../images/tip-t.png) repeat-x;
+}
+
+.default .QTip-tr {
+	background: url(../images/tip-tr.png) no-repeat right;
+	padding: 0px 7px 0px 7px;
+}
+
+.default .QTip-l {
+	background: url(../images/tip-l.png) repeat-y;
+}
+
+.default .QTip-content {
+	overflow: hidden;
+	background: #fff;
+	padding: 0 7px;
+        /* The Following was added */
+        text-align: left;
+        color: BLACK;
+}
+
+.default .QTip-r {
+	background: url(../images/tip-r.png) repeat-y right;
+	padding: 0px 7px 0px 7px;
+}
+
+.default .QTip-bl {
+	background: url(../images/tip-bl.png) no-repeat;
+}
+
+.default .QTip-br {
+	background: url(../images/tip-br.png) no-repeat right 0;
+	padding: 0px 7px 0px 7px;
+}
+
+.default .QTip-b {
+	background: url(../images/tip-b.png) repeat-x;
+}
+
+.default .QTip-arrow {
+	background: url(../images/tip-point.png) no-repeat center bottom;
+}
+
+.QTip-close {
+	position: absolute;
+	top: 4px;
+	right: 5px;
+	width: 16px;
+	height: 16px;
+	background: url(../images/close.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+
+.tipMod {
+	margin: 0 0 10px;
+}

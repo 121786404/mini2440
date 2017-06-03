@@ -1,0 +1,1 @@
+Cufon.replace('.aller_display', { fontFamily: 'Aller Display', hover: true }); 

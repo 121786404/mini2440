@@ -1,0 +1,28 @@
+/*slider*/
+ul.pagination li { float:left; }
+ul.pagination li.current a { background:url(../images/navigato_hov.png) 0 0 no-repeat;}
+#faded {height:656px;
+margin:0;
+width:307px; position:relative}
+#faded ul{ margin:0 0 0 0 !important; position:relative !important; list-style:none !important; background:none !important;padding:0px 0px 0px 0px !important;}
+#faded ul.fadeul li{margin:0 0 0 0 !important; list-style:none !important; background:none !important;padding:0px 0px 0px 0px !important;}
+a { outline:0; border:0; }
+
+
+.row-slider{ height:260px;}
+
+.prev, .next{display:block; position:absolute; width:18px; height:18px; text-indent:-2000px; font-size:0; line-height:0;}
+.prev{ background:url(../images/slider_go_left.png) 0 0 no-repeat;  margin:338px 0 0 848px;}
+.next{background:url(../images/slider_go_right.png) 0 0 no-repeat;  margin:338px 0 0 876px;}
+
+
+ul.pagination{left:81px;
+position:absolute;
+top:269px;
+width:176px; z-index:100}
+ul.pagination li{ margin:0 0 0 0 !important; padding:0 3px 0 0 !important; display:block; float:left; width:18px;}
+ul.pagination li a{ text-indent:-1999px; display:block; float:left; background:url(../images/navigato.png) 0 0 no-repeat; width:18px; height:18px;margin-right:2px;}
+ul.pagination li a:hover{background:url(../images/navigato_hov.png) 0 0 no-repeat;}
+
+
+/**/

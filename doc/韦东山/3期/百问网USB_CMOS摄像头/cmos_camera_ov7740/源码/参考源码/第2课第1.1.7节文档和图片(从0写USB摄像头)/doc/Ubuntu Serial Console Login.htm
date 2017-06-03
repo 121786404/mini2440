@@ -1,0 +1,788 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html class="cufon-active cufon-ready" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" dir="ltr" lang="en-gb"><head>
+
+
+  <!-- base href="http://2stech.ca/index.php/linux/linuxtutotials/tutorials/207-ubuntu-serial-console-login" -->
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="available
+beeping
+cameras
+capture
+cards
+Centralized
+Cleaning
+Computer
+Configuration
+connection
+Consultation
+Contacts
+content
+Design
+Desktop
+Diagnosis
+Digital
+Domain
+Dovecot
+Postfix
+else
+Email
+Facebook
+Favorites
+firewall
+FOSS
+functions
+Gateway
+Install
+Server
+Hardware
+Help
+Host
+hosted
+Hosting
+howto
+howtos
+route
+include
+individual
+Infrastructure
+Installation
+Internet
+Maintenance
+Network
+networking
+optimize
+Passwords
+Printing
+private
+problems
+public
+Recent
+record
+Recorder
+Redundant
+Remote
+remotely
+Repair
+required
+restrict
+restriction
+run
+secure
+Security
+server
+service
+sites
+software
+solutions
+source
+Specializing
+state
+storage
+Support
+switches
+System
+Technology
+tutorial
+tutorials
+Utilizing
+Video
+Web
+websites
+wiring
+Victoria BC Canada 
+Victoria British Columbia Canada">
+  <meta name="title" content="Ubuntu Serial Console Login">
+  <meta name="author" content="Sean Shust">
+  <meta name="description" content="2s Technology.
+Specializing in open source solutions, to everyday computer system problems.
+Featuring FOSS Gateway servers.  FOSS stands for Free Open Source Software.
+Computer hardware and software consultation, configuration, installation and maintenance.
+Network infrastructure design, consultation, configuration, installation and maintenance.
+Printing system design, consultation, configuration, installation and maintenance.
+Video security surveillance system design,  consultation, configuration, installation and maintenance.
+Web domain design, consultation, configuration, installation and maintenance.
+
+Victoria BC Canada
+Victoria British Columbia Canada">
+  <meta name="generator" content="Joomla! 1.5 - Open Source Content Management">
+  <title>Ubuntu Serial Console Login</title>
+  <link href="http://2stech.ca/index.php/component/jcomments/feed/com_content/207" rel="alternate" type="application/rss+xml" title="Ubuntu Serial Console Login">
+  <link href="http://2stech.ca/templates/theme8611/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link rel="stylesheet" href="Ubuntu%20Serial%20Console%20Login_files/modal.css" type="text/css">
+  <link rel="stylesheet" href="Ubuntu%20Serial%20Console%20Login_files/k2.css" type="text/css">
+  <link rel="stylesheet" href="Ubuntu%20Serial%20Console%20Login_files/style.css" type="text/css">
+  <link rel="stylesheet" href="Ubuntu%20Serial%20Console%20Login_files/tip.css" type="text/css">
+  <link rel="stylesheet" href="Ubuntu%20Serial%20Console%20Login_files/style_002.css" type="text/css">
+  <script src="Ubuntu%20Serial%20Console%20Login_files/ga.js" async="" type="text/javascript"></script><script type="text/javascript" src="Ubuntu%20Serial%20Console%20Login_files/mootools.js"></script>
+  <script type="text/javascript" src="Ubuntu%20Serial%20Console%20Login_files/modal.js"></script>
+  <script type="text/javascript" src="Ubuntu%20Serial%20Console%20Login_files/k2.js"></script>
+  <script type="text/javascript" src="Ubuntu%20Serial%20Console%20Login_files/jcomments-v2.js"></script>
+  <script type="text/javascript" src="Ubuntu%20Serial%20Console%20Login_files/ajax.js"></script>
+  <script type="text/javascript" src="Ubuntu%20Serial%20Console%20Login_files/caption.js"></script>
+  <script type="text/javascript" src="Ubuntu%20Serial%20Console%20Login_files/qluetip.js"></script>
+  <script type="text/javascript">
+
+		window.addEvent('domready', function() {
+
+			SqueezeBox.initialize({});
+
+			$$('a.modal').each(function(el) {
+				el.addEvent('click', function(e) {
+					new Event(e).stop();
+					SqueezeBox.fromElement(el);
+				});
+			});
+		});
+var K2RatingURL = 'http://2stech.ca/';
+  </script>
+
+
+<link href="Ubuntu%20Serial%20Console%20Login_files/template.css" rel="stylesheet" type="text/css">
+<link href="Ubuntu%20Serial%20Console%20Login_files/faded.css" rel="stylesheet" type="text/css">
+<script src="Ubuntu%20Serial%20Console%20Login_files/jquery.js" type="text/javascript"></script>
+<script src="Ubuntu%20Serial%20Console%20Login_files/jquery_002.js" type="text/javascript"></script>
+<script src="Ubuntu%20Serial%20Console%20Login_files/cufon-yui.js" type="text/javascript"></script><style type="text/css">cufon{text-indent:0!important;}@media screen,projection{cufon{display:inline!important;display:inline-block!important;position:relative!important;vertical-align:middle!important;font-size:1px!important;line-height:1px!important;}cufon cufontext{display:-moz-inline-box!important;display:inline-block!important;width:0!important;height:0!important;overflow:hidden!important;text-indent:-10000in!important;}cufon canvas{position:relative!important;}}@media print{cufon{padding:0!important;}cufon canvas{display:none!important;}}</style>
+<script src="Ubuntu%20Serial%20Console%20Login_files/aller.js" type="text/javascript"></script>
+<script src="Ubuntu%20Serial%20Console%20Login_files/cufon-replace.js" type="text/javascript"></script>
+
+<!--[if IE]>
+<script src="/templates/theme8611/html/js/DD_belatedPNG.js"></script>
+<script src="/templates/theme8611/html/js/ie6.js"></script>
+<![endif]-->
+
+<!--[if IE 7]>
+<link href="/templates/theme8611/css/template_ie_7.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+
+<!--[if IE 8]>
+<link href="/templates/theme8611/css/template_ie_8.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+
+<!--[if IE 6]><script type="text/javascript" src="http://info.template-help.com/files/ie6_warning/ie6_script_other.js"></script><![endif]-->
+
+
+<link rel="shortcut icon" href="http://2stech.ca/images/favicon.ico">
+
+<style type="text/css">	
+.section {
+margin:-77px 0 0;
+position:relative;
+width:950px !important;
+}
+</style>
+
+<style type="text/css">	
+	#text{ width: 900px !important;}   
+	.editor{ width: 925px !important;}
+</style>
+<script type="text/javascript">	// <![CDATA[	
+
+
+		var $j = jQuery.noConflict();
+		<!--MAIN BODY BEGIN-->
+	    function preloadImages(imgs){var picArr = [];for (i = 0; i<imgs.length; i++){picArr[i]= new Image();picArr[i].src=imgs[i];}}
+		var $j = jQuery.noConflict();
+		
+		$j(function(){
+			$j("#faded").faded({
+				speed: 300,
+				crossfade: true,
+				autoplay: 4000,
+				autopagination:true
+			});
+		});	
+		
+		
+					
+		$j(document).ready(function(){	
+		if ($j.browser.webkit) {$j('.inputbox_search').addClass('chrome01');}	
+		$j('.more_slide').click(function(){
+			$j("#faded ul.pagination li a:first").click();
+		});	
+		$j('.roktabs-top li span').wrapInner('<span class="tabs-mdl"></span>');		
+		
+		$j('#footer').css('height',$j(document).height()-$j('#middle').height()+51+'px');
+		//alert($j(window).height());
+		
+				
+				
+		$j('.log_in').toggle(function(){$j('#wrapper').animate({'margin-top':0},500,'swing');},function(){$j('#wrapper').animate({'margin-top':'-51px'},500,'swing');});		
+		$j('.check_off').toggle(function(){$j(this).addClass('check_on');$j('input',this).attr('checked','checked');},function(){$j(this).removeClass('check_on');$j('input',this).attr('checked','');});
+		
+		$j('.icon_map_1').hover(function(){$j('.icon_hov_1').slideDown('fast');$j('.icon_hov_2,.icon_hov_3,.icon_hov_4').slideUp('fast');});
+		$j('.icon_map_2').hover(function(){$j('.icon_hov_2').slideDown('fast');$j('.icon_hov_1,.icon_hov_3,.icon_hov_4').slideUp('fast');});
+		$j('.icon_map_3').hover(function(){$j('.icon_hov_3').slideDown('fast');$j('.icon_hov_1,.icon_hov_2,.icon_hov_4').slideUp('fast');});
+		$j('.icon_map_4').hover(function(){$j('.icon_hov_4').slideDown('fast');$j('.icon_hov_1,.icon_hov_2,.icon_hov_3').slideUp('fast');});
+		//$j('.bg_icons').hover(function(){},function(){$j('.icon_hov_1,.icon_hov_2,.icon_hov_3,.icon_hov_4').slideUp('fast');});	
+		
+		$j('.banner_1 .more_1').click(function(){$j('.banner_img_1').fadeOut('slow');$j('.banner_img_2').fadeIn('slow');});
+		$j('.banner_2 .more_1').click(function(){$j('.banner_img_2').fadeOut('slow');$j('.banner_img_1').fadeIn('slow');});
+			
+		$j("#topmenu ul.menu li.parent ul").wrap("<div style='display:none' class='ulwrapper'><div class='ulwrapper_btm'><div class='ulwrapper_mdl'><div class='ulwrapper_top'><div class='ulwrapper_content'>");		
+		$j("#topmenu ul.menu > li > a:last").css('background','none');
+		$j(".ulwrapper_content a:last").css('border','none');
+		$j('ul.menu  li').hover(
+			function() {
+				$j(this).addClass("active");
+				$j(this).find('.ulwrapper').stop(false, true).slideDown('fast');
+				$j(this).find('.ulwrapper .ulwrapper').stop(false, true).slideUp(0);
+			},
+			function() {
+				$j(this).removeClass("active");        
+				$j(this).find('div.ulwrapper').stop(false, true).slideUp(0);
+			}
+		);
+		$j('.ulwrapper').hover(
+			function() {
+				$j('.parent').addClass("active_tab");
+			},
+			function() {
+				$j('.parent').removeClass("active_tab");        
+			}
+		);
+		//$j('ul.menu li').unbind();	
+		
+				 
+	});	
+	
+	
+	$j(window).resize(function(){
+			$j('#footer').css('height',$j(document).height()-$j('#middle').height()+51+'px');
+		});
+	
+	// ]]></script>
+
+	
+
+<script type="”text/javascript”">alert("This is a test.");</script>
+<meta name="google-site-verification" content="pRdiO3xL8nZKosec4kBuDeHYqvSqkJUAgrc_7Z9lpcc">
+<script type="”text/javascript”">alert("This is a test.");</script>
+<link rel="stylesheet" type="text/css" href="Ubuntu%20Serial%20Console%20Login_files/general.css"><script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23836485-1']);
+  _gaq.push(['_setDomainName', '.2stech.ca']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+
+<!--Cash-->
+<img src="Ubuntu%20Serial%20Console%20Login_files/more_2_on.jpg" alt="" style="display:none">	
+<img src="Ubuntu%20Serial%20Console%20Login_files/more_3_on.jpg" alt="" style="display:none">	
+<!--End Cash-->
+<div id="wrapper">
+	<div id="middle">				
+		<div class="container">	
+			<!--HEADER BEGIN-->
+			<div id="header">
+				<div class="head_bl_0">
+					<div class="bl_login">
+	 <div class="moduletable">
+	 <div class="box_mdl_">
+			<div class="box_btm_">
+			 <div class="box_top_"><div class="box_content_">			
+
+<form action="/index.php/linux/linuxtutotials/tutorials" method="post" name="login" class="form-login">
+	<div style="height:57px;">
+	<div style="line-height:5px">&nbsp;</div>
+						
+		<table style="padding-top:0px;margin-left:87px;" border="0" cellpadding="0" cellspacing="0">
+			<tbody><tr valign="middle">
+				
+				<td valign="middle" align="left"><div class="bg_login"><input onfocus="if(this.value =='Username:' ) this.value=''" onblur="if(this.value=='') this.value='Username:'" value="Username:" name="username" id="mod_login_username" class="inputbox_login" alt="Username" type="text"></div></td>
+				
+				<td valign="middle" align="left"><div class="bg_login"><input onfocus="this.value=null" value="password" id="mod_login_password" name="passwd" class="inputbox_login" alt="Password" type="password"></div></td>
+				<td valign="middle" align="left"><div><input name="Submit" class="button_log" value="Login" type="submit"></div></td>
+				<td class="ie_hack_for_login_0" valign="middle" align="left"><input name="remember" id="mod_login_remember" class="checkbox" value="yes" alt="Remember Me" type="checkbox"></td>
+				<td class="ie_hack_for_login_1" valign="top" align="left"><label for="mod_login_remember">Remember Me</label></td>
+				<td class="ie_hack_for_login_2" valign="top" align="left"><a class="flogin" href="http://2stech.ca/index.php/component/user/reset#content">Forgot your password?</a></td>
+				
+			</tr> 
+		</tbody></table>
+		
+		
+				
+				
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+		
+		
+		
+	
+		
+	
+		
+		<input name="option" value="com_user" type="hidden">
+	<input name="task" value="login" type="hidden">
+	<input name="return" value="L2luZGV4LnBocC9saW51eC9saW51eHR1dG90aWFscy90dXRvcmlhbHMvMjA3LXVidW50dS1zZXJpYWwtY29uc29sZS1sb2dpbg==" type="hidden">
+	
+	<input name="dfac0b6c1d38350da8a9d186d8b5448f" value="1" type="hidden">	</div>
+	<div class="fwhite" style="margin-left:769px;width:210px; text-align:center"><span class="fwhiteB log_in">User login</span></div>
+</form>
+			
+				</div>
+			</div>
+		</div>	
+	</div></div></div>
+					<div class="fL bl_logo"><a href="http://2stech.ca/index.php"><img style="height:45px;" src="Ubuntu%20Serial%20Console%20Login_files/logo.png" alt="logo" border="0"></a></div>
+					
+					<div class="fL head_bl_1">
+						
+	 <div class="moduletable">
+	 <div class="box_mdl_">
+			<div class="box_btm_">
+			 <div class="box_top_"><div class="box_content_"><div class="smile" style="text-align: center "> <a style="margin:3px;" rel="nofollow" href="http://www.facebook.com/group.php?gid=134411493241218" target="_blank"><img src="Ubuntu%20Serial%20Console%20Login_files/facebook.png" alt="Facebook" title="Follow us on Facebook"></a>	</div>
+    <div class="clr"></div>
+			
+				</div>
+			</div>
+		</div>	
+	</div></div>					
+						<div class="cL"></div>						
+					</div>
+					<div class="cL"></div>
+				</div>
+				<div class="bg_menu">
+					<div class="fL head_bl_3">
+						<div id="topmenu" align="left">
+<ul class="menu"><li class="parent item1"><a href="http://2stech.ca/"><span>About</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="item58"><a href="http://2stech.ca/index.php/company/contacts"><span>Contact Us</span></a></li><li class="item136"><a href="http://2stech.ca/index.php/company/general-terms-a-conditions"><span>General Terms &amp; Conditions</span></a></li></ul></div></div></div></div></div></li><li class="item138"><a href="http://2stech.ca/index.php/products"><span>Products</span></a></li><li class="parent item121"><a href="#"><span>Services</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="item133"><a href="http://2stech.ca/index.php/services/basic-pricing"><span>Basic Pricing</span></a></li><li class="item159"><a href="http://2stech.ca/index.php/services/optimization-a-protection"><span>Optimization &amp; Protection</span></a></li><li class="item134"><a href="http://2stech.ca/index.php/services/service-contracts"><span>Service Contracts</span></a></li><li class="item135"><a href="http://2stech.ca/index.php/services/bulkpre-purchase-pricing"><span>Bulk/Pre Purchase Pricing</span></a></li><li class="item120"><a href="http://2stech.ca/index.php/services/support"><span>Remote Support</span></a></li></ul></div></div></div></div></div></li><li class="item129"><a href="http://2stech.ca/index.php/blog"><span>Blog</span></a></li><li class="parent active item124"><a style="background: none repeat scroll 0% 0% transparent;" href="http://2stech.ca/index.php/linux"><span>How To's</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="parent active item139"><a href="#"><span>Linux</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li id="current" class="parent active item122"><a href="http://2stech.ca/index.php/linux/linuxtutotials/tutorials"><span>Tutorials</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="item127"><a href="http://2stech.ca/index.php/linux/linuxtutotials/tutorials/list-tutorials"><span>List Tutorials</span></a></li><li class="item128"><a href="http://2stech.ca/index.php/linux/linuxtutotials/tutorials/blog-tutorials"><span>Blog Tutorials</span></a></li></ul></div></div></div></div></div></li><li class="parent item123"><a href="http://2stech.ca/index.php/linux/linuxtutotials/readmes"><span>README's</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="item125"><a href="http://2stech.ca/index.php/linux/linuxtutotials/readmes/list-readmes"><span>List Readme's</span></a></li><li class="item126"><a href="http://2stech.ca/index.php/linux/linuxtutotials/readmes/readmes"><span>Blog Readme's</span></a></li></ul></div></div></div></div></div></li></ul></div></div></div></div></div></li><li class="parent item140"><a href="#"><span>Windows</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="parent item142"><a href="http://2stech.ca/index.php/linux/windowstutotials/tutorials"><span>Tutorials</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="item146"><a href="http://2stech.ca/index.php/linux/windowstutotials/tutorials/list-tutorials"><span>List Tutorials</span></a></li><li class="item147"><a href="http://2stech.ca/index.php/linux/windowstutotials/tutorials/blog-tutorials"><span>Blog Tutorials</span></a></li></ul></div></div></div></div></div></li><li class="parent item143"><a href="http://2stech.ca/index.php/linux/windowstutotials/readmes"><span>README's</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="item144"><a href="http://2stech.ca/index.php/linux/windowstutotials/readmes/list-readmes"><span>List Readme's</span></a></li><li class="item145"><a href="http://2stech.ca/index.php/linux/windowstutotials/readmes/readmes"><span>Blog Readme's</span></a></li></ul></div></div></div></div></div></li></ul></div></div></div></div></div></li><li class="parent item141"><a href="#"><span>Miscellaneous</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="parent item148"><a href="http://2stech.ca/index.php/linux/misctutotials/tutorials"><span>Tutorials</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="item152"><a href="http://2stech.ca/index.php/linux/misctutotials/tutorials/list-tutorials"><span>List Tutorials</span></a></li><li class="item153"><a href="http://2stech.ca/index.php/linux/misctutotials/tutorials/blog-tutorials"><span>Blog Tutorials</span></a></li></ul></div></div></div></div></div></li><li class="parent item149"><a href="http://2stech.ca/index.php/linux/misctutotials/readmes"><span>README's</span></a><div style="display:none" class="ulwrapper"><div class="ulwrapper_btm"><div class="ulwrapper_mdl"><div class="ulwrapper_top"><div class="ulwrapper_content"><ul><li class="item150"><a href="http://2stech.ca/index.php/linux/misctutotials/readmes/list-readmes"><span>List Readme's</span></a></li><li class="item151"><a style="border: medium none;" href="http://2stech.ca/index.php/linux/misctutotials/readmes/readmes"><span>Blog Readme's</span></a></li></ul></div></div></div></div></div></li></ul></div></div></div></div></div></li><li class="item160"><a href="http://2stech.ca/index.php/linux/online-tools"><span>Online Tools</span></a></li></ul></div></div></div></div></div></li></ul>
+
+</div>
+					</div>
+					<div class="fL head_bl_4">
+						
+<form action="index.php" method="post" class="search">
+	
+	
+						
+			<div class="bg_search_fon">
+				<div class="bg_search_fon_content">
+					<table border="0" cellpadding="0" cellspacing="0">
+						
+						<tbody><tr>							
+							<td valign="top" align="left"><input value=" " class="button_search" type="submit"></td>	
+							<td valign="top" align="left"><div class="bg_search"><input name="searchword" id="mod_search_searchword" maxlength="25" value="Search..." class="inputbox_search" size="1" onblur="if(this.value=='') this.value='Search...';" onfocus="if(this.value=='Search...') this.value='';" type="text"></div></td>						
+							
+						</tr>
+													
+												
+							
+											
+					</tbody></table>
+				</div>
+				</div>
+				<input name="option" value="com_search" type="hidden">
+	<input name="task" value="search" type="hidden">
+</form>
+
+					</div>
+					<div class="cL"></div>
+					
+					<div class="bread">														
+													<div class="breadcrumb">
+								<div><span class="breadcrumbs pathway">
+<a href="http://2stech.ca/" class="pathway">Home</a> / <a href="http://2stech.ca/index.php/linux" class="pathway">How To's</a> / <a href="#" class="pathway">Linux</a> / <a href="http://2stech.ca/index.php/linux/linuxtutotials/tutorials" class="pathway">Tutorials</a> / Ubuntu Serial Console Login</span>
+</div>					
+							</div>	
+													
+					</div>																
+				</div>	
+				<div class="date bl_time">07/08/2013 20:36:09</div>			
+			</div>		
+			
+			
+			<!-- <p>Menu ID: 122</p>
+			<p>Menu Name: Tutorials</p>
+			<p>Menu Link: index.php?option=com_content&view=category&layout=blog&id=47</p>
+			<p>Menu Parent: 139</p>
+			<p>Menu Access Level: 0</p> -->
+			
+							<div class="fL bg_slider"><div id="faded">
+				<ul style="position: relative;" class="fadeul">
+					<li style="position: absolute; top: 0px; left: 0px; z-index: 0; display: none;"><img alt=" " src="Ubuntu%20Serial%20Console%20Login_files/slide_1.jpg"></li>
+					<li style="position: absolute; top: 0px; left: 0px; z-index: 0;"><img alt=" " src="Ubuntu%20Serial%20Console%20Login_files/slide_2.jpg"></li>
+					<li style="position: absolute; top: 0px; left: 0px; z-index: 0; display: none;"><img alt=" " src="Ubuntu%20Serial%20Console%20Login_files/slide_3.jpg"></li>				
+				</ul><ul class="pagination"><li class=""><a rel="0" href="#">1</a></li><li class="current"><a rel="1" href="#">2</a></li><li class=""><a rel="2" href="#">3</a></li></ul></div>
+				<a class="more_slide">Replay</a></div>
+				<div class="fL bg_icons"><div class="fL"><a href="#" class="icon_map_1"></a></div><div class="fL"><a href="#" class="icon_map_2"></a></div><p class="cL"></p>
+				<div class="fL"><a href="#" class="icon_map_3"></a></div><div class="fL"><a href="#" class="icon_map_4"></a></div><p class="cL"></p>
+				
+				<div style="display: none;" class="icon_hov_1">
+					<div class="fL fHead">Networking</div>
+					<div class="fL btn_for_b">
+						<a href="http://2stech.ca/index.php/component/content/article/214" class="more_4">More</a>
+					</div>
+					<p class="cL"></p>
+
+				</div>
+				<div style="display: none;" class="icon_hov_2">
+					<div class="fL fHead">Hardware</div>
+					<div class="fL btn_for_b">
+						<a href="http://2stech.ca/index.php/component/content/article/215" class="more_4">More</a>
+					</div>
+					<p class="cL"></p>
+				</div>
+
+				<div class="icon_hov_3">
+					<div class="fL fHead">Software</div>
+					<div class="fL btn_for_b">
+						<a href="http://2stech.ca/index.php/component/content/article/217" class="more_4">More</a>
+					</div>
+					<p class="cL"></p>
+				</div>
+				<div style="display: block;" class="icon_hov_4">
+
+					<div class="fL fHead">Consultation</div>
+					<div class="fL btn_for_b">
+						<a href="http://2stech.ca/index.php/component/content/article/213" class="more_4">More</a>
+					</div>
+					<p class="cL"></p>
+				</div></div>
+				<div class="cL"></div>
+			
+													
+			<div class="container_x">
+				<div class="container">	   		
+				<!--CONTENT BEGIN-->				
+						<div id="maincontent">		    	
+							<div class="bg_mdl">
+								<div class="bg_btm">
+									<div class="bg_top">
+										<div class="bg_content">														
+											
+										 <div class="overflow">
+												
+												
+												
+																										
+																								   											
+											
+																																												
+										   <div class="cL"></div>
+										   
+										   
+										   
+										  																						   	
+											
+											<div id="content_out">							  
+																										
+												<div id="content">
+
+																											
+<div id="page">
+
+
+			
+			
+<style type="text/css">	
+.section{ margin-top:-67px;}
+</style>			
+			
+
+<table class="" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tbody><tr>
+		<td class="title_left" valign="top" align="left"></td>
+		<td class="title_x" valign="top" align="left"><div class="nbsp">&nbsp;</div>
+
+<div>
+<h2 class="contentheading">
+	Ubuntu Serial Console Login</h2>
+
+
+</div>
+		</td>
+		<td class="title_right" valign="top" align="left">&nbsp;</td>
+	</tr> 
+</tbody></table>
+
+<table class="" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tbody><tr>
+		<td class="article_left" valign="top" align="left">&nbsp;</td>
+		<td class="article_x" valign="top" align="left"><div class="article_content">
+
+<div style="text-align: left;">
+<p>If you have a headless machine, as is the case with many serviers, it
+ is often nice to be able to see what's going on without having to 
+connect a monitor and a keyboard to the system.&nbsp; In this short 
+tutorial we'll show you how to configure the serial port on your server,
+ or Desktop, machine to allow you to view the console though it.</p>
+<div class="fHead2">Assumptions</div>
+<ul style="padding-left:40px;">
+<li style="display:list-item !important;list-style: disc outside none;">You have enabled the serial console in your BIOS</li>
+<li style="display:list-item !important;list-style: disc outside none;">The
+ serial connection is being made at 115200 baud 8n1, on first serial 
+port, called /dev/ttyS0 in linux (9600 8n1 is the default fall back if 
+your hardware does not support 115200 baud)</li>
+<li style="display:list-item !important;list-style: disc outside none;">You are comfortable editing critical system files such as /etc/inittab, /boot/grub/menu.lst</li>
+<li style="display:list-item !important;list-style: disc outside none;">You
+ are using a serial (null modem) cable. It is also possible to use a USB
+ to Serial adaptor, but the tty* must be changed to reflect your 
+hardware.</li>
+</ul>
+
+
+
+<div class="fHead2">Configuring the console login process</div>
+<p>Newer Ubuntu systems use Upstart, that is what we will be configuring first.</p>
+<p>If you look in <code>/etc/init</code> you will see the other terminal services they have names like <code>tty1.conf</code>. We are simply going to make a copy of on of these files:</p>
+<pre class="shell">cp /etc/init/tty1.conf /etc/init/ttyS0.conf</pre>
+<p>Next we edit the file, making the following changes:</p>
+<p>Change</p>
+<pre class="file"># tty1 - getty</pre>
+<p>To</p>
+<pre class="file"># ttyS0 - getty</pre>
+<p>Change</p>
+<pre class="file"># This service maintains a getty on tty1 from the point the system is</pre>
+<p>To</p>
+<pre class="file"># This service maintains a getty on ttyS0 from the point the system is</pre>
+<p>Change</p>
+<pre class="file">exec /sbin/getty -8 38400 tty1</pre>
+<p>To</p>
+<pre class="file">exec /sbin/getty -L 115200 ttyS0 vt102</pre>
+<p>Strictly speaking the changes to the comments are not necessary but should still be done.</p>
+<p>When your done the file should look like:</p>
+<pre class="file"># ttyS0 - getty
+#
+# This service maintains a getty on ttyS0 from the point the system is
+# started until it is shut down again.
+
+start on stopped rc RUNLEVEL=[2345]
+stop on runlevel [!2345]
+
+respawn
+exec /sbin/getty -L 115200 ttyS0 vt102
+</pre>
+<p>At this point simply start the service:</p>
+<pre class="shell">sudo start ttyS0</pre>
+<p><strong>DONE!</strong></p>
+<div class="fHead2">Configuring grub</div>
+<p>What happens if things go wrong before a login is available, it would
+ be nice to be able to see what is going on during start up at well. 
+That's what we'll do in this section.</p>
+<p>To that end let's edit <code>/etc/default/grub</code> and add the following lines:</p>
+<pre class="file">GRUB_CMDLINE_LINUX="console=tty0 console=ttyS0,115200n8"
+GRUB_TERMINAL=serial
+GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
+</pre>
+<p>When were done the file should look like:</p>
+<pre class="file"># If you change this file, run 'update-grub' afterwards to update
+# /boot/grub/grub.cfg.
+# For full documentation of the options in this file, see:
+#   info -f grub -n 'Simple configuration'
+
+GRUB_DEFAULT=0
+#GRUB_HIDDEN_TIMEOUT=0
+GRUB_HIDDEN_TIMEOUT_QUIET=true
+GRUB_TIMEOUT=2
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2&gt; /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="quiet"
+GRUB_CMDLINE_LINUX="console=tty0 console=ttyS0,115200n8"
+
+# Uncomment to enable BadRAM filtering, modify to suit your needs
+# This works with Linux (no patch required) and with any kernel that obtains
+# the memory map information from GRUB (GNU Mach, kernel of FreeBSD ...)
+#GRUB_BADRAM="0x01234567,0xfefefefe,0x89abcdef,0xefefefef"
+
+# Uncomment to disable graphical terminal (grub-pc only)
+#GRUB_TERMINAL=console
+GRUB_TERMINAL=serial
+GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
+
+# The resolution used on graphical terminal
+# note that you can use only modes which your graphic card supports via VBE
+# you can see them in real GRUB with the command `vbeinfo'
+#GRUB_GFXMODE=640x480
+
+# Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
+#GRUB_DISABLE_LINUX_UUID=true
+
+# Uncomment to disable generation of recovery mode menu entries
+#GRUB_DISABLE_RECOVERY="true"
+
+# Uncomment to get a beep at grub start
+#GRUB_INIT_TUNE="480 440 1"
+</pre>
+<p>Instead of:</p>
+<pre class="file"># If you change this file, run 'update-grub' afterwards to update
+# /boot/grub/grub.cfg.
+# For full documentation of the options in this file, see:
+#   info -f grub -n 'Simple configuration'
+
+GRUB_DEFAULT=0
+#GRUB_HIDDEN_TIMEOUT=0
+GRUB_HIDDEN_TIMEOUT_QUIET=true
+GRUB_TIMEOUT=2
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2&gt; /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="quiet"
+GRUB_CMDLINE_LINUX=""
+
+# Uncomment to enable BadRAM filtering, modify to suit your needs
+# This works with Linux (no patch required) and with any kernel that obtains
+# the memory map information from GRUB (GNU Mach, kernel of FreeBSD ...)
+#GRUB_BADRAM="0x01234567,0xfefefefe,0x89abcdef,0xefefefef"
+
+# Uncomment to disable graphical terminal (grub-pc only)
+#GRUB_TERMINAL=console
+
+# The resolution used on graphical terminal
+# note that you can use only modes which your graphic card supports via VBE
+# you can see them in real GRUB with the command `vbeinfo'
+#GRUB_GFXMODE=640x480
+
+# Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
+#GRUB_DISABLE_LINUX_UUID=true
+
+# Uncomment to disable generation of recovery mode menu entries
+#GRUB_DISABLE_RECOVERY="true"
+
+# Uncomment to get a beep at grub start
+#GRUB_INIT_TUNE="480 440 1"
+</pre>
+<p>After the changes you will need to update grub</p>
+<pre class="shell">sudo update-grub</pre>
+<p><strong>DONE!</strong></p>
+</div><script type="text/javascript">
+<!--
+var jcomments=new JComments(207, 'com_content','/index.php?option=com_jcomments&amp;tmpl=component');
+jcomments.setList('comments-list');
+//-->
+</script>
+<div id="jc">
+<div id="comments"></div>
+<h4>Add comment</h4>
+<a id="addcomments" href="#addcomments"></a>
+<form id="comments-form" name="comments-form" action="javascript:void(null);">
+<p>
+	<input id="comments-form-name" name="name" maxlength="20" size="22" tabindex="1" type="text">
+	<label for="comments-form-name">Name (required)</label>
+</p>
+<p>
+	<input id="comments-form-email" name="email" size="22" tabindex="2" type="text">
+	<label for="comments-form-email">E-mail (required, but will not display)</label>
+</p>
+<p>
+	<input id="comments-form-homepage" name="homepage" size="22" tabindex="3" type="text">
+	<label for="comments-form-homepage">Website</label>
+</p>
+<p>
+	<div class="smiles"><img class="smile" alt=":D" src="Ubuntu%20Serial%20Console%20Login_files/laugh.gif"><img class="smile" alt=":lol:" src="Ubuntu%20Serial%20Console%20Login_files/lol.gif"><img class="smile" alt=":-)" src="Ubuntu%20Serial%20Console%20Login_files/smile.gif"><img class="smile" alt=";-)" src="Ubuntu%20Serial%20Console%20Login_files/wink.gif"><img class="smile" alt="8)" src="Ubuntu%20Serial%20Console%20Login_files/cool.gif"><img class="smile" alt=":-|" src="Ubuntu%20Serial%20Console%20Login_files/normal.gif"><img class="smile" alt=":-*" src="Ubuntu%20Serial%20Console%20Login_files/whistling.gif"><img class="smile" alt=":oops:" src="Ubuntu%20Serial%20Console%20Login_files/redface.gif"><img class="smile" alt=":sad:" src="Ubuntu%20Serial%20Console%20Login_files/sad.gif"><img class="smile" alt=":cry:" src="Ubuntu%20Serial%20Console%20Login_files/cry.gif"><img class="smile" alt=":o" src="Ubuntu%20Serial%20Console%20Login_files/surprised.gif"><img class="smile" alt=":-?" src="Ubuntu%20Serial%20Console%20Login_files/confused.gif"><img class="smile" alt=":-x" src="Ubuntu%20Serial%20Console%20Login_files/sick.gif"><img class="smile" alt=":eek:" src="Ubuntu%20Serial%20Console%20Login_files/shocked.gif"><img class="smile" alt=":zzz" src="Ubuntu%20Serial%20Console%20Login_files/sleeping.gif"><img class="smile" alt=":P" src="Ubuntu%20Serial%20Console%20Login_files/tongue.gif"><img class="smile" alt=":roll:" src="Ubuntu%20Serial%20Console%20Login_files/rolleyes.gif"><img class="smile" alt=":sigh:" src="Ubuntu%20Serial%20Console%20Login_files/unsure.gif"></div><textarea id="comments-form-comment" name="comment" cols="65" rows="8" tabindex="5"></textarea><div class="grippie"><span class="counter"> <span>1000</span>  symbols left</span></div>
+</p>
+<p>
+	<input class="checkbox" id="comments-form-subscribe" name="subscribe" value="1" tabindex="5" type="checkbox">
+	<label for="comments-form-subscribe">Notify me of follow-up comments</label><br>
+</p>
+<p>
+	<img class="captcha" onclick="jcomments.clear('captcha');" id="comments-form-captcha-image" name="captcha-image" src="Ubuntu%20Serial%20Console%20Login_files/index.jpg" alt="Security code" height="60" width="121"><br>
+	<span class="captcha" onclick="jcomments.clear('captcha');">Refresh</span><br>
+	<input class="captcha" id="comments-form-captcha" name="captcha-refid" size="5" tabindex="6" type="text"><br>
+</p>
+<div id="comments-form-buttons">
+	<div class="btn" id="comments-form-send"><div><a href="#" tabindex="7" onclick="jcomments.saveComment();return false;" title="Send (Ctrl+Enter)">Send</a></div></div>
+	<div class="btn" id="comments-form-cancel" style="display:none;"><div><a href="#" tabindex="8" onclick="return false;" title="Cancel">Cancel</a></div></div>
+	<div style="clear:both;"></div>
+</div>
+	<input name="object_id" value="207" type="hidden">
+	<input name="object_group" value="com_content" type="hidden">
+</form>
+<script type="text/javascript">
+<!--
+function JCommentsInitializeForm()
+{
+	var jcEditor = new JCommentsEditor('comments-form-comment', true);
+	jcEditor.initSmiles('http://2stech.ca/components/com_jcomments/images/smiles');
+	jcEditor.addSmile(':D','laugh.gif');
+	jcEditor.addSmile(':lol:','lol.gif');
+	jcEditor.addSmile(':-)','smile.gif');
+	jcEditor.addSmile(';-)','wink.gif');
+	jcEditor.addSmile('8)','cool.gif');
+	jcEditor.addSmile(':-|','normal.gif');
+	jcEditor.addSmile(':-*','whistling.gif');
+	jcEditor.addSmile(':oops:','redface.gif');
+	jcEditor.addSmile(':sad:','sad.gif');
+	jcEditor.addSmile(':cry:','cry.gif');
+	jcEditor.addSmile(':o','surprised.gif');
+	jcEditor.addSmile(':-?','confused.gif');
+	jcEditor.addSmile(':-x','sick.gif');
+	jcEditor.addSmile(':eek:','shocked.gif');
+	jcEditor.addSmile(':zzz','sleeping.gif');
+	jcEditor.addSmile(':P','tongue.gif');
+	jcEditor.addSmile(':roll:','rolleyes.gif');
+	jcEditor.addSmile(':sigh:','unsure.gif');
+	jcEditor.addCounter(1000, '', ' symbols left', 'counter');
+	jcomments.setForm(new JCommentsForm('comments-form', jcEditor));
+}
+
+if (window.addEventListener) {window.addEventListener('load',JCommentsInitializeForm,false);}
+else if (document.addEventListener){document.addEventListener('load',JCommentsInitializeForm,false);}
+else if (window.attachEvent){window.attachEvent('onload',JCommentsInitializeForm);}
+else {if (typeof window.onload=='function'){var oldload=window.onload;window.onload=function(){oldload();JCommentsInitializeForm();}} else window.onload=JCommentsInitializeForm;} 
+//-->
+</script>
+<div id="comments-footer" align="center"><a href="http://www.joomlatune.com/" title="JComments" target="_blank">JComments</a></div>
+</div>		</div></td>
+		<td class="article_right" valign="top" align="left">&nbsp;</td>		
+	</tr> 
+</tbody></table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tbody><tr>
+		<td class="article_footer_left" valign="top" align="left">&nbsp;</td>
+		<td class="article_footer_x" valign="top" align="left">&nbsp;</td>
+		<td class="article_footer_right" valign="top" align="left">&nbsp;</td>
+		
+	</tr> 
+</tbody></table>
+<div style="line-height:30px">&nbsp;</div>
+</div>
+
+																																															
+												</div>																									
+											</div>
+											<div class="cL"></div>
+										  </div>		
+										</div>
+									</div>
+								</div>	
+							</div>
+						</div>
+						<div class="cL"></div>
+				<!--CONTENT END-->			
+			  </div>
+		  </div>
+			</div>
+		</div>
+
+		<!--FOOTER BEGIN-->	
+		<div style="height: 112px;" id="footer">			
+			<div class="footer_bottom">
+				<div align="center">
+					<div id="bottom">						
+						<p>2S Technology Services...</p>								
+					</div>
+				</div>				
+			</div>
+		</div>
+		<!--FOOTER END-->
+	</div>
+
+
+<div style="display: none; z-index: 65555; position: fixed; top: 0px; left: 0px; visibility: hidden; opacity: 0;" id="sbox-overlay"></div><div style="display: none; z-index: 65557; position: fixed; top: 50%; left: 50%;" id="sbox-window"><a href="#" id="sbox-btn-close"></a><div style="visibility: hidden; opacity: 0;" id="sbox-content"></div></div></body></html>
