@@ -5,7 +5,7 @@
 #define GPBDAT      (*(volatile unsigned long *)0x56000014)
 
 /*
- * LED1,LED2,LED4ÂØπÂ∫îGPB5„ÄÅGPB6„ÄÅGPB7„ÄÅGPB8
+ * LED1,LED2,LED4∂‘”¶GPB5°¢GPB6°¢GPB7°¢GPB8
  */
 #define	GPB5_out	(1<<(5*2))
 #define	GPB6_out	(1<<(6*2))
@@ -18,7 +18,7 @@
 #define	GPB8_msk	(3<<(8*2))
 
 /*
- * K1,K2,K3,K4ÂØπÂ∫îGPG0ÔºåGPG3ÔºåGPG5ÔºåGPG6
+ * K1,K2,K3,K4∂‘”¶GPG0£¨GPG3£¨GPG5£¨GPG6
  */
 #define GPG0_in     (0<<(0*2))
 #define GPG3_in     (0<<(3*2))
@@ -33,38 +33,38 @@
 int main()
 {
         unsigned long dwDat;
-        // LED1,LED2,LED3,LED4ÂØπÂ∫îÁöÑ4Ê†πÂºïËÑöËÆæ‰∏∫ËæìÂá∫
+        // LED1,LED2,LED3,LED4∂‘”¶µƒ4∏˘“˝Ω≈…ËŒ™ ‰≥ˆ
         GPBCON &= ~(GPB5_msk | GPB6_msk | GPB7_msk | GPB8_msk);
         GPBCON |= GPB5_out | GPB6_out | GPB7_out | GPB8_out;
         
-        // K1,K2,K3,K4ÂØπÂ∫îÁöÑ4Ê†πÂºïËÑöËÆæ‰∏∫ËæìÂÖ•
+        // K1,K2,K3,K4∂‘”¶µƒ4∏˘“˝Ω≈…ËŒ™ ‰»Î
         GPGCON &= ~(GPG0_msk | GPG3_msk | GPG5_msk | GPG6_msk);
         GPGCON |= GPG0_in | GPG3_in | GPG5_in | GPG6_in;
 
 
         while(1){
-            //Ëã•Kn‰∏∫0(Ë°®Á§∫Êåâ‰∏ã)ÔºåÂàô‰ª§LEDn‰∏∫0(Ë°®Á§∫ÁÇπ‰∫Æ)
-            dwDat = GPGDAT;             // ËØªÂèñGPFÁÆ°ËÑöÁîµÂπ≥Áä∂ÊÄÅ
+            //»ÙKnŒ™0(±Ì æ∞¥œ¬)£¨‘Ú¡ÓLEDnŒ™0(±Ì æµ„¡¡)
+            dwDat = GPGDAT;             // ∂¡»°GPFπ‹Ω≈µÁ∆Ω◊¥Ã¨
         
-            if (dwDat & (1<<0))        // K1Ê≤°ÊúâÊåâ‰∏ã
-                GPBDAT |= (1<<5);       // LED1ÁÜÑÁÅ≠
+            if (dwDat & (1<<0))        // K1√ª”–∞¥œ¬
+                GPBDAT |= (1<<5);       // LED1œ®√
             else    
-                GPBDAT &= ~(1<<5);      // LED1ÁÇπ‰∫Æ
+                GPBDAT &= ~(1<<5);      // LED1µ„¡¡
                 
-            if (dwDat & (1<<3))         // K2Ê≤°ÊúâÊåâ‰∏ã
-                GPBDAT |= (1<<6);       // LED2ÁÜÑÁÅ≠
+            if (dwDat & (1<<3))         // K2√ª”–∞¥œ¬
+                GPBDAT |= (1<<6);       // LED2œ®√
             else    
-                GPBDAT &= ~(1<<6);      // LED2ÁÇπ‰∫Æ
+                GPBDAT &= ~(1<<6);      // LED2µ„¡¡
     
-			if (dwDat & (1<<5)) 	   // K3Ê≤°ÊúâÊåâ‰∏ã
-				GPBDAT |= (1<<7);		// LED3ÁÜÑÁÅ≠
+			if (dwDat & (1<<5)) 	   // K3√ª”–∞¥œ¬
+				GPBDAT |= (1<<7);		// LED3œ®√
 			else	
-				GPBDAT &= ~(1<<7);		// LED3ÁÇπ‰∫Æ
+				GPBDAT &= ~(1<<7);		// LED3µ„¡¡
 				
-			if (dwDat & (1<<6)) 		// K4Ê≤°ÊúâÊåâ‰∏ã
-				GPBDAT |= (1<<8);		// LED4ÁÜÑÁÅ≠
+			if (dwDat & (1<<6)) 		// K4√ª”–∞¥œ¬
+				GPBDAT |= (1<<8);		// LED4œ®√
 			else	
-				GPBDAT &= ~(1<<8);		// LED4ÁÇπ‰∫Æ
+				GPBDAT &= ~(1<<8);		// LED4µ„¡¡
     }
 
     return 0;

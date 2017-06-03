@@ -17,8 +17,8 @@ void init_irq(void)
         isr_handle_array[i] = Dummy_isr;
     }
 
-    INTMOD = 0x0;	      // æ‰€æœ‰ä¸­æ–­éƒ½è®¾ä¸ºIRQæ¨¡å¼
-    INTMSK = BIT_ALLMSK;  // å…ˆå±è”½æ‰€æœ‰ä¸­æ–­
+    INTMOD = 0x0;	      // ËùÓĞÖĞ¶Ï¶¼ÉèÎªIRQÄ£Ê½
+    INTMSK = BIT_ALLMSK;  // ÏÈÆÁ±ÎËùÓĞÖĞ¶Ï
 
 //	isr_handle_array[ISR_IIC_OFT]  = I2CIntHandle;
 }
@@ -27,13 +27,13 @@ void IRQ_Handle(void)
 {
 	unsigned long oft = INTOFFSET;
     
-	//æ¸…ä¸­æ–­
+	//ÇåÖĞ¶Ï
 	if (oft == 4)
-        EINTPEND = 1<<7;    //EINT4-7åˆç”¨IRQ4ï¼Œæ³¨æ„EINTPEND[3:0]ä¿ç•™æœªç”¨ï¼Œå‘è¿™äº›ä½å†™å…¥1å¯èƒ½å¯¼è‡´æœªçŸ¥ç»“æœ
+        EINTPEND = 1<<7;    //EINT4-7ºÏÓÃIRQ4£¬×¢ÒâEINTPEND[3:0]±£ÁôÎ´ÓÃ£¬ÏòÕâĞ©Î»Ğ´Èë1¿ÉÄÜµ¼ÖÂÎ´Öª½á¹û
 	SRCPND = 1<<oft;	
 	INTPND = INTPND;	 
 
-    /* è°ƒç”¨ä¸­æ–­æœåŠ¡ç¨‹åº */
+    /* µ÷ÓÃÖĞ¶Ï·şÎñ³ÌĞò */
     isr_handle_array[oft]();
 }
 

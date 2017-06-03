@@ -1,6 +1,6 @@
 /*
  * FILE: lcddrv.h
- * 操作LCD控制器、调色板等的底层函数接口
+ * ����LCD����������ɫ��ȵĵײ㺯���ӿ�
  */
 
 #ifndef __LCDDRV_H__
@@ -35,9 +35,9 @@
 #define HWSWP           1
 
 /*
- * MINI2440 LCD 3.5英寸 ZQ3506_V0 SPEC.pdf 第11、12页
+ * MINI2440 LCD 3.5Ӣ�� ZQ3506_V0 SPEC.pdf ��11��12ҳ
  *
- * LCD手册11,12页和2440手册"Figure 15-6. TFT LCD Timing Example"一对比就知道参数含义了
+ * LCD�ֲ�11,12ҳ��2440�ֲ�"Figure 15-6. TFT LCD Timing Example"һ�ԱȾ�֪������������
  */
 
 //TFT LCD Panel(240*320)
@@ -100,59 +100,59 @@
 #define LCDFRAMEBUFFER 0x30400000
 
 /*
- * 初始化用于LCD的引脚
+ * ��ʼ������LCD������
  */
 void Lcd_Port_Init(void);
 
 /*
- * 初始化LCD控制器
- * 输入参数：
- * type: 显示模式
- *      MODE_TFT_8BIT_640480  : 640*640 8bpp的TFT LCD
- *      MODE_TFT_16BIT_640480 : 640*640 16bpp的TFT LCD
+ * ��ʼ��LCD������
+ * ���������
+ * type: ��ʾģʽ
+ *      MODE_TFT_8BIT_640480  : 640*640 8bpp��TFT LCD
+ *      MODE_TFT_16BIT_640480 : 640*640 16bpp��TFT LCD
  */
 void Tft_Lcd_Init(int type);
 
 /*
- * 设置调色板
+ * ���õ�ɫ��
  */
 void Lcd_Palette8Bit_Init(void);
 
 /*
- * 设置LCD控制器是否输出信号
- * 输入参数：
+ * ����LCD�������Ƿ�����ź�
+ * ���������
  * onoff: 
- *      0 : 关闭
- *      1 : 打开
+ *      0 : �ر�
+ *      1 : ��
  */
 void Lcd_EnvidOnOff(int onoff);
 
 /*
- * 设置是否输出LCD电源开关信号LCD_PWREN
- * 输入参数：
- *     invpwren: 0 - LCD_PWREN有效时为正常极性
- *               1 - LCD_PWREN有效时为反转极性
- *     pwren:    0 - LCD_PWREN输出有效
- *               1 - LCD_PWREN输出无效
+ * �����Ƿ����LCD��Դ�����ź�LCD_PWREN
+ * ���������
+ *     invpwren: 0 - LCD_PWREN��ЧʱΪ��������
+ *               1 - LCD_PWREN��ЧʱΪ��ת����
+ *     pwren:    0 - LCD_PWREN�����Ч
+ *               1 - LCD_PWREN�����Ч
  */
 void Lcd_PowerEnable(int invpwren, int pwren);
 
 /*
- * 使用临时调色板寄存器输出单色图像
- * 输入参数：
- *     color: 颜色值，格式为0xRRGGBB
+ * ʹ����ʱ��ɫ��Ĵ��������ɫͼ��
+ * ���������
+ *     color: ��ɫֵ����ʽΪ0xRRGGBB
  */
 void ClearScrWithTmpPlt(UINT32 color);
 
 /*
- * 停止使用临时调色板寄存器
+ * ֹͣʹ����ʱ��ɫ��Ĵ���
  */
 void DisableTmpPlt(void);
 
 /*
- * 改变调色板为一种颜色
- * 输入参数：
- *     color: 颜色值，格式为0xRRGGBB
+ * �ı��ɫ��Ϊһ����ɫ
+ * ���������
+ *     color: ��ɫֵ����ʽΪ0xRRGGBB
  */
 void ChangePalette(UINT32 color);
 

@@ -1,6 +1,6 @@
 /*
  * FILE: lcddrv.h
- * æ“ä½œLCDæŽ§åˆ¶å™¨ã€è°ƒè‰²æ¿ç­‰çš„åº•å±‚å‡½æ•°æŽ¥å£
+ * ²Ù×÷LCD¿ØÖÆÆ÷¡¢µ÷É«°åµÈµÄµ×²ãº¯Êý½Ó¿Ú
  */
 
 #ifndef __LCDDRV_H__
@@ -35,9 +35,9 @@
 #define HWSWP           1
 
 /*
- * MINI2440 LCD 3.5è‹±å¯¸ ZQ3506_V0 SPEC.pdf ç¬¬11ã€12é¡µ
+ * MINI2440 LCD 3.5Ó¢´ç ZQ3506_V0 SPEC.pdf µÚ11¡¢12Ò³
  *
- * LCDæ‰‹å†Œ11,12é¡µå’Œ2440æ‰‹å†Œ"Figure 15-6. TFT LCD Timing Example"ä¸€å¯¹æ¯”å°±çŸ¥é“å‚æ•°å«ä¹‰äº†
+ * LCDÊÖ²á11,12Ò³ºÍ2440ÊÖ²á"Figure 15-6. TFT LCD Timing Example"Ò»¶Ô±È¾ÍÖªµÀ²ÎÊýº¬ÒåÁË
  */
 
 //TFT LCD Panel(240*320)
@@ -54,11 +54,11 @@
 #define HOZVAL_TFT_320240	(LCD_XSIZE_TFT_320240-1)
 #define LINEVAL_TFT_320240	(LCD_YSIZE_TFT_320240-1)
 
-#define CLKVAL_TFT_320240	(6) /* LCDæ‰‹å†Œè¡¨ç¤ºDclk=6.4MHz~11MHz, HCLK=100MHz, Dclk=VCLK=HCLK/[(CLKVAL+1)x2]=100/((6+1)*2)=7.1MHz */
+#define CLKVAL_TFT_320240	(6) /* LCDÊÖ²á±íÊ¾Dclk=6.4MHz~11MHz, HCLK=100MHz, Dclk=VCLK=HCLK/[(CLKVAL+1)x2]=100/((6+1)*2)=7.1MHz */
 // 60hz @133Mhz
 // (9) 60hz @100Mhz
 #if 0
-/* ä½¿ç”¨è¿™äº›æ•°å€¼, å›¾åƒæœ‰ä¸‹ç§»å’Œå·¦ç§»çš„çŽ°è±¡, åº”è¯¥æ˜¯æ•°æ®æ‰‹å†Œè¿‡æ—¶äº† */
+/* Ê¹ÓÃÕâÐ©ÊýÖµ, Í¼ÏñÓÐÏÂÒÆºÍ×óÒÆµÄÏÖÏó, Ó¦¸ÃÊÇÊý¾ÝÊÖ²á¹ýÊ±ÁË */
 #define VBPD_320240		((18-1)&0xff)   /* tvb=18 */
 #define VFPD_320240		((4-1)&0xff)    /* tvf=4 */
 #define VSPW_320240		((1-1) &0x3f)   /* tvp=1 */
@@ -66,10 +66,10 @@
 #define HFPD_320240		((49-1)&0xff)   /* thf>=2, th=408=thp+thb+320+thf, thf=49 */
 #define HSPW_320240		((1-1)&0xff)    /* thp=1 */
 #else
-/* è‡ªå·±å¾®è°ƒä¸€ä¸‹, ä¸Šä¸‹ç§»åŠ¨è°ƒVBPDå’ŒVFPD, å·¦å³ç§»åŠ¨è°ƒHBPDå’ŒHFPD 
- * ä¿æŒ(VBPD+VFPD)ä¸å˜, å‡å°VBPDå›¾åƒä¸Šç§»
- * ä¿æŒ(HBPD+HFPD)ä¸å˜, å¢žåŠ HBPDå›¾åƒå³ç§»
- * å¤šè¯•å‡ æ¬¡, æˆ‘è¯•äº†10å¤šæ¬¡
+/* ×Ô¼ºÎ¢µ÷Ò»ÏÂ, ÉÏÏÂÒÆ¶¯µ÷VBPDºÍVFPD, ×óÓÒÒÆ¶¯µ÷HBPDºÍHFPD 
+ * ±£³Ö(VBPD+VFPD)²»±ä, ¼õÐ¡VBPDÍ¼ÏñÉÏÒÆ
+ * ±£³Ö(HBPD+HFPD)²»±ä, Ôö¼ÓHBPDÍ¼ÏñÓÒÒÆ
+ * ¶àÊÔ¼¸´Î, ÎÒÊÔÁË10¶à´Î
  */
 #define VBPD_320240		((12-1)&0xff)   /* tvb=12 */
 #define VFPD_320240		((10-1)&0xff)    /* tvf=10 */
@@ -113,59 +113,59 @@
 #define LCDFRAMEBUFFER 0x30400000
 
 /*
- * åˆå§‹åŒ–ç”¨äºŽLCDçš„å¼•è„š
+ * ³õÊ¼»¯ÓÃÓÚLCDµÄÒý½Å
  */
 void Lcd_Port_Init(void);
 
 /*
- * åˆå§‹åŒ–LCDæŽ§åˆ¶å™¨
- * è¾“å…¥å‚æ•°ï¼š
- * type: æ˜¾ç¤ºæ¨¡å¼
- *      MODE_TFT_8BIT_640480  : 640*640 8bppçš„TFT LCD
- *      MODE_TFT_16BIT_640480 : 640*640 16bppçš„TFT LCD
+ * ³õÊ¼»¯LCD¿ØÖÆÆ÷
+ * ÊäÈë²ÎÊý£º
+ * type: ÏÔÊ¾Ä£Ê½
+ *      MODE_TFT_8BIT_640480  : 640*640 8bppµÄTFT LCD
+ *      MODE_TFT_16BIT_640480 : 640*640 16bppµÄTFT LCD
  */
 void Tft_Lcd_Init(int type);
 
 /*
- * è®¾ç½®è°ƒè‰²æ¿
+ * ÉèÖÃµ÷É«°å
  */
 void Lcd_Palette8Bit_Init(void);
 
 /*
- * è®¾ç½®LCDæŽ§åˆ¶å™¨æ˜¯å¦è¾“å‡ºä¿¡å·
- * è¾“å…¥å‚æ•°ï¼š
+ * ÉèÖÃLCD¿ØÖÆÆ÷ÊÇ·ñÊä³öÐÅºÅ
+ * ÊäÈë²ÎÊý£º
  * onoff: 
- *      0 : å…³é—­
- *      1 : æ‰“å¼€
+ *      0 : ¹Ø±Õ
+ *      1 : ´ò¿ª
  */
 void Lcd_EnvidOnOff(int onoff);
 
 /*
- * è®¾ç½®æ˜¯å¦è¾“å‡ºLCDç”µæºå¼€å…³ä¿¡å·LCD_PWREN
- * è¾“å…¥å‚æ•°ï¼š
- *     invpwren: 0 - LCD_PWRENæœ‰æ•ˆæ—¶ä¸ºæ­£å¸¸æžæ€§
- *               1 - LCD_PWRENæœ‰æ•ˆæ—¶ä¸ºåè½¬æžæ€§
- *     pwren:    0 - LCD_PWRENè¾“å‡ºæœ‰æ•ˆ
- *               1 - LCD_PWRENè¾“å‡ºæ— æ•ˆ
+ * ÉèÖÃÊÇ·ñÊä³öLCDµçÔ´¿ª¹ØÐÅºÅLCD_PWREN
+ * ÊäÈë²ÎÊý£º
+ *     invpwren: 0 - LCD_PWRENÓÐÐ§Ê±ÎªÕý³£¼«ÐÔ
+ *               1 - LCD_PWRENÓÐÐ§Ê±Îª·´×ª¼«ÐÔ
+ *     pwren:    0 - LCD_PWRENÊä³öÓÐÐ§
+ *               1 - LCD_PWRENÊä³öÎÞÐ§
  */
 void Lcd_PowerEnable(int invpwren, int pwren);
 
 /*
- * ä½¿ç”¨ä¸´æ—¶è°ƒè‰²æ¿å¯„å­˜å™¨è¾“å‡ºå•è‰²å›¾åƒ
- * è¾“å…¥å‚æ•°ï¼š
- *     color: é¢œè‰²å€¼ï¼Œæ ¼å¼ä¸º0xRRGGBB
+ * Ê¹ÓÃÁÙÊ±µ÷É«°å¼Ä´æÆ÷Êä³öµ¥É«Í¼Ïñ
+ * ÊäÈë²ÎÊý£º
+ *     color: ÑÕÉ«Öµ£¬¸ñÊ½Îª0xRRGGBB
  */
 void ClearScrWithTmpPlt(UINT32 color);
 
 /*
- * åœæ­¢ä½¿ç”¨ä¸´æ—¶è°ƒè‰²æ¿å¯„å­˜å™¨
+ * Í£Ö¹Ê¹ÓÃÁÙÊ±µ÷É«°å¼Ä´æÆ÷
  */
 void DisableTmpPlt(void);
 
 /*
- * æ”¹å˜è°ƒè‰²æ¿ä¸ºä¸€ç§é¢œè‰²
- * è¾“å…¥å‚æ•°ï¼š
- *     color: é¢œè‰²å€¼ï¼Œæ ¼å¼ä¸º0xRRGGBB
+ * ¸Ä±äµ÷É«°åÎªÒ»ÖÖÑÕÉ«
+ * ÊäÈë²ÎÊý£º
+ *     color: ÑÕÉ«Öµ£¬¸ñÊ½Îª0xRRGGBB
  */
 void ChangePalette(UINT32 color);
 

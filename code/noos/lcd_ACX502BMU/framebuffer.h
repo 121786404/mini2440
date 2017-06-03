@@ -1,6 +1,6 @@
 /*
  * FILE: framebuffer.h
- * 在framebuffer上画点、画线、画同心圆、清屏的函数接口
+ * ��framebuffer�ϻ��㡢���ߡ���ͬ��Բ�������ĺ����ӿ�
  */
 
 #ifndef __FRAMEBUFFER_H__
@@ -9,43 +9,43 @@
 #include <types.h>
 
 /* 
- * 画点
- * 输入参数：
- *     x、y : 象素坐标
- *     color: 颜色值
- *         对于16BPP: color的格式为0xAARRGGBB (AA = 透明度),
- *     需要转换为5:6:5格式
- *         对于8BPP: color为调色板中的索引值，
- *     其颜色取决于调色板中的数值
+ * ����
+ * ���������
+ *     x��y : ��������
+ *     color: ��ɫֵ
+ *         ����16BPP: color�ĸ�ʽΪ0xAARRGGBB (AA = ͸����),
+ *     ��Ҫת��Ϊ5:6:5��ʽ
+ *         ����8BPP: colorΪ��ɫ���е�����ֵ��
+ *     ����ɫȡ���ڵ�ɫ���е���ֵ
  */
 void PutPixel(UINT32 x, UINT32 y, UINT32 color);
 
 /* 
- * 画线
- * 输入参数：
- *     x1、y1 : 起点坐标
- *     x2、y2 : 终点坐标
- *     color  : 颜色值
- *         对于16BPP: color的格式为0xAARRGGBB (AA = 透明度),
- *     需要转换为5:6:5格式
- *         对于8BPP: color为调色板中的索引值，
- *     其颜色取决于调色板中的数值
+ * ����
+ * ���������
+ *     x1��y1 : �������
+ *     x2��y2 : �յ�����
+ *     color  : ��ɫֵ
+ *         ����16BPP: color�ĸ�ʽΪ0xAARRGGBB (AA = ͸����),
+ *     ��Ҫת��Ϊ5:6:5��ʽ
+ *         ����8BPP: colorΪ��ɫ���е�����ֵ��
+ *     ����ɫȡ���ڵ�ɫ���е���ֵ
  */
 void DrawLine(int x1,int y1,int x2,int y2,int color);
 
 /* 
- * 绘制同心圆
+ * ����ͬ��Բ
  */
 void Mire(void);
 
 /* 
- * 将屏幕清成单色
- * 输入参数：
- *     color: 颜色值
- *         对于16BPP: color的格式为0xAARRGGBB (AA = 透明度),
- *     需要转换为5:6:5格式
- *         对于8BPP: color为调色板中的索引值，
- *     其颜色取决于调色板中的数值
+ * ����Ļ��ɵ�ɫ
+ * ���������
+ *     color: ��ɫֵ
+ *         ����16BPP: color�ĸ�ʽΪ0xAARRGGBB (AA = ͸����),
+ *     ��Ҫת��Ϊ5:6:5��ʽ
+ *         ����8BPP: colorΪ��ɫ���е�����ֵ��
+ *     ����ɫȡ���ڵ�ɫ���е���ֵ
  */
 void ClearScr(UINT32 color);
 

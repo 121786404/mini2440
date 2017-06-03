@@ -4,7 +4,7 @@
 
 
 /*
- * LED1,LED2,LED4å¯¹åº”GPB5ã€GPB6ã€GPB7ã€GPB8
+ * LED1,LED2,LED4¶ÔÓ¦GPB5¡¢GPB6¡¢GPB7¡¢GPB8
  */
 #define	GPB5_out	(1<<(5*2))
 #define	GPB6_out	(1<<(6*2))
@@ -20,12 +20,12 @@ int main(void)
 {
 	unsigned long i = 0;
 
-	// LED1,LED2,LED3,LED4å¯¹åº”çš„4æ ¹å¼•è„šè®¾ä¸ºè¾“å‡º
+	// LED1,LED2,LED3,LED4¶ÔÓ¦µÄ4¸ùÒý½ÅÉèÎªÊä³ö
 	GPBCON = GPB5_out | GPB6_out | GPB7_out | GPB8_out;
 
 	while(1){
 		wait(30000);
-		GPBDAT = (~(i<<5));	 	// æ ¹æ®içš„å€¼ï¼Œç‚¹äº®LED1,2,3,4
+		GPBDAT = (~(i<<5));	 	// ¸ù¾ÝiµÄÖµ£¬µãÁÁLED1,2,3,4
 		if(++i == 16)
 			i = 0;
 	}

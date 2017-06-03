@@ -1,13 +1,13 @@
 /*
- * leds.c: å¾ªç¯ç‚¹äº®4ä¸ªLED
- * å±äºç¬¬äºŒéƒ¨åˆ†ç¨‹åºï¼Œæ­¤æ—¶MMUå·²å¼€å¯ï¼Œä½¿ç”¨è™šæ‹Ÿåœ°å€
+ * leds.c: Ñ­»·µãÁÁ4¸öLED
+ * ÊôÓÚµÚ¶ş²¿·Ö³ÌĞò£¬´ËÊ±MMUÒÑ¿ªÆô£¬Ê¹ÓÃĞéÄâµØÖ·
  */ 
 
-#define GPBCON      (*(volatile unsigned long *)0xA0000010)     // ç‰©ç†åœ°å€0x56000010
-#define GPBDAT      (*(volatile unsigned long *)0xA0000014)     // ç‰©ç†åœ°å€0x56000014
+#define GPBCON      (*(volatile unsigned long *)0xA0000010)     // ÎïÀíµØÖ·0x56000010
+#define GPBDAT      (*(volatile unsigned long *)0xA0000014)     // ÎïÀíµØÖ·0x56000014
 
 /*
- * LED1,LED2,LED4å¯¹åº”GPB5ã€GPB6ã€GPB7ã€GPB8
+ * LED1,LED2,LED4¶ÔÓ¦GPB5¡¢GPB6¡¢GPB7¡¢GPB8
  */
 #define	GPB5_out	(1<<(5*2))
 #define	GPB6_out	(1<<(6*2))
@@ -15,11 +15,11 @@
 #define	GPB8_out	(1<<(8*2))
 
 /*
- * waitå‡½æ•°åŠ ä¸Šâ€œstatic inlineâ€æ˜¯æœ‰åŸå› çš„ï¼Œ
- * è¿™æ ·å¯ä»¥ä½¿å¾—ç¼–è¯‘leds.cæ—¶ï¼ŒwaitåµŒå…¥mainä¸­ï¼Œç¼–è¯‘ç»“æœä¸­åªæœ‰mainä¸€ä¸ªå‡½æ•°ã€‚
- * äºæ˜¯åœ¨è¿æ¥æ—¶ï¼Œmainå‡½æ•°çš„åœ°å€å°±æ˜¯ç”±è¿æ¥æ–‡ä»¶æŒ‡å®šçš„è¿è¡Œæ—¶è£…è½½åœ°å€ã€‚
- * è€Œè¿æ¥æ–‡ä»¶mmu.ldsä¸­ï¼ŒæŒ‡å®šäº†leds.oçš„è¿è¡Œæ—¶è£…è½½åœ°å€ä¸º0xB4004000ï¼Œ
- * è¿™æ ·ï¼Œhead.Sä¸­çš„â€œldr pc, =0xB4004000â€å°±æ˜¯è·³å»æ‰§è¡Œmainå‡½æ•°ã€‚
+ * waitº¯Êı¼ÓÉÏ¡°static inline¡±ÊÇÓĞÔ­ÒòµÄ£¬
+ * ÕâÑù¿ÉÒÔÊ¹µÃ±àÒëleds.cÊ±£¬waitÇ¶ÈëmainÖĞ£¬±àÒë½á¹ûÖĞÖ»ÓĞmainÒ»¸öº¯Êı¡£
+ * ÓÚÊÇÔÚÁ¬½ÓÊ±£¬mainº¯ÊıµÄµØÖ·¾ÍÊÇÓÉÁ¬½ÓÎÄ¼şÖ¸¶¨µÄÔËĞĞÊ±×°ÔØµØÖ·¡£
+ * ¶øÁ¬½ÓÎÄ¼şmmu.ldsÖĞ£¬Ö¸¶¨ÁËleds.oµÄÔËĞĞÊ±×°ÔØµØÖ·Îª0xB4004000£¬
+ * ÕâÑù£¬head.SÖĞµÄ¡°ldr pc, =0xB4004000¡±¾ÍÊÇÌøÈ¥Ö´ĞĞmainº¯Êı¡£
  */
 static inline void wait(volatile unsigned long dly)
 {
@@ -30,12 +30,12 @@ int main(void)
 {
 	unsigned long i = 0;
 	
-	// LED1,LED2,LED3,LED4å¯¹åº”çš„4æ ¹å¼•è„šè®¾ä¸ºè¾“å‡º
+	// LED1,LED2,LED3,LED4¶ÔÓ¦µÄ4¸ùÒı½ÅÉèÎªÊä³ö
 	GPBCON = GPB5_out | GPB6_out | GPB7_out | GPB8_out;
 
 	while(1){
 		wait(30000);
-		GPBDAT = (~(i<<5));	 	// æ ¹æ®içš„å€¼ï¼Œç‚¹äº®LED1,2,3,4
+		GPBDAT = (~(i<<5));	 	// ¸ù¾İiµÄÖµ£¬µãÁÁLED1,2,3,4
 		if(++i == 16)
 			i = 0;
 	}

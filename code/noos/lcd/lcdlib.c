@@ -1,6 +1,6 @@
 /*
  * FILE: lcdlib.c
- * å®ç°TFT LCDçš„æµ‹è¯•å‡½æ•°
+ * ÊµÏÖTFT LCDµÄ²âÊÔº¯Êı
  */
 
 #include <stdio.h>
@@ -9,24 +9,24 @@
 
 
 /* 
- * ä»¥320x240,8bppçš„æ˜¾ç¤ºæ¨¡å¼æµ‹è¯•TFT LCD
+ * ÒÔ320x240,8bppµÄÏÔÊ¾Ä£Ê½²âÊÔTFT LCD
  */
 void Test_Lcd_Tft_8Bit_320240(void)
 {
-    Lcd_Port_Init();                     // è®¾ç½®LCDå¼•è„š
-    Tft_Lcd_Init(MODE_TFT_8BIT_320240);  // åˆå§‹åŒ–LCDæ§åˆ¶å™¨
-    Lcd_PowerEnable(0, 1);               // è®¾ç½®LCD_PWRENæœ‰æ•ˆï¼Œå®ƒç”¨äºæ‰“å¼€LCDçš„ç”µæº
-    Lcd_EnvidOnOff(1);                   // ä½¿èƒ½LCDæ§åˆ¶å™¨è¾“å‡ºä¿¡å·
+    Lcd_Port_Init();                     // ÉèÖÃLCDÒı½Å
+    Tft_Lcd_Init(MODE_TFT_8BIT_320240);  // ³õÊ¼»¯LCD¿ØÖÆÆ÷
+    Lcd_PowerEnable(0, 1);               // ÉèÖÃLCD_PWRENÓĞĞ§£¬ËüÓÃÓÚ´ò¿ªLCDµÄµçÔ´
+    Lcd_EnvidOnOff(1);                   // Ê¹ÄÜLCD¿ØÖÆÆ÷Êä³öĞÅºÅ
 
-    Lcd_Palette8Bit_Init();     // åˆå§‹åŒ–è°ƒè‰²æ¿
-    ClearScr(0x0);              // æ¸…å±
+    Lcd_Palette8Bit_Init();     // ³õÊ¼»¯µ÷É«°å
+    ClearScr(0x0);              // ÇåÆÁ
     printf("[TFT 64K COLOR(16bpp) LCD TEST]\n");
 
     printf("1. Press any key to draw line\n");
     getc();
-    DrawLine(0  , 0  , 319, 0  , 0);    // é¢œè‰²ä¸ºDEMO256pal[0]
-    DrawLine(0  , 0  , 0  , 239, 1);    // é¢œè‰²ä¸ºDEMO256pal[1]
-    DrawLine(319, 0  , 319, 239, 2);    // â€¦â€¦
+    DrawLine(0  , 0  , 319, 0  , 0);    // ÑÕÉ«ÎªDEMO256pal[0]
+    DrawLine(0  , 0  , 0  , 239, 1);    // ÑÕÉ«ÎªDEMO256pal[1]
+    DrawLine(319, 0  , 319, 239, 2);    // ¡­¡­
     DrawLine(0  , 239, 319, 239, 4);
     DrawLine(0  , 0  , 319, 239, 8);
     DrawLine(319, 0  , 0  , 239, 16);
@@ -40,16 +40,16 @@ void Test_Lcd_Tft_8Bit_320240(void)
 
     printf("3. Press any key to fill the screem with one color\n");
     getc();
-    ClearScr(128);  //  è¾“å‡ºå•è‰²å›¾åƒï¼Œé¢œè‰²ä¸ºDEMO256pal[128]
+    ClearScr(128);  //  Êä³öµ¥É«Í¼Ïñ£¬ÑÕÉ«ÎªDEMO256pal[128]
 
     printf("4. Press any key to fill the screem by temporary palette\n");
     getc(); 
-    ClearScrWithTmpPlt(0x0000ff);       //  è¾“å‡ºå•è‰²å›¾åƒï¼Œé¢œè‰²ä¸ºè“è‰²
+    ClearScrWithTmpPlt(0x0000ff);       //  Êä³öµ¥É«Í¼Ïñ£¬ÑÕÉ«ÎªÀ¶É«
 
     printf("5. Press any key to fill the screem by palette\n");
     getc();
-    DisableTmpPlt();            // å…³é—­ä¸´æ—¶è°ƒè‰²æ¿å¯„å­˜å™¨
-    ChangePalette(0xffff00);    // æ”¹å˜æ•´ä¸ªè°ƒè‰²æ¿ä¸ºé»„è‰²ï¼Œè¾“å‡ºå•è‰²å›¾åƒ
+    DisableTmpPlt();            // ¹Ø±ÕÁÙÊ±µ÷É«°å¼Ä´æÆ÷
+    ChangePalette(0xffff00);    // ¸Ä±äÕû¸öµ÷É«°åÎª»ÆÉ«£¬Êä³öµ¥É«Í¼Ïñ
     
     printf("6. Press any key stop the testing\n");
     getc();
@@ -57,28 +57,28 @@ void Test_Lcd_Tft_8Bit_320240(void)
 }
 
 /* 
- * ä»¥320x240,16bppçš„æ˜¾ç¤ºæ¨¡å¼æµ‹è¯•TFT LCD
+ * ÒÔ320x240,16bppµÄÏÔÊ¾Ä£Ê½²âÊÔTFT LCD
  */
 void Test_Lcd_Tft_16Bit_320240(void)
 {
-    Lcd_Port_Init();                     // è®¾ç½®LCDå¼•è„š
-    Tft_Lcd_Init(MODE_TFT_16BIT_320240); // åˆå§‹åŒ–LCDæ§åˆ¶å™¨
-    Lcd_PowerEnable(0, 1);               // è®¾ç½®LCD_PWRENæœ‰æ•ˆï¼Œå®ƒç”¨äºæ‰“å¼€LCDçš„ç”µæº
-    Lcd_EnvidOnOff(1);                   // ä½¿èƒ½LCDæ§åˆ¶å™¨è¾“å‡ºä¿¡å·
+    Lcd_Port_Init();                     // ÉèÖÃLCDÒı½Å
+    Tft_Lcd_Init(MODE_TFT_16BIT_320240); // ³õÊ¼»¯LCD¿ØÖÆÆ÷
+    Lcd_PowerEnable(0, 1);               // ÉèÖÃLCD_PWRENÓĞĞ§£¬ËüÓÃÓÚ´ò¿ªLCDµÄµçÔ´
+    Lcd_EnvidOnOff(1);                   // Ê¹ÄÜLCD¿ØÖÆÆ÷Êä³öĞÅºÅ
 
-    ClearScr(0x0);  // æ¸…å±ï¼Œé»‘è‰²
+    ClearScr(0x0);  // ÇåÆÁ£¬ºÚÉ«
     printf("[TFT 64K COLOR(16bpp) LCD TEST]\n");
 
     printf("1. Press any key to draw line\n");
     getc();
-    DrawLine(0  , 0  , 319, 0  , 0xff0000);     // çº¢è‰²             
-    DrawLine(0  , 0  , 0  , 239, 0x00ff00);     // ç»¿è‰²             
-    DrawLine(319, 0  , 319, 239, 0x0000ff);     // è“è‰²             
-    DrawLine(0  , 239, 319, 239, 0xffffff);     // ç™½è‰²             
-    DrawLine(0  , 0  , 319, 239, 0xffff00);     // é»„è‰²             
-    DrawLine(319, 0  , 0  , 239, 0x8000ff);     // ç´«è‰²             
-    DrawLine(160, 0  , 160, 239, 0xe6e8fa);     // é“¶è‰²             
-    DrawLine(0  , 120, 319, 120, 0xcd7f32);     // é‡‘è‰²             
+    DrawLine(0  , 0  , 319, 0  , 0xff0000);     // ºìÉ«             
+    DrawLine(0  , 0  , 0  , 239, 0x00ff00);     // ÂÌÉ«             
+    DrawLine(319, 0  , 319, 239, 0x0000ff);     // À¶É«             
+    DrawLine(0  , 239, 319, 239, 0xffffff);     // °×É«             
+    DrawLine(0  , 0  , 319, 239, 0xffff00);     // »ÆÉ«             
+    DrawLine(319, 0  , 0  , 239, 0x8000ff);     // ×ÏÉ«             
+    DrawLine(160, 0  , 160, 239, 0xe6e8fa);     // ÒøÉ«             
+    DrawLine(0  , 120, 319, 120, 0xcd7f32);     // ½ğÉ«             
 
     printf("2. Press any key to draw circles\n");
     getc();
@@ -86,11 +86,11 @@ void Test_Lcd_Tft_16Bit_320240(void)
 
     printf("3. Press any key to fill the screem with one color\n");
     getc();
-    ClearScr(0xff0000);             // çº¢è‰²
+    ClearScr(0xff0000);             // ºìÉ«
 
     printf("4. Press any key to fill the screem by temporary palette\n");
     getc();
-    ClearScrWithTmpPlt(0x0000ff);   // è“è‰²
+    ClearScrWithTmpPlt(0x0000ff);   // À¶É«
 
     printf("5. Press any key stop the testing\n");
     getc();
@@ -99,24 +99,24 @@ void Test_Lcd_Tft_16Bit_320240(void)
 
 
 /* 
- * ä»¥640x480,8bppçš„æ˜¾ç¤ºæ¨¡å¼æµ‹è¯•TFT LCD
+ * ÒÔ640x480,8bppµÄÏÔÊ¾Ä£Ê½²âÊÔTFT LCD
  */
 void Test_Lcd_Tft_8Bit_640480(void)
 {
-    Lcd_Port_Init();                     // è®¾ç½®LCDå¼•è„š
-    Tft_Lcd_Init(MODE_TFT_8BIT_640480);  // åˆå§‹åŒ–LCDæ§åˆ¶å™¨
-    Lcd_PowerEnable(0, 1);               // è®¾ç½®LCD_PWRENæœ‰æ•ˆï¼Œå®ƒç”¨äºæ‰“å¼€LCDçš„ç”µæº
-    Lcd_EnvidOnOff(1);                   // ä½¿èƒ½LCDæ§åˆ¶å™¨è¾“å‡ºä¿¡å·
+    Lcd_Port_Init();                     // ÉèÖÃLCDÒı½Å
+    Tft_Lcd_Init(MODE_TFT_8BIT_640480);  // ³õÊ¼»¯LCD¿ØÖÆÆ÷
+    Lcd_PowerEnable(0, 1);               // ÉèÖÃLCD_PWRENÓĞĞ§£¬ËüÓÃÓÚ´ò¿ªLCDµÄµçÔ´
+    Lcd_EnvidOnOff(1);                   // Ê¹ÄÜLCD¿ØÖÆÆ÷Êä³öĞÅºÅ
 
-    Lcd_Palette8Bit_Init();     // åˆå§‹åŒ–è°ƒè‰²æ¿
-    ClearScr(0x0);              // æ¸…å±ï¼Œé»‘è‰²
+    Lcd_Palette8Bit_Init();     // ³õÊ¼»¯µ÷É«°å
+    ClearScr(0x0);              // ÇåÆÁ£¬ºÚÉ«
     printf("[TFT 64K COLOR(16bpp) LCD TEST]\n");
 
     printf("1. Press any key to draw line\n");
     getc();
-    DrawLine(0  , 0  , 639, 0  , 0);    // é¢œè‰²ä¸ºDEMO256pal[0]
-    DrawLine(0  , 0  , 0  , 479, 1);    // é¢œè‰²ä¸ºDEMO256pal[1]
-    DrawLine(639, 0  , 639, 479, 2);    // â€¦â€¦
+    DrawLine(0  , 0  , 639, 0  , 0);    // ÑÕÉ«ÎªDEMO256pal[0]
+    DrawLine(0  , 0  , 0  , 479, 1);    // ÑÕÉ«ÎªDEMO256pal[1]
+    DrawLine(639, 0  , 639, 479, 2);    // ¡­¡­
     DrawLine(0  , 479, 639, 479, 4);
     DrawLine(0  , 0  , 639, 479, 8);
     DrawLine(639, 0  , 0  , 479, 16);
@@ -129,16 +129,16 @@ void Test_Lcd_Tft_8Bit_640480(void)
 
     printf("3. Press any key to fill the screem with one color\n");
     getc();
-    ClearScr(128);  //  è¾“å‡ºå•è‰²å›¾åƒï¼Œé¢œè‰²ä¸ºDEMO256pal[128]
+    ClearScr(128);  //  Êä³öµ¥É«Í¼Ïñ£¬ÑÕÉ«ÎªDEMO256pal[128]
 
     printf("4. Press any key to fill the screem by temporary palette\n");
     getc(); 
-    ClearScrWithTmpPlt(0x0000ff);       //  è¾“å‡ºå•è‰²å›¾åƒï¼Œé¢œè‰²ä¸ºè“è‰²
+    ClearScrWithTmpPlt(0x0000ff);       //  Êä³öµ¥É«Í¼Ïñ£¬ÑÕÉ«ÎªÀ¶É«
     
     printf("5. Press any key to fill the screem by palette\n");
     getc();
-    DisableTmpPlt();            // å…³é—­ä¸´æ—¶è°ƒè‰²æ¿å¯„å­˜å™¨
-    ChangePalette(0xffff00);    // æ”¹å˜æ•´ä¸ªè°ƒè‰²æ¿ä¸ºé»„è‰²ï¼Œè¾“å‡ºå•è‰²å›¾åƒ
+    DisableTmpPlt();            // ¹Ø±ÕÁÙÊ±µ÷É«°å¼Ä´æÆ÷
+    ChangePalette(0xffff00);    // ¸Ä±äÕû¸öµ÷É«°åÎª»ÆÉ«£¬Êä³öµ¥É«Í¼Ïñ
     
     printf("6. Press any key stop the testing\n");
     getc();
@@ -146,28 +146,28 @@ void Test_Lcd_Tft_8Bit_640480(void)
 }
 
 /* 
- * ä»¥640x480,16bppçš„æ˜¾ç¤ºæ¨¡å¼æµ‹è¯•TFT LCD
+ * ÒÔ640x480,16bppµÄÏÔÊ¾Ä£Ê½²âÊÔTFT LCD
  */
 void Test_Lcd_Tft_16Bit_640480(void)
 {
-    Lcd_Port_Init();                     // è®¾ç½®LCDå¼•è„š
-    Tft_Lcd_Init(MODE_TFT_16BIT_640480); // åˆå§‹åŒ–LCDæ§åˆ¶å™¨
-    Lcd_PowerEnable(0, 1);               // è®¾ç½®LCD_PWRENæœ‰æ•ˆï¼Œå®ƒç”¨äºæ‰“å¼€LCDçš„ç”µæº
-    Lcd_EnvidOnOff(1);                   // ä½¿èƒ½LCDæ§åˆ¶å™¨è¾“å‡ºä¿¡å·
+    Lcd_Port_Init();                     // ÉèÖÃLCDÒı½Å
+    Tft_Lcd_Init(MODE_TFT_16BIT_640480); // ³õÊ¼»¯LCD¿ØÖÆÆ÷
+    Lcd_PowerEnable(0, 1);               // ÉèÖÃLCD_PWRENÓĞĞ§£¬ËüÓÃÓÚ´ò¿ªLCDµÄµçÔ´
+    Lcd_EnvidOnOff(1);                   // Ê¹ÄÜLCD¿ØÖÆÆ÷Êä³öĞÅºÅ
 
-    ClearScr(0x0);  // æ¸…å±ï¼Œé»‘è‰²
+    ClearScr(0x0);  // ÇåÆÁ£¬ºÚÉ«
     printf("[TFT 64K COLOR(16bpp) LCD TEST]\n");
 
     printf("1. Press any key to draw line\n");
     getc();
-    DrawLine(0  , 0  , 639, 0  , 0xff0000);     // çº¢è‰²
-    DrawLine(0  , 0  , 0  , 479, 0x00ff00);     // ç»¿è‰²
-    DrawLine(639, 0  , 639, 479, 0x0000ff);     // è“è‰²
-    DrawLine(0  , 479, 639, 479, 0xffffff);     // ç™½è‰²
-    DrawLine(0  , 0  , 639, 479, 0xffff00);     // é»„è‰²
-    DrawLine(639, 0  , 0  , 479, 0x8000ff);     // ç´«è‰²
-    DrawLine(320, 0  , 320, 479, 0xe6e8fa);     // é“¶è‰²
-    DrawLine(0  , 240, 639, 240, 0xcd7f32);     // é‡‘è‰²
+    DrawLine(0  , 0  , 639, 0  , 0xff0000);     // ºìÉ«
+    DrawLine(0  , 0  , 0  , 479, 0x00ff00);     // ÂÌÉ«
+    DrawLine(639, 0  , 639, 479, 0x0000ff);     // À¶É«
+    DrawLine(0  , 479, 639, 479, 0xffffff);     // °×É«
+    DrawLine(0  , 0  , 639, 479, 0xffff00);     // »ÆÉ«
+    DrawLine(639, 0  , 0  , 479, 0x8000ff);     // ×ÏÉ«
+    DrawLine(320, 0  , 320, 479, 0xe6e8fa);     // ÒøÉ«
+    DrawLine(0  , 240, 639, 240, 0xcd7f32);     // ½ğÉ«
 
     printf("2. Press any key to draw circles\n");
     getc();
@@ -175,11 +175,11 @@ void Test_Lcd_Tft_16Bit_640480(void)
 
     printf("3. Press any key to fill the screem with one color\n");
     getc();
-    ClearScr(0xff0000);             // çº¢è‰²
+    ClearScr(0xff0000);             // ºìÉ«
 
     printf("4. Press any key to fill the screem by temporary palette\n");
     getc();
-    ClearScrWithTmpPlt(0x0000ff);   // è“è‰²
+    ClearScrWithTmpPlt(0x0000ff);   // À¶É«
 
     printf("5. Press any key stop the testing\n");
     getc();

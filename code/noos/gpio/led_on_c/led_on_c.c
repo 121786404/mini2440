@@ -3,8 +3,8 @@
 
 int main()
 {
-    GPBCON = 0x00000400;    // 璁剧疆GPB5涓鸿緭鍑哄彛, 浣峓11:10]=0b01
-    GPBDAT = 0x00000000;    // GPB5杈撳嚭0锛孡ED1鐐逛寒
+    GPBCON = 0x00000400;    // 设置GPB5为输出口, 位[11:10]=0b01
+    GPBDAT = 0x00000000;    // GPB5输出0，LED1点亮
 
     return 0;
 }

@@ -2,44 +2,44 @@
 
 void EINT_Handle()
 {
-    unsigned long oft = INTOFFSET;  /* oftåº”è¯¥ä¸º5, INTMSKçš„bit5æ˜¯EINT8~EINT23çš„æ€»å¼€å…³ */
+    unsigned long oft = INTOFFSET;  /* oftÓ¦¸ÃÎª5, INTMSKµÄbit5ÊÇEINT8~EINT23µÄ×Ü¿ª¹Ø */
     unsigned long val = EINTPEND;
 
 	/*
-	 * K1,K2,K3,K4å¯¹åº”GPG0ï¼ŒGPG3ï¼ŒGPG5ï¼ŒGPG6
-	 *            å³ EINT8,EINT11,EINT13,EINT14
-	 *            å®ƒä»¬å…±äº«INTMSKçš„bit5            
-	 *            oftéƒ½æ˜¯5(å¯¹åº”INTMSKå¯„å­˜å™¨)
-	 * éœ€è¦è¯»EINTPENDç¡®å®šæ˜¯å‘ç”Ÿçš„æ˜¯å“ªä¸ªä¸­æ–­
+	 * K1,K2,K3,K4¶ÔÓ¦GPG0£¬GPG3£¬GPG5£¬GPG6
+	 *            ¼´ EINT8,EINT11,EINT13,EINT14
+	 *            ËüÃÇ¹²ÏíINTMSKµÄbit5            
+	 *            oft¶¼ÊÇ5(¶ÔÓ¦INTMSK¼Ä´æÆ÷)
+	 * ÐèÒª¶ÁEINTPENDÈ·¶¨ÊÇ·¢ÉúµÄÊÇÄÄ¸öÖÐ¶Ï
 	 */
 
-	GPBDAT |= (0xF<<5);   // æ‰€æœ‰LEDç†„ç­
+	GPBDAT |= (0xF<<5);   // ËùÓÐLEDÏ¨Ãð
 
 	if (val & (1<<8))
 	{
-        // K1è¢«æŒ‰ä¸‹
-        GPBDAT &= ~(1<<5);      // LED1ç‚¹äº®
+        // K1±»°´ÏÂ
+        GPBDAT &= ~(1<<5);      // LED1µãÁÁ
 	}
 
 	if (val & (1<<11))
 	{
-		// K2è¢«æŒ‰ä¸‹
-        GPBDAT &= ~(1<<6);      // LED2ç‚¹äº®
+		// K2±»°´ÏÂ
+        GPBDAT &= ~(1<<6);      // LED2µãÁÁ
 	}
 
 	if (val & (1<<13))
 	{
-        // K3è¢«æŒ‰ä¸‹
-        GPBDAT &= ~(1<<7);      // LED3ç‚¹äº®
+        // K3±»°´ÏÂ
+        GPBDAT &= ~(1<<7);      // LED3µãÁÁ
     }
 
 	if (val & (1<<14))
 	{
-        // K4è¢«æŒ‰ä¸‹
-            GPBDAT &= ~(1<<8);      // LED4ç‚¹äº®
+        // K4±»°´ÏÂ
+            GPBDAT &= ~(1<<8);      // LED4µãÁÁ
     }
 
-    //æ¸…ä¸­æ–­
+    //ÇåÖÐ¶Ï
     EINTPEND = (1<<8) | (1<<11) | (1<<13) | (1<<14);
     
     SRCPND = 1<<oft;

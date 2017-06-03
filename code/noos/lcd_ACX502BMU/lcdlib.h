@@ -1,18 +1,18 @@
 /*
  * FILE: lcdlib.h
- * TFT LCDГ └Ф╣▀Х╞∙Е┤╫Ф∙╟Ф▌╔Е▐ё
+ * TFT LCD╣д╡Бйт╨╞йЩ╫с©з
  */
 
 #ifndef __LCDLIB_H__
 #define __LCDLIB_H__
 
 /* 
- * Д╩╔640x480,8bppГ └Ф≤╬Г╓╨Ф╗║Е╪▐Ф╣▀Х╞∙TFT LCD
+ * рт640x480,8bpp╣дотй╬дёй╫╡БйтTFT LCD
  */
 void Test_Lcd_Tft_8Bit_640480(void);
 
 /* 
- * Д╩╔640x480,16bppГ └Ф≤╬Г╓╨Ф╗║Е╪▐Ф╣▀Х╞∙TFT LCD
+ * рт640x480,16bpp╣дотй╬дёй╫╡БйтTFT LCD
  */
 void Test_Lcd_Tft_16Bit_640480(void);
 

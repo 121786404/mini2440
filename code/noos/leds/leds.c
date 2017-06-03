@@ -4,7 +4,7 @@
 #define GPBDAT      (*(volatile unsigned long *)0x56000014)
 
 /*
- * LED1,LED2,LED4ÂØπÂ∫îGPB5„ÄÅGPB6„ÄÅGPB7„ÄÅGPB8
+ * LED1,LED2,LED4∂‘”¶GPB5°¢GPB6°¢GPB7°¢GPB8
  */
 #define	GPB5_out	(1<<(5*2))
 #define	GPB6_out	(1<<(6*2))
@@ -20,12 +20,12 @@ int main(void)
 {
 	unsigned long i = 0;
 
-	// LED1,LED2,LED4ÂØπÂ∫îÁöÑ4Ê†πÂºïËÑöËÆæ‰∏∫ËæìÂá∫
+	// LED1,LED2,LED4∂‘”¶µƒ4∏˘“˝Ω≈…ËŒ™ ‰≥ˆ
 	GPBCON = GPB5_out | GPB6_out | GPB7_out | GPB8_out;
 
 	while(1){
 		wait(30000);
-		GPBDAT = (~(i<<5));	 	// Ê†πÊçÆiÁöÑÂÄºÔºåÁÇπ‰∫ÆLED1,2,3,4
+		GPBDAT = (~(i<<5));	 	// ∏˘æ›iµƒ÷µ£¨µ„¡¡LED1,2,3,4
 		if(++i == 16)
 			i = 0;
 	}
